@@ -1,0 +1,3 @@
+This package contains Formatters that capable of formatting content into Excels.
+Specially, due to excel's multisheet structure, the formatter are required
+ to support formatting multiple input into a single file.

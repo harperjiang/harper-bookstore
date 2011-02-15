@@ -1,0 +1,3 @@
+For named objects, use IFile
+For structured data, use ITableModel
+For text data, use ITextData
