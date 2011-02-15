@@ -8,10 +8,9 @@ import oracle.toplink.sessions.UnitOfWork;
 
 import org.apache.commons.lang.StringUtils;
 import org.harper.bookstore.domain.profile.Book;
+import org.harper.frm.data.ITable;
+import org.harper.frm.data.parser.CSV2TableParser;
 import org.harper.frm.toplink.SessionManager;
-
-import com.oocl.frm.data.ITable;
-import com.oocl.frm.data.parser.CSV2TableParser;
 
 public class ImportBook {
 
