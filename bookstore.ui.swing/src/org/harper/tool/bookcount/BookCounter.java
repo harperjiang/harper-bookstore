@@ -14,13 +14,12 @@ import java.util.Properties;
 
 import javax.swing.ListSelectionModel;
 
+import org.harper.frm.data.ITable;
+import org.harper.frm.data.parser.CSV2TableParser;
 import org.harper.frm.gui.swing.comp.table.ColumnDescBean;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.table.data.AbstractEditableTableData;
 import org.harper.frm.gui.swing.comp.table.data.TableData;
-
-import com.oocl.frm.data.ITable;
-import com.oocl.frm.data.parser.CSV2TableParser;
 
 public class BookCounter {
 

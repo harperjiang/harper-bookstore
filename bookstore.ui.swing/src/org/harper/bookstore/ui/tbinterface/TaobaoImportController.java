@@ -18,9 +18,8 @@ import org.harper.bookstore.service.bean.TaobaoItemBean;
 import org.harper.bookstore.service.bean.TaobaoOrderBean;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.core.logging.LogManager;
-
-import com.oocl.frm.data.ITable;
-import com.oocl.frm.data.parser.CSV2TableParser;
+import org.harper.frm.data.ITable;
+import org.harper.frm.data.parser.CSV2TableParser;
 
 public class TaobaoImportController extends Controller {
 

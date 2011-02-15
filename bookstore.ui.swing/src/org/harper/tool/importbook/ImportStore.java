@@ -17,10 +17,9 @@ import org.harper.bookstore.domain.profile.Source;
 import org.harper.bookstore.domain.profile.Supplier;
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.service.TransactionContext;
+import org.harper.frm.data.ITable;
+import org.harper.frm.data.parser.CSV2TableParser;
 import org.harper.frm.toplink.SessionManager;
-
-import com.oocl.frm.data.ITable;
-import com.oocl.frm.data.parser.CSV2TableParser;
 
 public class ImportStore {
 
