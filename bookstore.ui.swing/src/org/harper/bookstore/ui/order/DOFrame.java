@@ -9,9 +9,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+
+import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 
 public class DOFrame extends JFrame {
 
@@ -51,6 +54,17 @@ public class DOFrame extends JFrame {
 		panel = new DeliveryPanel();
 		tabbedPane.addTab("Delivery Info", panel);
 
+		doItemTable = new JTable();
+		CommonTableModel tableModel = new CommonTableModel();
+		tableModel.initialize(DeliveryItemTableData.class);
+		doItemTable.setModel(tableModel);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(doItemTable);
+		
+		tabbedPane.add("Item Info",scrollPane);
+		
+		
 		JPanel bottomPanel = new JPanel();
 		add(bottomPanel, BorderLayout.SOUTH);
 
