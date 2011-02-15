@@ -1,0 +1,87 @@
+package com.oocl.frm.sql.component.datamodel.parser.csv;
+
+import java_cup.runtime.Symbol;
+
+%%
+%implements java_cup.runtime.Scanner
+%type Symbol
+%class CSVScanner
+%function next_token
+%line
+%char
+%state STR0,STR1
+
+
+%{
+
+%}
+
+%{
+	private Symbol opr(int symType) {
+		return new Symbol(symType,yychar,yychar+yylength(),yytext());
+	}
+	
+	private Symbol opr(int symType,Object val) {
+		return new Symbol(symType,yychar,yychar+yylength(),val);
+	}
+	
+	private StringBuffer strBf = new StringBuffer();
+%}
+
+%eofval{
+	return (new Symbol(syms.EOF));
+%eofval}
+
+DIGIT	=		[0-9]
+CHAR	=		[A-Za-z]
+CTL		=		[\x00-\x1F\x7E]
+CR		=		\r
+LF		=		\n
+SP		=		" "
+TAB		=		\t
+DQMARK	=		\"
+PNT		=		\.
+STAR	=		\*
+COMMA	=		","
+COLON	=		":"
+SEMICOLON =		";"
+LBR		= 		"("
+RBR		= 		")"
+LBBR	=		"{"
+RBBR	=		"}"
+EQUAL	=		"="
+MINUS	=		"-"
+HEX		=		[a-fA-F]|{DIGIT}
+
+DECIMAL	=		-?{DIGIT}+
+FLOAT	=		-?{DIGIT}*\.{DIGIT}+
+NUMBER	=		{DECIMAL}|{FLOAT}
+
+ID		=		{CHAR}({DIGIT}|{CHAR}|_)*
+
+%%
+<STR0>\"		{String val = strBf.toString();strBf=new StringBuffer();yybegin(YYINITIAL);return opr(syms.STRING1,val);}
+<STR0>[^\r\n]	{strBf.append(yytext());break;}
+<STR0>{NUMBER}	{strBf.append(yytext());break;}
+\"				{yybegin(STR0);break;}
+<STR1>'			{String val = strBf.toString();strBf=new StringBuffer();yybegin(YYINITIAL);return opr(syms.STRING0,val);}
+<STR1>[^\r\n]	{strBf.append(yytext());break;}
+<STR1>{NUMBER}	{strBf.append(yytext());break;}
+'				{yybegin(STR1);break;}
+
+{PNT}			{return opr(syms.POINT);}
+{LBR}			{return opr(syms.LBR);}
+{RBR}			{return opr(syms.RBR);}	
+{LBBR}			{return opr(syms.LBBR);}
+{RBBR}			{return opr(syms.RBBR);}	
+{EQUAL}			{return opr(syms.EQUAL);}
+{COMMA}			{return opr(syms.COMMA);}
+{SEMICOLON}		{return opr(syms.SEMICOLON);}
+<YYINITIAL>{ID}	{return opr(syms.ID);}
+<YYINITIAL>{NUMBER}	{return opr(syms.NUMBER);}
+
+{SP}			{;}
+{HT}			{;}
+{CR}			{;}
+{LF}			{;}
+.				{System.out.println("Unrecognized character " + yytext() + ",omitted");}
