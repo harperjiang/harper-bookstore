@@ -12,8 +12,8 @@ import org.harper.bookstore.domain.order.ListPrice;
 import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.domain.order.OrderItem;
 import org.harper.bookstore.domain.order.PurchaseOrder;
-import org.harper.bookstore.domain.order.SupplyOrder;
 import org.harper.bookstore.domain.order.PurchaseOrder.DeliveryStatus;
+import org.harper.bookstore.domain.order.SupplyOrder;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.profile.Customer;
 import org.harper.bookstore.domain.profile.Supplier;
@@ -279,5 +279,9 @@ public class OrderService extends Service {
 			throw new RuntimeException(e);
 		}
 
+	}
+
+	public DeliveryOrder saveDeliveryOrder(DeliveryOrder order) {
+		return order;
 	}
 }
