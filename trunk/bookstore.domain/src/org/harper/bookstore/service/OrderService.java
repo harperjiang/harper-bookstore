@@ -284,4 +284,9 @@ public class OrderService extends Service {
 	public DeliveryOrder saveDeliveryOrder(DeliveryOrder order) {
 		return order;
 	}
+
+	public List<DeliveryOrder> searchDeliveryOrder(Date fromDate, Date toDate,
+			String poNumber, String consigneeName, String poCustomerId) {
+		return null;
+	}
 }
