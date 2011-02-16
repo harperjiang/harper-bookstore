@@ -12,8 +12,6 @@ public class DOController extends Controller {
 
 	private DOFrame frame;
 
-	private BindingManager manager;
-
 	private DeliveryOrderBean bean;
 
 	public DOController() {
