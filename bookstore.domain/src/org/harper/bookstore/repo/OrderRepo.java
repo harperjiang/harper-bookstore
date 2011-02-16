@@ -14,11 +14,11 @@ public interface OrderRepo extends Repo {
 	public List<SupplyOrder> getSupplyOrder(Book book);
 
 	public List<Order> searchOrder(String number, String type, Date start,
-			Date stop, String status, String partyId);
+			Date stop, int[] status, int[] expressStatus, String partyId);
 
 	public PurchaseOrder getPurchaseOrderByRefno(String refno);
 
 	public ListPrice getListPrice(Book book);
-	
+
 	public List<PurchaseOrder> getExternalOutstandingOrder();
 }

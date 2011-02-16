@@ -30,23 +30,25 @@ public class TopLinkOrderRepo extends TopLinkRepo implements OrderRepo {
 
 	@Override
 	public List<Order> searchOrder(String number, String type, Date start,
-			Date stop, String status, String partyId) {
+			Date stop, int[] status, int[] expStatus, String partyId) {
 		Validate.notNull(type);
 		Validate.notNull(status);
 		ExpressionBuilder builder = new ExpressionBuilder();
 		Expression exp = builder;
 		if (null != number) {
 			if (number.contains(";"))
-				exp = exp.and(builder.get("number").in(number.split(";")).or(
-						builder.get("refno").in(number.split(";"))));
+				exp = exp.and(builder.get("number").in(number.split(";"))
+						.or(builder.get("refno").in(number.split(";"))));
 			else
-				exp = exp.and(builder.get("number").likeIgnoreCase(
-						"%" + number + "%").or(
-						builder.get("refno").equal(number)));
+				exp = exp.and(builder.get("number")
+						.likeIgnoreCase("%" + number + "%")
+						.or(builder.get("refno").equal(number)));
 		}
-		if (!"ALL".equals(status))
-			exp = exp.and(builder.get("status").equal(
-					Order.Status.valueOf(status).ordinal()));
+		if (null != status)
+			exp = exp.and(builder.get("status").in(status));
+		if (null != expStatus)
+			exp = exp.and(builder.get("deliveryStatus").in(expStatus));
+
 		if (start != null)
 			exp = exp.and(builder.get("createDate").greaterThanEqual(start));
 		if (stop != null)
@@ -90,8 +92,10 @@ public class TopLinkOrderRepo extends TopLinkRepo implements OrderRepo {
 	@Override
 	public List<PurchaseOrder> getExternalOutstandingOrder() {
 		ExpressionBuilder builder = new ExpressionBuilder();
-		Expression exp = builder.get("refno").notNull().and(
-				builder.get("status").equal(
+		Expression exp = builder
+				.get("refno")
+				.notNull()
+				.and(builder.get("status").equal(
 						PurchaseOrder.Status.DRAFT.ordinal()));
 		return getSession().readAllObjects(PurchaseOrder.class, exp);
 	}
