@@ -7,6 +7,11 @@ public class DeliveryOrderBean extends AbstractBean {
 	private DeliveryOrder delivery;
 
 	private String poNumber;
+	
+	public DeliveryOrderBean() {
+		super();
+		delivery = new DeliveryOrder();
+	}
 
 	public DeliveryOrder getDelivery() {
 		return delivery;

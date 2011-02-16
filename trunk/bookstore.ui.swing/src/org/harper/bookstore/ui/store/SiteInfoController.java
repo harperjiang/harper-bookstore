@@ -16,8 +16,6 @@ public class SiteInfoController extends Controller {
 
 	private SiteInfoFrame frame;
 
-	private BindingManager manager;
-
 	private BookReportBean reportBean;
 
 	public SiteInfoController() {
