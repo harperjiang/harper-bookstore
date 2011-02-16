@@ -2,6 +2,7 @@ package org.harper.bookstore.ui.order;
 
 import java.util.List;
 
+import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
@@ -35,7 +36,8 @@ public class ViewPurchaseOrderController extends Controller {
 
 	protected void initManager() {
 		manager = new BindingManager(bean);
-		manager.addBinding(new JTextBinding(frame.getOrderNumField(),"orderNum"));
+		manager.addBinding(new JTextBinding(frame.getOrderNumField(),
+				"orderNum"));
 		manager.addBinding(new JComboBinding(frame.getDeliveryStatusCombo(),
 				"deliveryStatus"));
 		manager.addBinding(new JComboBinding(frame.getStatusCombo(), "status"));
@@ -43,8 +45,7 @@ public class ViewPurchaseOrderController extends Controller {
 				"startDate"));
 		manager.addBinding(frame.getStopDateField().new DateTextBinding(
 				"stopDate"));
-		manager
-				.addBinding(new JTextBinding(frame.getPartyIdField(), "partyId"));
+		manager.addBinding(new JTextBinding(frame.getPartyIdField(), "partyId"));
 		manager.addBinding(new TableBinding(frame.getOrderTable(),
 				"searchResults"));
 
@@ -52,9 +53,12 @@ public class ViewPurchaseOrderController extends Controller {
 	}
 
 	public void search() {
-		bean.setSearchResults((List)new OrderService().searchOrder(
-				bean.getOrderNum(), bean.getOrderType(), bean.getStartDate(),
-				bean.getStopDate(), bean.getStatus(), bean.getPartyId()));
+		bean.setSearchResults((List) new OrderService().searchOrder(bean
+				.getOrderNum(), bean.getOrderType(), bean.getStartDate(), bean
+				.getStopDate(),
+				"ALL".equals(bean.getStatus()) ? null
+						: new int[] { Order.Status.valueOf(bean.getStatus())
+								.ordinal() }, null, bean.getPartyId()));
 	}
 
 	public static void main(String[] args) {

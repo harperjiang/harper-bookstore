@@ -1,7 +1,15 @@
 package org.harper.bookstore.ui.order;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.harper.bookstore.domain.deliver.DeliveryItem;
+import org.harper.bookstore.domain.deliver.DeliveryOrder;
+import org.harper.bookstore.domain.order.Order;
+import org.harper.bookstore.domain.order.OrderItem;
+import org.harper.bookstore.domain.order.PurchaseOrder;
+import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
 import org.harper.frm.gui.swing.manager.BindingManager;
@@ -22,6 +30,12 @@ public class DOController extends Controller {
 
 		bean = new DeliveryOrderBean();
 		initManager();
+	}
+
+	public DOController(DeliveryOrder dobean) {
+		this();
+		this.bean.setDelivery(dobean);
+		manager.loadAll();
 	}
 
 	protected void initManager() {
@@ -48,9 +62,42 @@ public class DOController extends Controller {
 				.getView().getItemTable(), "delivery.items"));
 	}
 
+	public void loadPo() {
+		List<Order> pos = new OrderService()
+				.searchOrder(
+						bean.getPoNumber(),
+						"PO",
+						null,
+						null,
+						new int[] { Order.Status.CONFIRM.ordinal() },
+						new int[] {
+								PurchaseOrder.DeliveryStatus.PARTIAL_SENT
+										.ordinal(),
+								PurchaseOrder.DeliveryStatus.NOT_SENT.ordinal() },
+						null);
+		if (pos.size() > 0) {
+			PurchaseOrder po = (PurchaseOrder) pos.get(0);
+			// Check whether this PO had been loaded before
+			for (DeliveryItem item : bean.getDelivery().getItems()) {
+				if (null != item.getOrderItem()
+						&& item.getOrderItem().getOrder().getOid() == po
+								.getOid())
+					return;
+			}
+			for (OrderItem oi : po.getItems()) {
+				DeliveryItem newdi = new DeliveryItem();
+				newdi.setOrderItem(oi);
+				bean.getDelivery().getItems().add(newdi);
+			}
+			manager.loadAll();
+		}
+
+	}
+
 	public void save(boolean forceClose) {
-		Validate.isTrue(!StringUtils.isEmpty(bean.getPoNumber()),
-				"Please input a valid PO number");
+		Validate.isTrue(!StringUtils.isEmpty(bean.getDelivery().getNumber()),
+				"Please input a valid Delivery Order number");
+		new OrderService().saveDeliveryOrder(bean.getDelivery());
 	}
 
 	public static void main(String[] args) {

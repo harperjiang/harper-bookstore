@@ -58,14 +58,21 @@ public class DOFrame extends JFrame {
 		poNumberField = new JTextField();
 		poNumberField.setPreferredSize(new Dimension(200, 25));
 		topPanel.add(poNumberField);
+		
+		JButton loadPoButton = new JButton("Load");
+		loadPoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				controller.loadPo();
+			}
+		});
+		topPanel.add(loadPoButton);
 
 		add(topPanel, BorderLayout.NORTH);
 
 		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
 
-		panel = new DeliveryPanel();
-		tabbedPane.addTab("Delivery Info", panel);
+		
 
 		doItemController = new ItemController<DeliveryItem>(null,
 				new TableCreator() {
@@ -111,6 +118,9 @@ public class DOFrame extends JFrame {
 
 		tabbedPane.add("Item Info", doItemController.getView());
 
+		panel = new DeliveryPanel();
+		tabbedPane.addTab("Delivery Info", panel);
+		
 		JPanel bottomPanel = new JPanel();
 		add(bottomPanel, BorderLayout.SOUTH);
 
