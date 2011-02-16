@@ -1,5 +1,6 @@
 package org.harper.bookstore.domain.deliver;
 
+import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.Entity;
 import org.harper.bookstore.domain.Item;
 import org.harper.bookstore.domain.order.OrderItem;
@@ -10,6 +11,8 @@ public class DeliveryItem extends Entity implements Item {
 	private DeliveryOrder header;
 
 	private OrderItem orderItem;
+
+	private Book book;
 
 	private int count;
 
@@ -27,6 +30,8 @@ public class DeliveryItem extends Entity implements Item {
 
 	public void setOrderItem(OrderItem orderItem) {
 		this.orderItem = orderItem;
+		if (null != orderItem)
+			this.setBook(orderItem.getBook());
 	}
 
 	public int getCount() {
@@ -37,14 +42,12 @@ public class DeliveryItem extends Entity implements Item {
 		this.count = count;
 	}
 
-	@Override
 	public Book getBook() {
-		return getOrderItem().getBook();
+		return book;
 	}
 
-	@Override
 	public void setBook(Book book) {
-		getOrderItem().setBook(book);
+		this.book = book;
 	}
 
 }

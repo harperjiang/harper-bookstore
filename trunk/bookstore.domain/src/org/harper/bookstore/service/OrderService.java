@@ -163,11 +163,11 @@ public class OrderService extends Service {
 	}
 
 	public List<Order> searchOrder(String num, String type, Date start,
-			Date stop, String status, String partyId) {
+			Date stop, int[] status, int[] expStatus, String partyId) {
 		startTransaction();
 		try {
 			return RepoFactory.INSTANCE.getOrderRepo().searchOrder(num, type,
-					start, stop, status, partyId);
+					start, stop, status, expStatus, partyId);
 		} finally {
 			releaseTransaction();
 		}
@@ -282,6 +282,9 @@ public class OrderService extends Service {
 	}
 
 	public DeliveryOrder saveDeliveryOrder(DeliveryOrder order) {
+		// Get the Purchase Order1111111111111111111111111111111111111111111111111111111111111111111111111111111                                                                                   
+		// order.
+
 		return order;
 	}
 
