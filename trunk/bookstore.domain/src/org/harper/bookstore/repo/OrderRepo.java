@@ -3,6 +3,7 @@ package org.harper.bookstore.repo;
 import java.util.Date;
 import java.util.List;
 
+import org.harper.bookstore.domain.deliver.DeliveryOrder;
 import org.harper.bookstore.domain.order.ListPrice;
 import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.domain.order.PurchaseOrder;
@@ -21,4 +22,7 @@ public interface OrderRepo extends Repo {
 	public ListPrice getListPrice(Book book);
 
 	public List<PurchaseOrder> getExternalOutstandingOrder();
+
+	public List<DeliveryOrder> searchDeliveryOrder(Date fromDate, Date toDate,
+			String poNumber, String consigneeName, String poCustomerId);
 }
