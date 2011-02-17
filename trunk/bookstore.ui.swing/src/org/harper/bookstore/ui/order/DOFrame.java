@@ -27,6 +27,7 @@ import org.harper.bookstore.ui.common.ExceptionRunnable;
 import org.harper.bookstore.ui.common.ItemController;
 import org.harper.bookstore.ui.common.ItemController.TableCreator;
 import org.harper.bookstore.ui.common.ReturnKeyAdapter;
+import org.harper.frm.core.logging.LogManager;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.table.data.TableData;
 import org.harper.frm.gui.swing.comp.textfield.NumTextField;
@@ -67,6 +68,8 @@ public class DOFrame extends JFrame {
 					}
 
 					public void handleException(final Exception ex) {
+						LogManager.getInstance().getLogger(DOFrame.class)
+								.error("Exception when saving", ex);
 						SwingUtilities.invokeLater(new Runnable() {
 							public void run() {
 								JOptionPane.showMessageDialog(DOFrame.this,
@@ -156,6 +159,8 @@ public class DOFrame extends JFrame {
 								}
 							});
 						} catch (final Exception ex) {
+							LogManager.getInstance().getLogger(DOFrame.class)
+									.error("Error on saving", ex);
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									JOptionPane.showMessageDialog(DOFrame.this,

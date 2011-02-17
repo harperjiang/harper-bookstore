@@ -1,5 +1,6 @@
 package org.harper.bookstore.ui.order;
 
+import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
 import org.harper.frm.gui.swing.manager.BindingManager;
@@ -37,7 +38,9 @@ public class QueryDOController extends Controller {
 	}
 
 	public void search() {
-
+		bean.setOrders(new OrderService().searchDeliveryOrder(
+				bean.getFromDate(), bean.getToDate(), bean.getPoNumber(),
+				bean.getConsigneeName(), bean.getPoCustomerId()));
 	}
 
 	public static void main(String[] args) {
