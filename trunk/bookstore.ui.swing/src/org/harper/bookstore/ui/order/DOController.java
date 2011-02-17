@@ -90,8 +90,8 @@ public class DOController extends Controller {
 				bean.getDelivery().getItems().add(newdi);
 			}
 			manager.loadAll();
-		}
-
+		} else
+			throw new IllegalArgumentException("No Purchase Order Found");
 	}
 
 	public void save(boolean forceClose) {
