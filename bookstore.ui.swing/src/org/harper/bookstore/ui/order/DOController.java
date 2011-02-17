@@ -86,6 +86,7 @@ public class DOController extends Controller {
 			}
 			for (OrderItem oi : po.getItems()) {
 				DeliveryItem newdi = new DeliveryItem();
+				newdi.setHeader(bean.getDelivery());
 				newdi.setOrderItem(oi);
 				bean.getDelivery().getItems().add(newdi);
 			}

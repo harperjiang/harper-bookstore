@@ -11,9 +11,9 @@ public class DeliveryItemTableData extends AbstractEditableTableData {
 				"orderItem.book.isbn"));
 		descBeans.add(new ColumnDescBean(String.class, "Name",
 				"orderItem.book.name"));
-		descBeans.add(new ColumnDescBean(Integer.TYPE, "Total",
-				"orderItem.count"));
-		descBeans.add(new ColumnDescBean(Integer.TYPE, "Count", "count"));
+		descBeans.add(new ColumnDescBean(Integer.TYPE, "Remains",
+				"orderItem.unsentCount"));
+		descBeans.add(new ColumnDescBean(Integer.TYPE, "To Send", "count"));
 	}
 
 	public DeliveryItemTableData(Object bean) {
