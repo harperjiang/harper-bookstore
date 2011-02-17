@@ -159,6 +159,7 @@ public class DOFrame extends JFrame {
 								}
 							});
 						} catch (final Exception ex) {
+							ex.printStackTrace();
 							LogManager.getInstance().getLogger(DOFrame.class)
 									.error("Error on saving", ex);
 							SwingUtilities.invokeLater(new Runnable() {
@@ -176,7 +177,7 @@ public class DOFrame extends JFrame {
 		bottomPanel.add(saveButton);
 
 		JButton saveAndCloseButton = new JButton("Save and Force Close");
-		saveButton.addActionListener(new ActionListener() {
+		saveAndCloseButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new Thread(new Runnable() {
