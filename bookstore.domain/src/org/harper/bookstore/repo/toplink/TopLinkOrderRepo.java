@@ -6,9 +6,11 @@ import java.util.List;
 import oracle.toplink.expressions.Expression;
 import oracle.toplink.expressions.ExpressionBuilder;
 import oracle.toplink.queryframework.ReadAllQuery;
+import oracle.toplink.queryframework.ReportQuery;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.harper.bookstore.domain.deliver.DeliveryOrder;
 import org.harper.bookstore.domain.order.ListPrice;
 import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.domain.order.PurchaseOrder;
@@ -98,5 +100,44 @@ public class TopLinkOrderRepo extends TopLinkRepo implements OrderRepo {
 				.and(builder.get("status").equal(
 						PurchaseOrder.Status.DRAFT.ordinal()));
 		return getSession().readAllObjects(PurchaseOrder.class, exp);
+	}
+
+	@Override
+	public List<DeliveryOrder> searchDeliveryOrder(Date fromDate, Date toDate,
+			String poNumber, String consigneeName, String poCustomerId) {
+		ExpressionBuilder builder = new ExpressionBuilder();
+		Expression exp = builder;
+
+		exp = builder.get("valid").equal(true);
+		if (null != fromDate)
+			exp = exp.and(builder.get("createDate").greaterThanEqual(fromDate));
+		if (null != toDate)
+			exp = exp.and(builder.get("createDate").lessThanEqual(toDate));
+		if (!StringUtils.isEmpty(consigneeName))
+			exp = exp.and(builder.get("contact").get("name")
+					.containsSubstring(consigneeName));
+
+		ExpressionBuilder poBuilder = new ExpressionBuilder();
+		Expression poExp = poBuilder;
+		if (!StringUtils.isEmpty(poNumber))
+			poExp = poExp.and(poBuilder.get("number").equal(poNumber));
+		if (!StringUtils.isEmpty(poCustomerId))
+			poExp = poExp.and(poBuilder.get("customer").get("id")
+					.equalsIgnoreCase(poCustomerId));
+		if (poExp != poBuilder) {
+
+			poExp = poExp.and(poBuilder.anyOf("deliveryOrders").equal(builder));
+
+			ReportQuery poRq = new ReportQuery(PurchaseOrder.class, poBuilder);
+			poRq.addAttribute("oid");
+			poRq.setSelectionCriteria(poExp);
+			exp = exp.and(builder.exists(poRq));
+		}
+
+		ReadAllQuery raq = new ReadAllQuery(DeliveryOrder.class, exp);
+		raq.addOrdering(builder.get("createDate"));
+
+		return (List<DeliveryOrder>) TransactionContext.getSession()
+				.executeQuery(raq);
 	}
 }

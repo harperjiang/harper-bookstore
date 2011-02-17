@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.harper.bookstore.domain.deliver.DeliveryItem;
 import org.harper.bookstore.domain.deliver.DeliveryOrder;
 import org.harper.bookstore.domain.order.ListPrice;
 import org.harper.bookstore.domain.order.Order;
@@ -18,6 +19,7 @@ import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.profile.Customer;
 import org.harper.bookstore.domain.profile.Supplier;
 import org.harper.bookstore.repo.RepoFactory;
+import org.springframework.util.CollectionUtils;
 
 public class OrderService extends Service {
 
@@ -270,6 +272,7 @@ public class OrderService extends Service {
 					.ordinal() : DeliveryStatus.FULLY_SENT.ordinal());
 			// Update the delivery order to be valid;
 			order.getDelivery().setValid(true);
+			order.getDeliveryOrders().add(order.getDelivery());
 			PurchaseOrder retval = getRepoFactory().getCommonRepo()
 					.store(order);
 			commitTransaction();
@@ -285,6 +288,26 @@ public class OrderService extends Service {
 
 		startTransaction();
 		try {
+			Validate.isTrue(!CollectionUtils.isEmpty(order.getItems()),
+					"Please input the item to be sent");
+
+			for (int i = 0; i < order.getItems().size(); i++) {
+				DeliveryItem item = order.getItems().get(i);
+				// Remove the items that has 0 or negative count;
+				if (0 > item.getCount()) {
+					order.getItems().remove(i);
+					i--;
+					continue;
+				}
+				// Set Connection with PurchaseOrder
+				if (null != item.getOrderItem()) {
+					PurchaseOrder po = (PurchaseOrder) item.getOrderItem()
+							.getOrder();
+					if(!po.getDelivery().isValid())
+						po.setDelivery(order);
+					po.getDeliveryOrders().add(order);
+				}
+			}
 			DeliveryOrder result = getRepoFactory().getCommonRepo()
 					.store(order);
 			commitTransaction();
@@ -298,6 +321,7 @@ public class OrderService extends Service {
 
 	public List<DeliveryOrder> searchDeliveryOrder(Date fromDate, Date toDate,
 			String poNumber, String consigneeName, String poCustomerId) {
-		return null;
+		return getRepoFactory().getOrderRepo().searchDeliveryOrder(fromDate,
+				toDate, poNumber, consigneeName, poCustomerId);
 	}
 }
