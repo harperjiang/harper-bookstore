@@ -143,15 +143,15 @@ public class POController extends Controller {
 		manager.addBinding(new JTextBinding(getOrderFrame().getDeliveryPanel()
 				.getOrderNumberField(), "delivery.number"));
 		manager.addBinding(new JTextBinding(getOrderFrame().getDeliveryPanel()
-				.getNameField(), "delivery.contact.name"));
+				.getNameField(), "contact.name"));
 		manager.addBinding(new JTextBinding(getOrderFrame().getDeliveryPanel()
-				.getAddressArea(), "delivery.contact.address"));
+				.getAddressArea(), "contact.address"));
 		manager.addBinding(new JTextBinding(getOrderFrame().getDeliveryPanel()
-				.getEmailField(), "delivery.contact.email"));
+				.getEmailField(), "contact.email"));
 		manager.addBinding(new JTextBinding(getOrderFrame().getDeliveryPanel()
-				.getPhoneField(), "delivery.contact.phone"));
+				.getPhoneField(), "contact.phone"));
 		manager.addBinding(new JTextBinding(getOrderFrame().getDeliveryPanel()
-				.getMobileField(), "delivery.contact.mobile"));
+				.getMobileField(), "contact.mobile"));
 
 		manager.addPropertyChangeListener(new PropertyChangeListener() {
 			@Override

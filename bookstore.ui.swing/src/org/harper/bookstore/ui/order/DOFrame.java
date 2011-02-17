@@ -23,8 +23,10 @@ import org.harper.bookstore.domain.deliver.DeliveryItem;
 import org.harper.bookstore.domain.order.OrderItem;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.ui.common.CheckBoxTableRenderer;
+import org.harper.bookstore.ui.common.ExceptionRunnable;
 import org.harper.bookstore.ui.common.ItemController;
 import org.harper.bookstore.ui.common.ItemController.TableCreator;
+import org.harper.bookstore.ui.common.ReturnKeyAdapter;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.table.data.TableData;
 import org.harper.frm.gui.swing.comp.textfield.NumTextField;
@@ -58,7 +60,24 @@ public class DOFrame extends JFrame {
 		poNumberField = new JTextField();
 		poNumberField.setPreferredSize(new Dimension(200, 25));
 		topPanel.add(poNumberField);
-		
+		poNumberField.addKeyListener(new ReturnKeyAdapter(
+				new ExceptionRunnable() {
+					public void run() {
+						getController().loadPo();
+					}
+
+					public void handleException(final Exception ex) {
+						SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								JOptionPane.showMessageDialog(DOFrame.this,
+										ex.getMessage(), "Failed to load",
+										JOptionPane.ERROR_MESSAGE);
+							}
+						});
+
+					}
+				}));
+
 		JButton loadPoButton = new JButton("Load");
 		loadPoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -72,8 +91,6 @@ public class DOFrame extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
 
-		
-
 		doItemController = new ItemController<DeliveryItem>(null,
 				new TableCreator() {
 
@@ -83,7 +100,7 @@ public class DOFrame extends JFrame {
 						ctm.initialize(DeliveryItemTableData.class);
 						table.setModel(ctm);
 
-						ctm.setCellEditable(2, true);
+						ctm.setCellEditable(3, true);
 
 						table.setDefaultRenderer(Integer.TYPE,
 								new DefaultTableCellRenderer());
@@ -120,7 +137,7 @@ public class DOFrame extends JFrame {
 
 		panel = new DeliveryPanel();
 		tabbedPane.addTab("Delivery Info", panel);
-		
+
 		JPanel bottomPanel = new JPanel();
 		add(bottomPanel, BorderLayout.SOUTH);
 
