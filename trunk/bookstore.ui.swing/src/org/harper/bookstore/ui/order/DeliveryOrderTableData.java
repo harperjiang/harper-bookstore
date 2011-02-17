@@ -17,7 +17,7 @@ public class DeliveryOrderTableData extends AbstractTableData {
 		descBeans.add(new ColumnDescBean(String.class, "Number", "number"));
 
 		descBeans.add(new ColumnDescBean(String.class, "Consignee",
-				"contact.consignee"));
+				"contact.name"));
 		descBeans.add(new ColumnDescBean(String.class, "Address",
 				"contact.address"));
 	}
