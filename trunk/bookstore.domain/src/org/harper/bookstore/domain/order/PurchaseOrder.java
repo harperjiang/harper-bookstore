@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 import oracle.toplink.indirection.ValueHolder;
 import oracle.toplink.indirection.ValueHolderInterface;
@@ -44,7 +45,7 @@ public class PurchaseOrder extends Order {
 
 	private ValueHolderInterface delivery;
 
-	private List<DeliveryOrder> deliveryOrders;
+	private ValueHolderInterface deliveryOrders;
 
 	public PurchaseOrder() {
 		super();
@@ -54,6 +55,7 @@ public class PurchaseOrder extends Order {
 		DeliveryOrder infoDo = new DeliveryOrder();
 		infoDo.setValid(false);
 		delivery = new ValueHolder(infoDo);
+		deliveryOrders = new ValueHolder(new Vector());
 	}
 
 	public void addDispItem(DisplayItem item) {
@@ -240,11 +242,11 @@ public class PurchaseOrder extends Order {
 	}
 
 	public List<DeliveryOrder> getDeliveryOrders() {
-		return deliveryOrders;
+		return (List<DeliveryOrder>)deliveryOrders.getValue();
 	}
 
 	public void setDeliveryOrders(List<DeliveryOrder> deliveryOrders) {
-		this.deliveryOrders = deliveryOrders;
+		this.deliveryOrders.setValue(deliveryOrders);
 	}
 
 	public int getDeliveryStatus() {

@@ -22,6 +22,7 @@ public class Service {
 	}
 
 	public void releaseTransaction() {
-		((UnitOfWork) TransactionContext.get().pop()).release();
+		if (!TransactionContext.get().isEmpty())
+			((UnitOfWork) TransactionContext.get().pop()).release();
 	}
 }

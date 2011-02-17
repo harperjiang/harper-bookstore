@@ -287,7 +287,6 @@ public class OrderService extends Service {
 	}
 
 	public DeliveryOrder saveDeliveryOrder(DeliveryOrder order) {
-
 		startTransaction();
 		try {
 			Validate.isTrue(!CollectionUtils.isEmpty(order.getItems()),
@@ -295,6 +294,7 @@ public class OrderService extends Service {
 
 			for (int i = 0; i < order.getItems().size(); i++) {
 				DeliveryItem item = order.getItems().get(i);
+				item.setHeader(order);
 				// Remove the items that has 0 or negative count;
 				if (0 > item.getCount()) {
 					order.getItems().remove(i);
@@ -303,11 +303,16 @@ public class OrderService extends Service {
 				}
 				// Set Connection with PurchaseOrder
 				if (null != item.getOrderItem()) {
+					item.getOrderItem().setSentCount(
+							item.getOrderItem().getSentCount()
+									+ item.getCount());
+
 					PurchaseOrder po = (PurchaseOrder) item.getOrderItem()
 							.getOrder();
 					if (!po.getDelivery().isValid())
 						po.setDelivery(order);
 					po.getDeliveryOrders().add(order);
+					po.makeDelivery();
 				}
 			}
 			DeliveryOrder result = getRepoFactory().getCommonRepo()
@@ -323,7 +328,12 @@ public class OrderService extends Service {
 
 	public List<DeliveryOrder> searchDeliveryOrder(Date fromDate, Date toDate,
 			String poNumber, String consigneeName, String poCustomerId) {
-		return getRepoFactory().getOrderRepo().searchDeliveryOrder(fromDate,
-				toDate, poNumber, consigneeName, poCustomerId);
+		startTransaction();
+		try {
+			return getRepoFactory().getOrderRepo().searchDeliveryOrder(
+					fromDate, toDate, poNumber, consigneeName, poCustomerId);
+		} finally {
+			releaseTransaction();
+		}
 	}
 }
