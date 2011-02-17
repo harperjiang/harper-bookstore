@@ -17,8 +17,6 @@ public abstract class Order extends Entity {
 		NEW, DRAFT, CONFIRM, FINISH, CANCEL;
 	}
 
-	private int oid;
-
 	private int status;
 
 	private String number;
@@ -108,14 +106,6 @@ public abstract class Order extends Entity {
 			sum = sum.add(feeAmount);
 		setTotalAmt(sum);
 		return sum;
-	}
-
-	public int getOid() {
-		return oid;
-	}
-
-	public void setOid(int oid) {
-		this.oid = oid;
 	}
 
 	public int getStatus() {

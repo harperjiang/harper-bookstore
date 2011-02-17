@@ -3,9 +3,9 @@ package org.harper.bookstore.repo.toplink;
 import oracle.toplink.descriptors.ClassDescriptor;
 import oracle.toplink.descriptors.RelationalDescriptor;
 import oracle.toplink.descriptors.VersionLockingPolicy;
-import oracle.toplink.indirection.IndirectList;
 import oracle.toplink.mappings.AggregateObjectMapping;
 import oracle.toplink.mappings.DirectToFieldMapping;
+import oracle.toplink.mappings.ManyToManyMapping;
 import oracle.toplink.mappings.OneToManyMapping;
 import oracle.toplink.mappings.OneToOneMapping;
 import oracle.toplink.sequencing.TableSequence;
@@ -526,6 +526,11 @@ public ClassDescriptor buildOrderItemDescriptor() {
 	unitCostMapping.setFieldName("order_item.unit_cost");
 	descriptor.addMapping(unitCostMapping);
 	
+	DirectToFieldMapping sentCountMapping = new DirectToFieldMapping();
+	sentCountMapping.setAttributeName("sentCount");
+	sentCountMapping.setFieldName("order_item.sent_count");
+	descriptor.addMapping(sentCountMapping);
+	
 	DirectToFieldMapping agentMapping = new DirectToFieldMapping();
 	agentMapping.setAttributeName("agent");
 	agentMapping.setFieldName("order_item.is_agent");
@@ -650,6 +655,8 @@ public ClassDescriptor buildPurchaseOrderDescriptor() {
 	dispItemsMapping.useCollectionClass(oracle.toplink.indirection.IndirectList.class);
 	dispItemsMapping.addTargetForeignKeyFieldName("order_disp_item.order_header", "order_common.oid");
 	descriptor.addMapping(dispItemsMapping);
+	
+	ManyToManyMapping deliveryOrdersMapping = new ManyToManyMapping();
 	
 	return descriptor;
 }
@@ -1358,9 +1365,9 @@ public ClassDescriptor buildDeliveryItemDescriptor() {
 	
 	OneToOneMapping orderItemMapping = new OneToOneMapping();
 	orderItemMapping.setAttributeName("orderItem");
-	orderItemMapping.setReferenceClass(org.harper.bookstore.domain.deliver.DeliveryOrder.class);
+	orderItemMapping.setReferenceClass(org.harper.bookstore.domain.order.OrderItem.class);
 	orderItemMapping.dontUseIndirection();
-	orderItemMapping.addForeignKeyFieldName("order_delivery_item.item_oid", "order_delivery.oid");
+	orderItemMapping.addForeignKeyFieldName("order_delivery_item.item_oid", "order_item.oid");
 	descriptor.addMapping(orderItemMapping);
 	
 	return descriptor;

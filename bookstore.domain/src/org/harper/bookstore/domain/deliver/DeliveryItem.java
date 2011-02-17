@@ -30,8 +30,9 @@ public class DeliveryItem extends Entity implements Item {
 
 	public void setOrderItem(OrderItem orderItem) {
 		this.orderItem = orderItem;
-		if (null != orderItem)
+		if (null != orderItem) {
 			this.setBook(orderItem.getBook());
+		}
 	}
 
 	public int getCount() {
