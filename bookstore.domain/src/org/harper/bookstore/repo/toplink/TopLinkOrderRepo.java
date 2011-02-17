@@ -34,7 +34,6 @@ public class TopLinkOrderRepo extends TopLinkRepo implements OrderRepo {
 	public List<Order> searchOrder(String number, String type, Date start,
 			Date stop, int[] status, int[] expStatus, String partyId) {
 		Validate.notNull(type);
-		Validate.notNull(status);
 		ExpressionBuilder builder = new ExpressionBuilder();
 		Expression exp = builder;
 		if (null != number) {
@@ -135,7 +134,7 @@ public class TopLinkOrderRepo extends TopLinkRepo implements OrderRepo {
 		}
 
 		ReadAllQuery raq = new ReadAllQuery(DeliveryOrder.class, exp);
-		raq.addOrdering(builder.get("createDate"));
+		raq.addOrdering(builder.get("createDate").descending());
 
 		return (List<DeliveryOrder>) TransactionContext.getSession()
 				.executeQuery(raq);

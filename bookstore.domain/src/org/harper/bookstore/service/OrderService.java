@@ -272,6 +272,8 @@ public class OrderService extends Service {
 					.ordinal() : DeliveryStatus.FULLY_SENT.ordinal());
 			// Update the delivery order to be valid;
 			order.getDelivery().setValid(true);
+			order.getDelivery().setCreateDate(new Date());
+			order.getDelivery().getContact().copy(order.getContact());
 			order.getDeliveryOrders().add(order.getDelivery());
 			PurchaseOrder retval = getRepoFactory().getCommonRepo()
 					.store(order);
@@ -303,7 +305,7 @@ public class OrderService extends Service {
 				if (null != item.getOrderItem()) {
 					PurchaseOrder po = (PurchaseOrder) item.getOrderItem()
 							.getOrder();
-					if(!po.getDelivery().isValid())
+					if (!po.getDelivery().isValid())
 						po.setDelivery(order);
 					po.getDeliveryOrders().add(order);
 				}
