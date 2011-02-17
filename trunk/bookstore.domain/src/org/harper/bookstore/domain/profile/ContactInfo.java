@@ -28,6 +28,15 @@ public class ContactInfo {
 		}
 		return super.equals(comp);
 	}
+	
+	public void copy(ContactInfo src) {
+		setName(src.getName());
+		setAddress(src.getAddress());
+		setEmail(src.getEmail());
+		setPhone(src.getPhone());
+		setMobile(src.getMobile());
+		setPostalCode(src.getPostalCode());
+	}
 
 	public String getEmail() {
 		return email;
