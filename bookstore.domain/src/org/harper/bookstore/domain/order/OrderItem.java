@@ -25,6 +25,12 @@ public class OrderItem implements Item {
 
 	private String refUid;
 
+	private int sentCount;
+
+	public OrderItem() {
+		super();
+	}
+	
 	public int getCount() {
 		return count;
 	}
@@ -97,4 +103,15 @@ public class OrderItem implements Item {
 		this.refUid = refUid;
 	}
 
+	public int getSentCount() {
+		return sentCount;
+	}
+
+	public void setSentCount(int sentCount) {
+		this.sentCount = sentCount;
+	}
+	
+	public int getUnsentCount() {
+		return getCount() - getSentCount();
+	}
 }

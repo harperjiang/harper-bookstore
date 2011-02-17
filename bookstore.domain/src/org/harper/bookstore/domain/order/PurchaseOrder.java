@@ -17,7 +17,6 @@ import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.repo.RepoFactory;
 import org.harper.bookstore.repo.StoreRepo;
 import org.harper.frm.ValidateException;
-import org.springframework.util.CollectionUtils;
 
 public class PurchaseOrder extends Order {
 
@@ -51,7 +50,7 @@ public class PurchaseOrder extends Order {
 		super();
 		customer = new Customer();
 		dispItems = new ArrayList<DisplayItem>();
-		
+
 		DeliveryOrder infoDo = new DeliveryOrder();
 		infoDo.setValid(false);
 		delivery = new ValueHolder(infoDo);
@@ -137,9 +136,8 @@ public class PurchaseOrder extends Order {
 				int remains = item.getCount() * book.getCount();
 				remains -= site.lock(book.getBook(), remains);
 				if (remains > 0)
-					throw ValidateException.notEnoughBook(book.getBook(), item
-							.getCount()
-							- remains);
+					throw ValidateException.notEnoughBook(book.getBook(),
+							item.getCount() - remains);
 			}
 		}
 	}
@@ -162,9 +160,8 @@ public class PurchaseOrder extends Order {
 					sum = sum.add(unit.getSum());
 				}
 				if (remains > 0)
-					throw ValidateException.notEnoughBook(book.getBook(), item
-							.getCount()
-							- remains);
+					throw ValidateException.notEnoughBook(book.getBook(),
+							item.getCount() - remains);
 
 			}
 			if (0 != item.getCount())
@@ -186,9 +183,8 @@ public class PurchaseOrder extends Order {
 				int remains = item.getCount() * book.getCount();
 				remains -= site.cancel(book.getBook(), remains);
 				if (remains > 0)
-					throw ValidateException.notEnoughBook(book.getBook(), item
-							.getCount()
-							- remains);
+					throw ValidateException.notEnoughBook(book.getBook(),
+							item.getCount() - remains);
 			}
 		}
 	}
@@ -234,9 +230,9 @@ public class PurchaseOrder extends Order {
 	}
 
 	public DeliveryOrder getDelivery() {
-		if(null == delivery.getValue()) 
+		if (null == delivery.getValue())
 			delivery.setValue(new DeliveryOrder());
-		return (DeliveryOrder)delivery.getValue();
+		return (DeliveryOrder) delivery.getValue();
 	}
 
 	public void setDelivery(DeliveryOrder delivery) {
@@ -275,11 +271,22 @@ public class PurchaseOrder extends Order {
 	}
 
 	public void partialDeliver() {
-
+		
 	}
 
 	public void makeDelivery() {
-		Validate.isTrue(null != getDelivery()
-				|| !CollectionUtils.isEmpty(getDeliveryOrders()));
+		Validate.isTrue(getDeliveryStatus() != DeliveryStatus.FULLY_SENT
+				.ordinal());
+		for (OrderItem item : getItems()) {
+			if (item.getSentCount() == 0) {
+				setDeliveryStatus(DeliveryStatus.NOT_SENT.ordinal());
+				continue;
+			}
+			if (item.getCount() > item.getSentCount()) {
+				setDeliveryStatus(DeliveryStatus.PARTIAL_SENT.ordinal());
+				break;
+			}
+			setDeliveryStatus(DeliveryStatus.FULLY_SENT.ordinal());
+		}
 	}
 }
