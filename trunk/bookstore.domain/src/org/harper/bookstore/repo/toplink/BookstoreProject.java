@@ -657,6 +657,13 @@ public ClassDescriptor buildPurchaseOrderDescriptor() {
 	descriptor.addMapping(dispItemsMapping);
 	
 	ManyToManyMapping deliveryOrdersMapping = new ManyToManyMapping();
+	deliveryOrdersMapping.setAttributeName("deliveryOrders");
+	deliveryOrdersMapping.setReferenceClass(org.harper.bookstore.domain.deliver.DeliveryOrder.class);
+	deliveryOrdersMapping.setRelationTableName("order_delivery_po");
+	deliveryOrdersMapping.addSourceRelationKeyFieldName("order_delivery_po.po_oid", "order_common.oid");
+	deliveryOrdersMapping.addTargetRelationKeyFieldName("order_delivery_po.do_oid", "order_delivery.oid");
+	deliveryOrdersMapping.useBasicIndirection();
+	descriptor.addMapping(deliveryOrdersMapping);
 	
 	return descriptor;
 }

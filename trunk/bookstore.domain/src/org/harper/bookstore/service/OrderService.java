@@ -311,7 +311,8 @@ public class OrderService extends Service {
 							.getOrder();
 					if (!po.getDelivery().isValid())
 						po.setDelivery(order);
-					po.getDeliveryOrders().add(order);
+					if (!po.getDeliveryOrders().contains(order))
+						po.getDeliveryOrders().add(order);
 					po.makeDelivery();
 				}
 			}
