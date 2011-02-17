@@ -282,10 +282,18 @@ public class OrderService extends Service {
 	}
 
 	public DeliveryOrder saveDeliveryOrder(DeliveryOrder order) {
-		// Get the Purchase Order1111111111111111111111111111111111111111111111111111111111111111111111111111111                                                                                   
-		// order.
 
-		return order;
+		startTransaction();
+		try {
+			DeliveryOrder result = getRepoFactory().getCommonRepo()
+					.store(order);
+			commitTransaction();
+			return result;
+		} catch (Exception e) {
+			releaseTransaction();
+			throw new RuntimeException(e);
+		}
+
 	}
 
 	public List<DeliveryOrder> searchDeliveryOrder(Date fromDate, Date toDate,
