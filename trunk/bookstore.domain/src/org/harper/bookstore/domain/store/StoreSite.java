@@ -17,6 +17,8 @@ public class StoreSite extends Entity {
 
 	private int privilege;
 
+	private String description;
+
 	// Is this storesite available to sale books
 	private boolean forOutput;
 
@@ -60,6 +62,14 @@ public class StoreSite extends Entity {
 
 	public void setForOutput(boolean forOutput) {
 		this.forOutput = forOutput;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public StoreEntry putInto(Book book, int count, BigDecimal unitPrice) {
