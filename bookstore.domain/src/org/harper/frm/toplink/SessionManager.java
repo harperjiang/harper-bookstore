@@ -30,8 +30,8 @@ public class SessionManager {
 				login.usePlatform(new oracle.toplink.platform.database.MySQL4Platform());
 				login.setDriverClassName("com.mysql.jdbc.Driver");
 				login.setConnectionString(ConfigManager.getInstance().getConfigValue("JDBC_CONSTR"));
-				login.setUserName("root");
-				login.setEncryptedPassword("BF06934E3F151B148BEEB6319A4856D6");
+				login.setUserName(ConfigManager.getInstance().getConfigValue("JDBC_PRINCIPLE"));
+				login.setPassword(ConfigManager.getInstance().getConfigValue("JDBC_CREDENTIAL"));
 			}
 			
 			session = proj.createDatabaseSession();

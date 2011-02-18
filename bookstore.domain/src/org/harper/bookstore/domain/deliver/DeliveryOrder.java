@@ -67,11 +67,21 @@ public class DeliveryOrder extends Entity {
 		return (List<DeliveryItem>) items.getValue();
 	}
 
-	public void setItems(List<DeliveryItem> items) {
-		this.items.setValue(items);
-		for (DeliveryItem item : items)
-			item.setHeader(this);
+	public void addItem(DeliveryItem add) {
+		add.setHeader(this);
+		this.getItems().add(add);
 	}
+	
+	public void removeItem(DeliveryItem remove) {
+		remove.setHeader(null);
+		this.getItems().remove(remove);
+	}
+	
+//	public void setItems(List<DeliveryItem> items) {
+//		this.items.setValue(items);
+//		for (DeliveryItem item : items)
+//			item.setHeader(this);
+//	}
 
 	public int getStatus() {
 		return status;

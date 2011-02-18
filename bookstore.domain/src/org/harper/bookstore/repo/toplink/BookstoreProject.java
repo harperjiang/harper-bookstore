@@ -939,6 +939,11 @@ public ClassDescriptor buildStoreSiteDescriptor() {
 	nameMapping.setFieldName("store_site.name");
 	descriptor.addMapping(nameMapping);
 	
+	DirectToFieldMapping descriptionMapping = new DirectToFieldMapping();
+	descriptionMapping.setAttributeName("description");
+	descriptionMapping.setFieldName("store_site.description");
+	descriptor.addMapping(descriptionMapping);
+	
 	DirectToFieldMapping validMapping = new DirectToFieldMapping();
 	validMapping.setAttributeName("valid");
 	validMapping.setFieldName("store_site.valid");
