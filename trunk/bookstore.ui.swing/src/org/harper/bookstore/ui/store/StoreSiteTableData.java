@@ -8,7 +8,7 @@ public class StoreSiteTableData extends AbstractEditableTableData {
 	public StoreSiteTableData() {
 		super();
 		descBeans.add(new ColumnDescBean(String.class, "Name", "name", 200));
-		descBeans.add(new ColumnDescBean(String.class, "Description", "desc",
+		descBeans.add(new ColumnDescBean(String.class, "Description", "description",
 				200));
 		descBeans.add(new ColumnDescBean(Boolean.class, "Valid", "valid", 50));
 		descBeans.add(new ColumnDescBean(Boolean.class, "For Output",

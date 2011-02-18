@@ -3,6 +3,7 @@ package org.harper.bookstore.ui.order;
 import java.util.List;
 
 import org.harper.bookstore.domain.order.Order;
+import org.harper.bookstore.domain.order.PurchaseOrder.DeliveryStatus;
 import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
@@ -55,10 +56,10 @@ public class ViewPurchaseOrderController extends Controller {
 	public void search() {
 		bean.setSearchResults((List) new OrderService().searchOrder(bean
 				.getOrderNum(), bean.getOrderType(), bean.getStartDate(), bean
-				.getStopDate(),
-				"ALL".equals(bean.getStatus()) ? null
-						: new int[] { Order.Status.valueOf(bean.getStatus())
-								.ordinal() }, null, bean.getPartyId()));
+				.getStopDate(), null == bean.getStatus() ? null
+				: new int[] { bean.getStatus().ordinal() }, null == bean
+				.getDeliveryStatus() ? null : new int[] { bean
+				.getDeliveryStatus().ordinal() }, bean.getPartyId()));
 	}
 
 	public static void main(String[] args) {

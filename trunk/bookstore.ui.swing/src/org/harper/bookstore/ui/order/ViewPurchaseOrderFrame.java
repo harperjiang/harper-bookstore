@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -21,7 +22,9 @@ import javax.swing.border.EmptyBorder;
 
 import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.domain.order.PurchaseOrder;
+import org.harper.bookstore.domain.order.PurchaseOrder.DeliveryStatus;
 import org.harper.bookstore.domain.order.SupplyOrder;
+import org.harper.bookstore.ui.common.EnumListCellRenderer;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
 
@@ -67,51 +70,74 @@ public class ViewPurchaseOrderFrame extends JFrame {
 		headerPanel.setLayout(new GridLayout(4, 2, 5, 5));
 		headerPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		JLabel orderNumLabel = new JLabel(Messages.getString("ViewPurchaseOrderFrame.order_num")); //$NON-NLS-1$
+		JLabel orderNumLabel = new JLabel(
+				Messages.getString("ViewPurchaseOrderFrame.order_num")); //$NON-NLS-1$
 		headerPanel.add(orderNumLabel);
 
 		orderNumField = new JTextField();
 		orderNumField.setPreferredSize(new Dimension(120, 20));
 		headerPanel.add(orderNumField);
 
-		JLabel statusLabel = new JLabel(Messages.getString("ViewPurchaseOrderFrame.order_status")); //$NON-NLS-1$
+		JLabel statusLabel = new JLabel(
+				Messages.getString("ViewPurchaseOrderFrame.order_status")); //$NON-NLS-1$
 		headerPanel.add(statusLabel);
 
 		statusCombo = new JComboBox();
-		statusCombo.addItem(Messages.getString("ViewPurchaseOrderFrame.status_all")); //$NON-NLS-1$
+		statusCombo.addItem(null); //$NON-NLS-1$
 		for (Order.Status status : Order.Status.values())
-			statusCombo.addItem(status.name());
+			statusCombo.addItem(status);
+
+		statusCombo
+				.setRenderer(new EnumListCellRenderer(
+						Order.Status.class,
+						ResourceBundle
+								.getBundle("org.harper.bookstore.ui.order.OrderStatus"),
+						"ALL"));
 		headerPanel.add(statusCombo);
 
-		JLabel startDateLabel = new JLabel(Messages.getString("ViewPurchaseOrderFrame.start_date")); //$NON-NLS-1$
+		JLabel startDateLabel = new JLabel(
+				Messages.getString("ViewPurchaseOrderFrame.start_date")); //$NON-NLS-1$
 		headerPanel.add(startDateLabel);
 
 		startDateField = new DateTextField(new SimpleDateFormat("yyyy-MM-dd")); //$NON-NLS-1$
 		startDateField.setPreferredSize(new Dimension(100, 20));
 		headerPanel.add(startDateField);
 
-		JLabel stopDateLabel = new JLabel(Messages.getString("ViewPurchaseOrderFrame.stop_date")); //$NON-NLS-1$
+		JLabel stopDateLabel = new JLabel(
+				Messages.getString("ViewPurchaseOrderFrame.stop_date")); //$NON-NLS-1$
 		headerPanel.add(stopDateLabel);
 
 		stopDateField = new DateTextField(new SimpleDateFormat("yyyy-MM-dd")); //$NON-NLS-1$
 		stopDateField.setPreferredSize(new Dimension(100, 20));
 		headerPanel.add(stopDateField);
 
-		JLabel partyIdLabel = new JLabel(Messages.getString("ViewPurchaseOrderFrame.cust_id")); //$NON-NLS-1$
+		JLabel partyIdLabel = new JLabel(
+				Messages.getString("ViewPurchaseOrderFrame.cust_id")); //$NON-NLS-1$
 		headerPanel.add(partyIdLabel);
 
 		partyIdField = new JTextField();
 		partyIdField.setPreferredSize(new Dimension(100, 20));
 		headerPanel.add(partyIdField);
 
-		JLabel deliveryStatusLabel = new JLabel(Messages.getString("ViewPurchaseOrderFrame.delivery_status")); //$NON-NLS-1$
+		JLabel deliveryStatusLabel = new JLabel(
+				Messages.getString("ViewPurchaseOrderFrame.delivery_status")); //$NON-NLS-1$
 		headerPanel.add(deliveryStatusLabel);
 
 		deliveryStatusCombo = new JComboBox();
 		deliveryStatusCombo.setPreferredSize(new Dimension(100, 20));
+		deliveryStatusCombo.addItem(null);
+		for (DeliveryStatus ds : DeliveryStatus.values())
+			deliveryStatusCombo.addItem(ds);
+		deliveryStatusCombo
+				.setRenderer(new EnumListCellRenderer(
+						DeliveryStatus.class,
+						ResourceBundle
+								.getBundle("org.harper.bookstore.ui.order.OrderStatus"),
+						"ALL"));
 		headerPanel.add(deliveryStatusCombo);
 
-		JButton searchButton = new JButton(Messages.getString("ViewPurchaseOrderFrame.btn_search")); //$NON-NLS-1$
+		JButton searchButton = new JButton(
+				Messages.getString("ViewPurchaseOrderFrame.btn_search")); //$NON-NLS-1$
 		searchButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -120,20 +146,22 @@ public class ViewPurchaseOrderFrame extends JFrame {
 		});
 		headerPanel.add(searchButton);
 
-		JButton printOrderButton = new JButton(Messages.getString("ViewPurchaseOrderFrame.print_order")); //$NON-NLS-1$
+		JButton printOrderButton = new JButton(
+				Messages.getString("ViewPurchaseOrderFrame.print_order")); //$NON-NLS-1$
 		printOrderButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				throw new UnsupportedOperationException("Not implemented");
 			}
 		});
 		headerPanel.add(printOrderButton);
 
-		JButton printExpressButton = new JButton(Messages.getString("ViewPurchaseOrderFrame.print_express")); //$NON-NLS-1$
+		JButton printExpressButton = new JButton(
+				Messages.getString("ViewPurchaseOrderFrame.print_express")); //$NON-NLS-1$
 		printExpressButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				throw new UnsupportedOperationException("Not implemented");
 			}
 		});
 		headerPanel.add(printExpressButton);
@@ -146,8 +174,8 @@ public class ViewPurchaseOrderFrame extends JFrame {
 		orderTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
 		for (int i = 0; i < ctm.getColumnCount(); i++)
-			orderTable.getColumnModel().getColumn(i).setPreferredWidth(
-					ctm.getColumnWidth(i));
+			orderTable.getColumnModel().getColumn(i)
+					.setPreferredWidth(ctm.getColumnWidth(i));
 
 		// TableColumnModel
 		orderTable.addMouseListener(new MouseAdapter() {
@@ -156,8 +184,8 @@ public class ViewPurchaseOrderFrame extends JFrame {
 				if (event.getClickCount() <= 1)
 					return;
 				int selected = orderTable.getSelectedRow();
-				Order order = controller.getBean().getSearchResults().get(
-						selected);
+				Order order = controller.getBean().getSearchResults()
+						.get(selected);
 				if (order instanceof PurchaseOrder) {
 					new POController((PurchaseOrder) order);
 				}
