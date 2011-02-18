@@ -21,7 +21,7 @@ public class CreateSequences {
 				"profile_supplier", "store_site", "store_entry",
 				"store_transfer", "store_trans_item", "profile_book",
 				"library_record", "library_record_item", "library_entry",
-				"profile_borrower", "order_disp_item" };
+				"profile_borrower", "order_disp_item","fna_accounting" };
 		PreparedStatement stmt = con
 				.prepareStatement("insert into sys_sequence(table_name,seq) values(?,?)");
 		for (String table : tables) {
