@@ -9,6 +9,11 @@ import java.awt.print.PrinterException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 
+import net.sourceforge.barbecue.Barcode;
+import net.sourceforge.barbecue.BarcodeException;
+import net.sourceforge.barbecue.BarcodeFactory;
+import net.sourceforge.barbecue.output.OutputException;
+
 import org.apache.commons.lang.StringUtils;
 import org.harper.bookstore.domain.order.OrderItem;
 import org.harper.bookstore.domain.order.PurchaseOrder;
@@ -41,9 +46,10 @@ public class POContainer implements Printable {
 		// Draw table
 		g2d.drawString("Order #:" + order.getNumber(), 50, 100);
 		g2d.drawString("Customer:" + order.getCustomer().getId(), 350, 100);
-		g2d.drawString("Creation Date:"
-				+ new SimpleDateFormat("dd/MMM/yyyy").format(order
-						.getCreateDate()), 50, 120);
+		g2d.drawString(
+				"Creation Date:"
+						+ new SimpleDateFormat("dd/MMM/yyyy").format(order
+								.getCreateDate()), 50, 120);
 
 		// Table Header
 		int[] SPLIT = new int[] { 50, 140, 350, 420, 490 };
@@ -64,16 +70,33 @@ public class POContainer implements Printable {
 		int startY = 185;
 
 		for (OrderItem item : order.getItems()) {
-			g2d.drawString(item.getBook().getIsbn(), SPLIT[0] + 10, startY);
+			// Draw Barcode
+//			if (!StringUtils.isEmpty(item.getBook().getIsbn())
+//					&& 13 == item.getBook().getIsbn().length()) {
+//				try {
+//					Barcode barcode = BarcodeFactory.createEAN13(item.getBook()
+//							.getIsbn().substring(0, 12));
+//					barcode.setBarHeight(16);
+//					barcode.draw(g2d, SPLIT[0], startY);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//					g2d.drawString(item.getBook().getIsbn(), SPLIT[0] + 10,
+//							startY);
+//				}
+//			} else {
+				g2d.drawString(item.getBook().getIsbn(), SPLIT[0] + 10, startY);
+//			}
+			// g2d.draw
 			if (!StringUtils.isEmpty(item.getBook().getName()))
 				g2d.drawString(item.getBook().getName(), SPLIT[1] + 10, startY);
 			g2d.drawString(item.getUnitPrice().toPlainString(), SPLIT[2] + 10,
 					startY);
 			g2d.drawString(String.valueOf(item.getCount()), SPLIT[3] + 10,
 					startY);
-			g2d.drawString(item.getUnitPrice().multiply(
-					new BigDecimal(item.getCount())).toPlainString(),
-					SPLIT[4] + 10, startY);
+			g2d.drawString(
+					item.getUnitPrice()
+							.multiply(new BigDecimal(item.getCount()))
+							.toPlainString(), SPLIT[4] + 10, startY);
 			startY += 20;
 		}
 		g2d.setFont(headerFont);
