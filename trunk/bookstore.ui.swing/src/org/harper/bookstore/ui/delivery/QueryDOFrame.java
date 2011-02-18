@@ -64,7 +64,7 @@ public class QueryDOFrame extends JFrame {
 				int selected = queryDoTable.getSelectedRow();
 				DeliveryOrder order = controller.getBean().getOrders()
 						.get(selected);
-				new DOController(order);
+				new ViewDOController(order);
 			}
 		});
 
