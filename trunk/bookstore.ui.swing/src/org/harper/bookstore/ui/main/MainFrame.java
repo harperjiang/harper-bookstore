@@ -6,12 +6,12 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JToolBar;
 
+import org.harper.bookstore.ui.delivery.DOController;
+import org.harper.bookstore.ui.delivery.QueryDOController;
 import org.harper.bookstore.ui.library.BorrowBookController;
 import org.harper.bookstore.ui.library.ReturnBookController;
 import org.harper.bookstore.ui.library.ViewLibraryController;
-import org.harper.bookstore.ui.order.DOController;
 import org.harper.bookstore.ui.order.POController;
-import org.harper.bookstore.ui.order.QueryDOController;
 import org.harper.bookstore.ui.order.SOController;
 import org.harper.bookstore.ui.order.ViewOrderController;
 import org.harper.bookstore.ui.order.ViewPurchaseOrderController;
