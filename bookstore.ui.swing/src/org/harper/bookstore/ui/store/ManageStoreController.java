@@ -42,7 +42,6 @@ public class ManageStoreController extends Controller {
 	protected void createManager() {
 		manager = new BindingManager(bean);
 		manager.addBinding(new TableBinding(frame.getStoreTable(), "sites"));
-
 		manager.loadAll();
 	}
 

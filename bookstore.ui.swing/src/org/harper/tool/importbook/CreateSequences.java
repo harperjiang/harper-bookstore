@@ -13,8 +13,8 @@ public class CreateSequences {
 		Class.forName("com.mysql.jdbc.Driver");
 
 		Connection con = DriverManager.getConnection(
-				"jdbc:mysql://localhost:3306/bookstore", "root", "jieninan");
-
+		// "jdbc:mysql://localhost:3306/bookstore", "root", "jieninan");
+				"jdbc:mysql://harper.gotoip1.com:3306/harper", "harper", "jieninan");
 		con.setAutoCommit(false);
 		String[] tables = new String[] { "order_common", "order_item",
 				"order_delivery", "order_delivery_item", "profile_customer",

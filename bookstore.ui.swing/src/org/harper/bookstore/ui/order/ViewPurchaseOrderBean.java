@@ -4,14 +4,17 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.harper.bookstore.domain.order.Order;
+import org.harper.bookstore.domain.order.Order.Status;
 import org.harper.bookstore.domain.order.PurchaseOrder;
+import org.harper.bookstore.domain.order.PurchaseOrder.DeliveryStatus;
 import org.harper.frm.gui.swing.manager.AbstractBean;
 
 public class ViewPurchaseOrderBean extends AbstractBean {
 
 	private String orderType = "PO";
 
-	private String status = "ALL";
+	private Order.Status status = null;
 
 	private Date startDate = DateUtils.addDays(new Date(), -7);
 
@@ -21,7 +24,7 @@ public class ViewPurchaseOrderBean extends AbstractBean {
 
 	private String orderNum;
 
-	private String deliveryStatus;
+	private PurchaseOrder.DeliveryStatus deliveryStatus = null;
 
 	private List<PurchaseOrder> searchResults;
 
@@ -29,11 +32,11 @@ public class ViewPurchaseOrderBean extends AbstractBean {
 		return orderType;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
@@ -73,11 +76,11 @@ public class ViewPurchaseOrderBean extends AbstractBean {
 		this.orderNum = orderNum;
 	}
 
-	public String getDeliveryStatus() {
+	public DeliveryStatus getDeliveryStatus() {
 		return deliveryStatus;
 	}
 
-	public void setDeliveryStatus(String deliveryStatus) {
+	public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
 		this.deliveryStatus = deliveryStatus;
 	}
 

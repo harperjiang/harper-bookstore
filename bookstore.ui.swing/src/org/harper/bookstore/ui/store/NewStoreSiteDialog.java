@@ -67,6 +67,7 @@ public class NewStoreSiteDialog extends JDialog {
 				StoreSite site = new StoreSite();
 				site.setName(bean.getName());
 				site.setValid(true);
+				site.setDescription(bean.getDesc());
 				site.setForOutput(bean.getForOutput());
 				new ProfileService().newStoreSite(site);
 				NewStoreSiteDialog.this.dispose();
