@@ -16,27 +16,31 @@ import org.harper.frm.gui.swing.manager.BindingManager;
 import org.harper.frm.gui.swing.manager.JComboBinding;
 import org.harper.frm.gui.swing.manager.JTextBinding;
 
-public class DOController extends Controller {
+public class ViewDOController extends Controller {
 
-	private DOFrame frame;
+	private ViewDOFrame frame;
 
 	private DeliveryOrderBean bean;
 
-	public DOController() {
+	public ViewDOController() {
 		super();
 
-		frame = new DOFrame();
+		frame = new ViewDOFrame();
 		frame.setController(this);
 
 		bean = new DeliveryOrderBean();
 		initManager();
 	}
 
+	public ViewDOController(DeliveryOrder dobean) {
+		this();
+		this.bean.setDelivery(dobean);
+		manager.loadAll();
+	}
+
 	protected void initManager() {
 		manager = new BindingManager(bean);
 
-		manager.addBinding(new JTextBinding(frame.getPoNumberField(),
-				"poNumber"));
 		manager.addBinding(new JComboBinding(
 				frame.getPanel().getCompanyCombo(), "delivery.company"));
 		manager.addBinding(new JTextBinding(frame.getPanel()
@@ -52,8 +56,8 @@ public class DOController extends Controller {
 		manager.addBinding(new JTextBinding(frame.getPanel().getMobileField(),
 				"delivery.contact.mobile"));
 
-		manager.addBinding(new TableBinding(frame.getDoItemController()
-				.getView().getItemTable(), "delivery.items"));
+		manager.addBinding(new TableBinding(frame.getDoItemTable(),
+				"delivery.items"));
 	}
 
 	public void loadPo() {
@@ -96,6 +100,6 @@ public class DOController extends Controller {
 	}
 
 	public static void main(String[] args) {
-		new DOController();
+		new ViewDOController();
 	}
 }
