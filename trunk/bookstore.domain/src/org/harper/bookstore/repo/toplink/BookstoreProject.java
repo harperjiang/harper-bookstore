@@ -8,6 +8,7 @@ import oracle.toplink.mappings.DirectToFieldMapping;
 import oracle.toplink.mappings.ManyToManyMapping;
 import oracle.toplink.mappings.OneToManyMapping;
 import oracle.toplink.mappings.OneToOneMapping;
+import oracle.toplink.publicinterface.Descriptor;
 import oracle.toplink.sequencing.TableSequence;
 import oracle.toplink.sessions.DatabaseLogin;
 
@@ -29,6 +30,7 @@ public BookstoreProject() {
 	setName("bookstore");
 	applyLogin();
 	
+	addDescriptor(buildAccountingDescriptor());
 	addDescriptor(buildBorrowRecordDescriptor());
 	addDescriptor(buildLibraryEntryDescriptor());
 	addDescriptor(buildRecordDescriptor());
@@ -55,7 +57,10 @@ public BookstoreProject() {
 	addDescriptor(buildDeliveryOrderDescriptor());
 	addDescriptor(buildDeliveryItemDescriptor());
 	addDescriptor(buildTopLinkCommonRepo$NumGenDescriptor());
+	
 }
+
+
 
 public void applyLogin() {
 	DatabaseLogin login = new DatabaseLogin();
@@ -71,6 +76,63 @@ public void applyLogin() {
 	login.setDefaultSequence(new TableSequence("", 50, "sys_sequence", "table_name", "seq"));
 	
 	setDatasourceLogin(login);
+}
+
+public ClassDescriptor buildAccountingDescriptor() {
+	RelationalDescriptor descriptor = new RelationalDescriptor();
+	descriptor.setJavaClass(org.harper.bookstore.domain.store.StoreSite.class);
+	descriptor.addTableName("fna_accounting");
+	descriptor.addPrimaryKeyFieldName("fna_accounting.oid");
+	
+	// Descriptor Properties.
+	descriptor.useSoftCacheWeakIdentityMap();
+	descriptor.setIdentityMapSize(100);
+	descriptor.useRemoteSoftCacheWeakIdentityMap();
+	descriptor.setRemoteIdentityMapSize(100);
+	descriptor.setSequenceNumberFieldName("fna_accounting.oid");
+	descriptor.setSequenceNumberName("fna_accounting");
+	descriptor.setAlias("Accounting");
+	
+	
+	// Query Manager.
+	descriptor.getQueryManager().checkCacheForDoesExist();
+	
+	
+	// Event Manager.
+	
+	// Mappings.
+	
+	DirectToFieldMapping createDateMapping = new DirectToFieldMapping();
+	createDateMapping.setAttributeName("createDate");
+	createDateMapping.setFieldName("fna_accounting.create_date");
+	descriptor.addMapping(createDateMapping);
+	
+	DirectToFieldMapping subjectMapping = new DirectToFieldMapping();
+	subjectMapping.setAttributeName("subject");
+	subjectMapping.setFieldName("fna_accounting.subject");
+	descriptor.addMapping(subjectMapping);
+	
+	DirectToFieldMapping amountMapping = new DirectToFieldMapping();
+	amountMapping.setAttributeName("amount");
+	amountMapping.setFieldName("fna_accounting.amount");
+	descriptor.addMapping(amountMapping);
+	
+	DirectToFieldMapping oidMapping = new DirectToFieldMapping();
+	oidMapping.setAttributeName("oid");
+	oidMapping.setFieldName("store_site.oid");
+	descriptor.addMapping(oidMapping);
+	
+	DirectToFieldMapping refTypeMapping = new DirectToFieldMapping();
+	refTypeMapping.setAttributeName("refType");
+	refTypeMapping.setFieldName("fna_accounting.ref_type");
+	descriptor.addMapping(refTypeMapping);
+	
+	DirectToFieldMapping refNumberMapping = new DirectToFieldMapping();
+	refNumberMapping.setAttributeName("refNumber");
+	refNumberMapping.setFieldName("fna_accounting.ref_number");
+	descriptor.addMapping(refNumberMapping);
+	
+	return descriptor;
 }
 
 public ClassDescriptor buildBookUnit2Descriptor() {
