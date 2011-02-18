@@ -1,4 +1,4 @@
-package org.harper.bookstore.ui.order;
+package org.harper.bookstore.ui.delivery;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -27,6 +27,7 @@ import org.harper.bookstore.ui.common.ExceptionRunnable;
 import org.harper.bookstore.ui.common.ItemController;
 import org.harper.bookstore.ui.common.ItemController.TableCreator;
 import org.harper.bookstore.ui.common.ReturnKeyAdapter;
+import org.harper.bookstore.ui.order.DeliveryPanel;
 import org.harper.frm.core.logging.LogManager;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.table.data.TableData;

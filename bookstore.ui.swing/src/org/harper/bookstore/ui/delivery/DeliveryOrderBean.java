@@ -1,4 +1,4 @@
-package org.harper.bookstore.ui.order;
+package org.harper.bookstore.ui.delivery;
 
 import org.harper.bookstore.domain.deliver.DeliveryOrder;
 import org.harper.frm.gui.swing.manager.AbstractBean;

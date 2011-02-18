@@ -1,10 +1,12 @@
-package org.harper.bookstore.ui.order;
+package org.harper.bookstore.ui.delivery;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
@@ -16,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.harper.bookstore.domain.deliver.DeliveryOrder;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
 
@@ -53,6 +56,17 @@ public class QueryDOFrame extends JFrame {
 		CommonTableModel ctm = new CommonTableModel();
 		ctm.initialize(DeliveryOrderTableData.class);
 		queryDoTable.setModel(ctm);
+
+		queryDoTable.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent event) {
+				if (event.getClickCount() <= 1)
+					return;
+				int selected = queryDoTable.getSelectedRow();
+				DeliveryOrder order = controller.getBean().getOrders()
+						.get(selected);
+				new DOController(order);
+			}
+		});
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(queryDoTable);
@@ -116,12 +130,10 @@ public class QueryDOFrame extends JFrame {
 		JButton searchButton = new JButton("Search");
 		topPanel.add(searchButton);
 		searchButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				getController().search();
 			}
-
 		});
 
 		add(topPanel, BorderLayout.NORTH);

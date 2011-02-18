@@ -1,4 +1,4 @@
-package org.harper.bookstore.ui.order;
+package org.harper.bookstore.ui.delivery;
 
 import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.ui.Controller;
@@ -41,6 +41,10 @@ public class QueryDOController extends Controller {
 		bean.setOrders(new OrderService().searchDeliveryOrder(
 				bean.getFromDate(), bean.getToDate(), bean.getPoNumber(),
 				bean.getConsigneeName(), bean.getPoCustomerId()));
+	}
+
+	public QueryDOBean getBean() {
+		return bean;
 	}
 
 	public static void main(String[] args) {
