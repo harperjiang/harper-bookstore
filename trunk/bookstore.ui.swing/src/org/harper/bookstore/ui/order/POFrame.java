@@ -3,6 +3,7 @@ package org.harper.bookstore.ui.order;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -35,7 +36,6 @@ import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.table.data.TableData;
 import org.harper.frm.gui.swing.comp.textfield.NumTextField;
 
-
 public class POFrame extends JFrame {
 
 	/**
@@ -52,7 +52,7 @@ public class POFrame extends JFrame {
 	private JButton confirmButton;
 
 	private JButton sendButton;
-	
+
 	private JButton partialSendButton;
 
 	private JButton cancelButton;
@@ -71,12 +71,14 @@ public class POFrame extends JFrame {
 
 	private LabeledTextArea remarkArea;
 
+	private LabeledTextArea memoArea;
+
 	private DeliveryPanel deliveryPanel;
 
 	public POFrame(POController controller) {
 		super();
 		setTitle(Messages.getString("POFrame.title")); //$NON-NLS-1$
-		setSize(800, 600);
+		setSize(800, 800);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setLayout(new BorderLayout());
@@ -109,11 +111,13 @@ public class POFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					controller.save();
-					JOptionPane.showMessageDialog(POFrame.this, Messages.getString("POFrame.saveMsg")); //$NON-NLS-1$
+					JOptionPane.showMessageDialog(POFrame.this,
+							Messages.getString("POFrame.saveMsg")); //$NON-NLS-1$
 				} catch (Exception ee) {
 					ee.printStackTrace();
 					JOptionPane.showMessageDialog(POFrame.this,
-							ee.getMessage(), Messages.getString("POFrame.exception"), //$NON-NLS-1$
+							ee.getMessage(),
+							Messages.getString("POFrame.exception"), //$NON-NLS-1$
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -131,17 +135,24 @@ public class POFrame extends JFrame {
 							controller.print();
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
-									JOptionPane.showMessageDialog(POFrame.this,
-											Messages.getString("POFrame.printMsg")); //$NON-NLS-1$
+									JOptionPane
+											.showMessageDialog(
+													POFrame.this,
+													Messages.getString("POFrame.printMsg")); //$NON-NLS-1$
 								}
 							});
 						} catch (final Exception ee) {
-							LogManager.getInstance().getLogger(POFrame.class)
-									.error(Messages.getString("POFrame.printError"), ee); //$NON-NLS-1$
+							LogManager
+									.getInstance()
+									.getLogger(POFrame.class)
+									.error(Messages
+											.getString("POFrame.printError"), ee); //$NON-NLS-1$
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
-									JOptionPane.showMessageDialog(POFrame.this,
-											ee.getMessage(), Messages.getString("POFrame.exception"), //$NON-NLS-1$
+									JOptionPane.showMessageDialog(
+											POFrame.this,
+											ee.getMessage(),
+											Messages.getString("POFrame.exception"), //$NON-NLS-1$
 											JOptionPane.ERROR_MESSAGE);
 								}
 							});
@@ -154,7 +165,8 @@ public class POFrame extends JFrame {
 		});
 		toolBar.add(printButton);
 
-		printExpressButton = new JButton(Messages.getString("POFrame.printExpress")); //$NON-NLS-1$
+		printExpressButton = new JButton(
+				Messages.getString("POFrame.printExpress")); //$NON-NLS-1$
 		printExpressButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -165,17 +177,24 @@ public class POFrame extends JFrame {
 							controller.printExpress();
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
-									JOptionPane.showMessageDialog(POFrame.this,
-											Messages.getString("POFrame.printExpressMsg")); //$NON-NLS-1$
+									JOptionPane
+											.showMessageDialog(
+													POFrame.this,
+													Messages.getString("POFrame.printExpressMsg")); //$NON-NLS-1$
 								}
 							});
 						} catch (final Exception ee) {
-							LogManager.getInstance().getLogger(POFrame.class)
-									.error(Messages.getString("POFrame.printExpressError"), ee); //$NON-NLS-1$
+							LogManager
+									.getInstance()
+									.getLogger(POFrame.class)
+									.error(Messages
+											.getString("POFrame.printExpressError"), ee); //$NON-NLS-1$
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
-									JOptionPane.showMessageDialog(POFrame.this,
-											ee.getMessage(), Messages.getString("POFrame.exception"), //$NON-NLS-1$
+									JOptionPane.showMessageDialog(
+											POFrame.this,
+											ee.getMessage(),
+											Messages.getString("POFrame.exception"), //$NON-NLS-1$
 											JOptionPane.ERROR_MESSAGE);
 								}
 							});
@@ -199,7 +218,8 @@ public class POFrame extends JFrame {
 				} catch (Exception ee) {
 					ee.printStackTrace();
 					JOptionPane.showMessageDialog(POFrame.this,
-							ee.getMessage(), Messages.getString("POFrame.exception"), //$NON-NLS-1$
+							ee.getMessage(),
+							Messages.getString("POFrame.exception"), //$NON-NLS-1$
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -211,35 +231,39 @@ public class POFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					controller.send();
-					JOptionPane.showMessageDialog(POFrame.this, Messages.getString("POFrame.sendMsg")); //$NON-NLS-1$
-				} catch (Exception ee) {
-					LogManager.getInstance().getLogger(getClass()).error(
-							Messages.getString("POFrame.sendError"), ee); //$NON-NLS-1$
 					JOptionPane.showMessageDialog(POFrame.this,
-							ee.getMessage(), Messages.getString("POFrame.exception"), //$NON-NLS-1$
+							Messages.getString("POFrame.sendMsg")); //$NON-NLS-1$
+				} catch (Exception ee) {
+					LogManager.getInstance().getLogger(getClass())
+							.error(Messages.getString("POFrame.sendError"), ee); //$NON-NLS-1$
+					JOptionPane.showMessageDialog(POFrame.this,
+							ee.getMessage(),
+							Messages.getString("POFrame.exception"), //$NON-NLS-1$
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		toolBar.add(sendButton);
-		
-		partialSendButton = new JButton(Messages.getString("POFrame.partialSendButton")); //$NON-NLS-1$
+
+		partialSendButton = new JButton(
+				Messages.getString("POFrame.partialSendButton")); //$NON-NLS-1$
 		partialSendButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					controller.partialSend();
-					JOptionPane.showMessageDialog(POFrame.this, Messages.getString("POFrame.sendMsg")); //$NON-NLS-1$
-				} catch (Exception ee) {
-					LogManager.getInstance().getLogger(getClass()).error(
-							Messages.getString("POFrame.sendError"), ee); //$NON-NLS-1$
 					JOptionPane.showMessageDialog(POFrame.this,
-							ee.getMessage(), Messages.getString("POFrame.exception"), //$NON-NLS-1$
+							Messages.getString("POFrame.sendMsg")); //$NON-NLS-1$
+				} catch (Exception ee) {
+					LogManager.getInstance().getLogger(getClass())
+							.error(Messages.getString("POFrame.sendError"), ee); //$NON-NLS-1$
+					JOptionPane.showMessageDialog(POFrame.this,
+							ee.getMessage(),
+							Messages.getString("POFrame.exception"), //$NON-NLS-1$
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		toolBar.add(partialSendButton);
-		
 
 		cancelButton = new JButton(Messages.getString("POFrame.cancelButton")); //$NON-NLS-1$
 		cancelButton.addActionListener(new ActionListener() {
@@ -252,7 +276,8 @@ public class POFrame extends JFrame {
 				} catch (Exception ee) {
 					ee.printStackTrace();
 					JOptionPane.showMessageDialog(POFrame.this,
-							ee.getMessage(), Messages.getString("POFrame.exception"), //$NON-NLS-1$
+							ee.getMessage(),
+							Messages.getString("POFrame.exception"), //$NON-NLS-1$
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -357,7 +382,8 @@ public class POFrame extends JFrame {
 		JPanel stPanel = new JPanel();
 		stPanel.setLayout(new FlowLayout());
 
-		JLabel subtotalLabel = new JLabel(Messages.getString("POFrame.subtotal")); //$NON-NLS-1$
+		JLabel subtotalLabel = new JLabel(
+				Messages.getString("POFrame.subtotal")); //$NON-NLS-1$
 		stPanel.add(subtotalLabel, BorderLayout.NORTH);
 
 		subtotalAmountLabel = new JLabel();
@@ -366,10 +392,20 @@ public class POFrame extends JFrame {
 
 		bottomPanel.add(stPanel, BorderLayout.NORTH);
 
-		remarkArea = new LabeledTextArea(Messages.getString("POFrame.remark")); //$NON-NLS-1$
-		remarkArea.setPreferredSize(new Dimension(0, 100));
+		JPanel bottomCenterPanel = new JPanel();
+		bottomCenterPanel.setLayout(new GridLayout(2,1));
 
-		bottomPanel.add(remarkArea, BorderLayout.CENTER);
+		remarkArea = new LabeledTextArea(Messages.getString("POFrame.remark")); //$NON-NLS-1$
+		remarkArea.setPreferredSize(new Dimension(80, 100));
+		remarkArea.getTextField().setEditable(false);
+		remarkArea.getTextField().setEnabled(false);
+		bottomCenterPanel.add(remarkArea);
+		
+		memoArea = new LabeledTextArea("Memo");
+		memoArea.setPreferredSize(new Dimension(80, 100));
+		bottomCenterPanel.add(memoArea);
+		
+		bottomPanel.add(bottomCenterPanel, BorderLayout.CENTER);
 
 		add(bottomPanel, BorderLayout.SOUTH);
 	}
@@ -420,6 +456,10 @@ public class POFrame extends JFrame {
 
 	public DeliveryPanel getDeliveryPanel() {
 		return deliveryPanel;
+	}
+
+	public JTextArea getMemoArea() {
+		return memoArea.getTextField();
 	}
 
 }

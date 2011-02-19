@@ -129,6 +129,8 @@ public class POController extends Controller {
 				.getStatusTextField(), "orderStatus"));
 		manager.addBinding(new JTextBinding(getOrderFrame().getRemarkArea(),
 				"remark"));
+		manager.addBinding(new JTextBinding(getOrderFrame().getMemoArea(),
+				"memo"));
 		manager.addBinding(getOrderFrame().getFeeAmountField().new NumTextBinding(
 				"feeAmount"));
 		manager.addBinding(new JComboBinding(getOrderFrame().getHeaderPanel()
