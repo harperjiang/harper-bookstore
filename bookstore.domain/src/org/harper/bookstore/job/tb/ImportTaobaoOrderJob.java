@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.domain.taobao.TradeQueryStatus;
 import org.harper.bookstore.job.Job;
 import org.harper.bookstore.service.InterfaceService;
@@ -25,6 +24,16 @@ import com.taobao.api.model.TradesSoldIncrementGetRequest;
 
 public class ImportTaobaoOrderJob implements Job {
 
+	private int hour = 24;
+
+	public int getHour() {
+		return hour;
+	}
+
+	public void setHour(int hour) {
+		this.hour = hour;
+	}
+
 	@Override
 	public void run() {
 		TOPSession ssn = TOPSessionManager.getInstance().getSession();
@@ -35,7 +44,7 @@ public class ImportTaobaoOrderJob implements Job {
 
 		req.setFields(TaobaoJobConstants.TRADE_INCREGET_FIELDS);
 		Date current = new Date();
-		req.setStartModified(new Date(current.getTime() - 24 * 3600000));
+		req.setStartModified(new Date(current.getTime() - getHour() * 3600000));
 		req.setEndModified(current);
 		req.setPageSize(TaobaoJobConstants.PAGE_SIZE);
 
