@@ -22,7 +22,8 @@ import org.harper.bookstore.ui.store.ManageStoreController;
 import org.harper.bookstore.ui.store.SiteInfoController;
 import org.harper.bookstore.ui.store.TransferPlanController;
 import org.harper.bookstore.ui.store.ViewTransferController;
-import org.harper.bookstore.ui.tbinterface.TaobaoImportController;
+import org.harper.bookstore.ui.tbinterface.TOPImportController;
+import org.harper.bookstore.ui.tbinterface.TaobaoCSVImportController;
 
 public class MainFrame extends JFrame {
 
@@ -62,7 +63,8 @@ public class MainFrame extends JFrame {
 		add(deliveryToolBar);
 		deliveryToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.create_do"), DOController.class)); //$NON-NLS-1$
-		deliveryToolBar.add(new ControllerAction(Messages.getString("MainFrame.query_do"), //$NON-NLS-1$
+		deliveryToolBar.add(new ControllerAction(Messages
+				.getString("MainFrame.query_do"), //$NON-NLS-1$
 				QueryDOController.class));
 
 		JToolBar reportToolBar = new JToolBar();
@@ -114,7 +116,9 @@ public class MainFrame extends JFrame {
 
 		importToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.import_taobao_order"), //$NON-NLS-1$
-				TaobaoImportController.class));
+				TaobaoCSVImportController.class));
+		importToolBar.add(new ControllerAction(Messages.getString("MainFrame.import_top"), //$NON-NLS-1$
+				TOPImportController.class));
 
 		JToolBar printToolBar = new JToolBar();
 		printToolBar.setFloatable(false);
