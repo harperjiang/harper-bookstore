@@ -16,7 +16,7 @@ import javax.swing.border.EmptyBorder;
 import org.apache.log4j.LogManager;
 import org.harper.bookstore.ui.common.DirectoryChooseField;
 
-public class TaobaoImportFrame extends JFrame {
+public class TaobaoCSVImportFrame extends JFrame {
 
 	/**
 	 * 
@@ -27,9 +27,9 @@ public class TaobaoImportFrame extends JFrame {
 
 	private DirectoryChooseField importOrderField;
 
-	private TaobaoImportController controller;
+	private TaobaoCSVImportController controller;
 
-	public TaobaoImportFrame() {
+	public TaobaoCSVImportFrame() {
 		super();
 		setTitle("Import Taobao Data");
 		setSize(600, 200);
@@ -69,17 +69,17 @@ public class TaobaoImportFrame extends JFrame {
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									JOptionPane.showMessageDialog(
-											TaobaoImportFrame.this, "Imported");
+											TaobaoCSVImportFrame.this, "Imported");
 								}
 							});
 						} catch (final Exception exception) {
-							LogManager.getLogger(TaobaoImportFrame.class)
+							LogManager.getLogger(TaobaoCSVImportFrame.class)
 									.error("Error while importing orders",
 											exception);
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									JOptionPane.showMessageDialog(
-											TaobaoImportFrame.this, exception
+											TaobaoCSVImportFrame.this, exception
 													.getMessage(), "Exception",
 											JOptionPane.ERROR_MESSAGE);
 								}
@@ -94,11 +94,11 @@ public class TaobaoImportFrame extends JFrame {
 		setVisible(true);
 	}
 
-	public TaobaoImportController getController() {
+	public TaobaoCSVImportController getController() {
 		return controller;
 	}
 
-	public void setController(TaobaoImportController controller) {
+	public void setController(TaobaoCSVImportController controller) {
 		this.controller = controller;
 	}
 

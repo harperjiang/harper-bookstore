@@ -21,14 +21,14 @@ import org.harper.frm.core.logging.LogManager;
 import org.harper.frm.data.ITable;
 import org.harper.frm.data.parser.CSV2TableParser;
 
-public class TaobaoImportController extends Controller {
+public class TaobaoCSVImportController extends Controller {
 
-	private TaobaoImportFrame frame;
+	private TaobaoCSVImportFrame frame;
 
-	public TaobaoImportController() {
+	public TaobaoCSVImportController() {
 		super();
 
-		frame = new TaobaoImportFrame();
+		frame = new TaobaoCSVImportFrame();
 		frame.setController(this);
 	}
 
