@@ -62,7 +62,7 @@ public class TopLinkProfileRepo extends TopLinkRepo implements ProfileRepo {
 				builder.get("name").toLowerCase().like(
 						"%" + isbnOrName.toLowerCase() + "%"));
 		ReadAllQuery raq = new ReadAllQuery(Book.class, exp);
-		raq.addOrdering(builder.get("name"));
+		raq.addOrdering(builder.get("isbn"));
 		return (List<Book>) TransactionContext.getSession().executeQuery(raq);
 	}
 
