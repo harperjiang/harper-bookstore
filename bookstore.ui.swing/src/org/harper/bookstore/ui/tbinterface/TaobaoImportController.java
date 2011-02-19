@@ -88,8 +88,8 @@ public class TaobaoImportController extends Controller {
 			iob.setTransFeeAmount(new BigDecimal((String) orderTable
 					.getValueAt(i, 4)));
 			iob.setUid((String) orderTable.getValueAt(i, 0));
-			iob.setRemark1((String) orderTable.getValueAt(i, 11));
-			iob.setRemark2((String) orderTable.getValueAt(i, 23));
+			iob.setBuyerMemo((String) orderTable.getValueAt(i, 11));
+			iob.setSellerMemo((String) orderTable.getValueAt(i, 23));
 			iob.setCreateTime(parseTaobaoDate((String) orderTable.getValueAt(i,
 					17)));
 			iob.setName((String) orderTable.getValueAt(i, 12));
