@@ -31,8 +31,8 @@ public class ConvertTaobaoOrderTask {
 		order.setCustomerId(input.getBuyerNick());
 		order.setMobile(input.getReceiverMobile());
 		order.setPhone(input.getReceiverPhone());
-		order.setRemark1(input.getBuyerMemo());
-		order.setRemark2(input.getSellerMemo());
+		order.setBuyerMemo(input.getBuyerMemo());
+		order.setSellerMemo(input.getSellerMemo());
 		order.setTotalAmount(new BigDecimal(input.getPayment()));
 		if (!StringUtils.isEmpty(input.getPostFee()))
 			order.setTransFeeAmount(new BigDecimal(input.getPostFee()));
@@ -52,6 +52,8 @@ public class ConvertTaobaoOrderTask {
 			order.getItems()[i].setOrderUid(input.getTid());
 			order.getItems()[i].setItemId(tbo.getOuterIid());
 			order.getItems()[i].setUnitPrice(new BigDecimal(tbo.getPrice()));
+			order.getItems()[i]
+					.setActualPrice(new BigDecimal(tbo.getTotalFee()));
 		}
 
 		return order;
