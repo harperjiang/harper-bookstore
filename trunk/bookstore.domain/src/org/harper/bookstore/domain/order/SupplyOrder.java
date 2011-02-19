@@ -45,6 +45,7 @@ public class SupplyOrder extends Order {
 	public void confirm() {
 		Validate.isTrue(getOrderStatus() == Status.DRAFT);
 		setStatus(Status.CONFIRM.ordinal());
+		setTotalAmt(getTotal());
 		for (OrderItem item : getItems()) {
 			BigDecimal[] splitPrice = CalcHelper.split(item.getUnitPrice(),
 					item.getBook().getContent());

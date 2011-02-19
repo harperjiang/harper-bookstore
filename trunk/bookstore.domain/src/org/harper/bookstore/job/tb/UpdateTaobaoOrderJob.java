@@ -36,7 +36,7 @@ public class UpdateTaobaoOrderJob extends AbstractJob {
 		for (PurchaseOrder po : ostOrders) {
 			TradeGetRequest req = new TradeGetRequest();
 			req.setTid(po.getRefno());
-			req.setFields(TaobaoJobConstants.TRADE_FIELDS);
+			req.setFields(TaobaoJobConstants.TRADE_INCREGET_FIELDS);
 			try {
 				Trade trade = client.tradeGet(req).getTrade();
 				orders.add(task.convert(trade));

@@ -496,6 +496,7 @@ public ClassDescriptor buildOrderDescriptor() {
 	descriptor.addDirectMapping("version","order_common.version");
 	descriptor.addDirectMapping("feeAmount","order_common.fee_amount");
 	descriptor.addDirectMapping("remark","order_common.remark");
+	descriptor.addDirectMapping("memo","order_common.memo");
 	descriptor.addDirectMapping("refno","order_common.refno");
 	
 	DirectToFieldMapping createDateMapping = new DirectToFieldMapping();
@@ -662,6 +663,11 @@ public ClassDescriptor buildDisplayItemDescriptor() {
 	unitPriceMapping.setAttributeName("unitPrice");
 	unitPriceMapping.setFieldName("order_disp_item.unit_price");
 	descriptor.addMapping(unitPriceMapping);
+	
+	DirectToFieldMapping actualPriceMapping = new DirectToFieldMapping();
+	actualPriceMapping.setAttributeName("actualPrice");
+	actualPriceMapping.setFieldName("order_disp_item.actual_price");
+	descriptor.addMapping(actualPriceMapping);
 	
 	OneToOneMapping orderMapping = new OneToOneMapping();
 	orderMapping.setAttributeName("order");

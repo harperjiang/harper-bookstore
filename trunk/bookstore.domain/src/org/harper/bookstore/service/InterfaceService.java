@@ -69,7 +69,8 @@ public class InterfaceService extends Service {
 			po.setCreateDate(orderBean.getCreateTime());
 			po.setTotalAmt(orderBean.getTotalAmount());
 			po.setFeeAmount(orderBean.getTransFeeAmount());
-			po.setRemark(orderBean.getRemark1());
+			po.setRemark(orderBean.getBuyerMemo());
+			po.setMemo(orderBean.getSellerMemo());
 			po.setRefno(orderBean.getUid());
 			po.getContact().setAddress(orderBean.getAddress());
 			po.getContact().setName(orderBean.getName());
@@ -83,7 +84,8 @@ public class InterfaceService extends Service {
 				dispItem.setName(itemBean.getName());
 				dispItem.setCount(itemBean.getCount());
 				dispItem.setUnitPrice(itemBean.getUnitPrice());
-
+				dispItem.setActualPrice(itemBean.getActualPrice());
+				
 				po.addDispItem(dispItem);
 
 				// Only add items for new orders

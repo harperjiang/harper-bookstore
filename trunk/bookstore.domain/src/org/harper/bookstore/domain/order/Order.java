@@ -30,7 +30,7 @@ public abstract class Order extends Entity {
 
 	// My Remark;
 	private String memo;
-	
+
 	private String feeName;
 
 	private BigDecimal feeAmount;
@@ -95,6 +95,8 @@ public abstract class Order extends Entity {
 	}
 
 	public BigDecimal getTotal() {
+		if (null != totalAmt)
+			return totalAmt;
 		BigDecimal sum = BigDecimal.ZERO;
 		if (!CollectionUtils.isEmpty(items))
 			for (OrderItem item : items) {
@@ -104,7 +106,6 @@ public abstract class Order extends Entity {
 			}
 		if (null != feeAmount)
 			sum = sum.add(feeAmount);
-		setTotalAmt(sum);
 		return sum;
 	}
 
@@ -165,7 +166,7 @@ public abstract class Order extends Entity {
 	}
 
 	public ContactInfo getContact() {
-		if(null == contact) {
+		if (null == contact) {
 			contact = new OrderContact();
 			contact.setOrder(this);
 		}

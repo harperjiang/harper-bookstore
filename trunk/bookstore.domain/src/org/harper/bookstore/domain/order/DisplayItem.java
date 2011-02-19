@@ -1,6 +1,7 @@
 package org.harper.bookstore.domain.order;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.harper.bookstore.domain.Entity;
 
@@ -12,7 +13,7 @@ public class DisplayItem extends Entity {
 
 	private BigDecimal unitPrice;
 
-	private BigDecimal totalPrice;
+	private BigDecimal actualPrice;
 
 	private PurchaseOrder order;
 
@@ -40,12 +41,12 @@ public class DisplayItem extends Entity {
 		this.unitPrice = unitPrice;
 	}
 
-	public BigDecimal getTotalPrice() {
-		return totalPrice;
+	public BigDecimal getActualPrice() {
+		return actualPrice;
 	}
 
-	public void setTotalPrice(BigDecimal totalPrice) {
-		this.totalPrice = totalPrice;
+	public void setActualPrice(BigDecimal actualPrice) {
+		this.actualPrice = actualPrice;
 	}
 
 	public PurchaseOrder getOrder() {
@@ -54,5 +55,11 @@ public class DisplayItem extends Entity {
 
 	public void setOrder(PurchaseOrder order) {
 		this.order = order;
+	}
+
+	public BigDecimal getDiscount() {
+		return getActualPrice().divide(
+				getUnitPrice().multiply(new BigDecimal(count)), 4,
+				RoundingMode.HALF_UP);
 	}
 }

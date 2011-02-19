@@ -26,10 +26,10 @@ public class TaobaoOrderBean {
 	private String phone;
 
 	// Buyer Memo
-	private String remark1;
+	private String buyerMemo;
 
 	// Seller Memo
-	private String remark2;
+	private String sellerMemo;
 
 	private Date createTime;
 
@@ -71,20 +71,20 @@ public class TaobaoOrderBean {
 		this.createTime = createTime;
 	}
 
-	public String getRemark1() {
-		return remark1;
+	public String getBuyerMemo() {
+		return buyerMemo;
 	}
 
-	public void setRemark1(String remark1) {
-		this.remark1 = remark1;
+	public void setBuyerMemo(String buyerMemo) {
+		this.buyerMemo = buyerMemo;
 	}
 
-	public String getRemark2() {
-		return remark2;
+	public String getSellerMemo() {
+		return sellerMemo;
 	}
 
-	public void setRemark2(String remark2) {
-		this.remark2 = remark2;
+	public void setSellerMemo(String sellerMemo) {
+		this.sellerMemo = sellerMemo;
 	}
 
 	public Date getCreateTime() {

@@ -111,6 +111,7 @@ public class PurchaseOrder extends Order {
 	public void confirm() {
 		Validate.isTrue(getOrderStatus() == Status.DRAFT);
 		setStatus(Status.CONFIRM.ordinal());
+		setTotalAmt(getTotal());
 		collectStorage();
 	}
 
