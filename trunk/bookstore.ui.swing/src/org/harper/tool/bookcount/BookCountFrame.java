@@ -56,7 +56,7 @@ public class BookCountFrame extends JFrame {
 		setSize(400, 400);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Book Count");
-		setFont(new Font("Tahoma", Font.PLAIN, 20));
+		setFont(new Font("Calibri", Font.PLAIN, 15));
 		setLayout(new BorderLayout());
 
 		JPanel upperPanel = new JPanel();
