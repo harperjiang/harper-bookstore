@@ -1,5 +1,6 @@
 package org.harper.bookstore.ui.order;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,15 @@ public class ViewOrderBean extends AbstractBean {
 	private String orderNum;
 
 	private List<Order> searchResults;
+
+	public ViewOrderBean() {
+		super();
+
+		Date stopDate = new Date();
+		stopDate = DateUtils.addSeconds(DateUtils.addDays(
+				DateUtils.truncate(stopDate, Calendar.DATE), 1), -1);
+		setStopDate(stopDate);
+	}
 
 	public String getOrderType() {
 		return orderType;

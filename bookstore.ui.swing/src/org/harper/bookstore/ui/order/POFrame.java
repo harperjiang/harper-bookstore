@@ -78,7 +78,7 @@ public class POFrame extends JFrame {
 	public POFrame(POController controller) {
 		super();
 		setTitle(Messages.getString("POFrame.title")); //$NON-NLS-1$
-		setSize(800, 800);
+		setSize(800, 700);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setLayout(new BorderLayout());
