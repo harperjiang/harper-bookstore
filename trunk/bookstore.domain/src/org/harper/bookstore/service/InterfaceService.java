@@ -1,5 +1,6 @@
 package org.harper.bookstore.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ import org.harper.bookstore.domain.profile.Customer;
 import org.harper.bookstore.domain.profile.Source;
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.job.tb.ImportTaobaoOrderJob;
-import org.harper.bookstore.job.tb.UpdateTaobaoOrderJob;
+import org.harper.bookstore.job.tb.IncreImportTaobaoOrderJob;
 import org.harper.bookstore.repo.OrderRepo;
 import org.harper.bookstore.repo.RepoFactory;
 import org.harper.bookstore.service.bean.TaobaoItemBean;
@@ -85,7 +86,7 @@ public class InterfaceService extends Service {
 				dispItem.setCount(itemBean.getCount());
 				dispItem.setUnitPrice(itemBean.getUnitPrice());
 				dispItem.setActualPrice(itemBean.getActualPrice());
-				
+
 				po.addDispItem(dispItem);
 
 				// Only add items for new orders
@@ -124,8 +125,16 @@ public class InterfaceService extends Service {
 		return news.size();
 	}
 
-	public void synchronizeWithTaobao() {
-		new UpdateTaobaoOrderJob().run();
-		new ImportTaobaoOrderJob().run();
+	public int importTOPOrder(Date start, Date stop) {
+		ImportTaobaoOrderJob job = new ImportTaobaoOrderJob();
+		job.setStart(start);
+		job.setStop(stop);
+		return (Integer) job.call();
+	}
+
+	public int increImportTOPOrder() {
+		IncreImportTaobaoOrderJob job = new IncreImportTaobaoOrderJob();
+		job.setHour(24);
+		return (Integer) job.call();
 	}
 }
