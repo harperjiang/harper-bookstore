@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.harper.bookstore.domain.Entity;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.profile.ContactInfo;
@@ -95,8 +96,8 @@ public abstract class Order extends Entity {
 	}
 
 	public BigDecimal getTotal() {
-		if (Order.Status.NEW.ordinal() == getStatus()
-				|| Order.Status.DRAFT.ordinal() == getStatus()) {
+		if ((Order.Status.NEW.ordinal() == getStatus() || Order.Status.DRAFT
+				.ordinal() == getStatus()) && StringUtils.isEmpty(refno)) {
 			BigDecimal sum = BigDecimal.ZERO;
 			if (!CollectionUtils.isEmpty(items))
 				for (OrderItem item : items) {

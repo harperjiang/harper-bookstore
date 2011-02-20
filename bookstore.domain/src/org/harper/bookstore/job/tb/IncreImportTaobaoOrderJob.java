@@ -20,51 +20,42 @@ import com.taobao.api.model.Trade;
 import com.taobao.api.model.TradeGetRequest;
 import com.taobao.api.model.TradeGetResponse;
 import com.taobao.api.model.TradesGetResponse;
-import com.taobao.api.model.TradesSoldGetRequest;
+import com.taobao.api.model.TradesSoldIncrementGetRequest;
 
-public class ImportTaobaoOrderJob extends AbstractJob {
+public class IncreImportTaobaoOrderJob extends AbstractJob {
 
-	private Date start;
+	private int hour = 24;
 
-	private Date stop;
-
-	public Date getStart() {
-		return start;
+	public int getHour() {
+		return hour;
 	}
 
-	public void setStart(Date start) {
-		this.start = start;
-	}
-
-	public Date getStop() {
-		return stop;
-	}
-
-	public void setStop(Date stop) {
-		this.stop = stop;
+	public void setHour(int hour) {
+		this.hour = hour;
 	}
 
 	@Override
-	protected Object execute() {
+	public Object execute() {
 		TOPSession ssn = TOPSessionManager.getInstance().getSession();
 
 		TaobaoRestClient client = ssn.getClient();
 
-		TradesSoldGetRequest req = new TradesSoldGetRequest();
+		TradesSoldIncrementGetRequest req = new TradesSoldIncrementGetRequest();
 
 		req.setFields(TaobaoJobConstants.TRADE_INCREGET_FIELDS);
 		Date current = new Date();
-		req.setStartCreated(start);
-		req.setEndCreated(stop);
+		req.setStartModified(new Date(current.getTime() - getHour() * 3600000));
+		req.setEndModified(current);
 		req.setPageSize(TaobaoJobConstants.PAGE_SIZE);
+
 		req.setStatus(TradeQueryStatus.WAIT_SELLER_SEND_GOODS.name());
 
 		Map<String, Trade> result = new HashMap<String, Trade>();
 		try {
-			TradesGetResponse resp = client.tradesSoldGet(req,
+			TradesGetResponse resp = client.tradesSoldIncrementGet(req,
 					ssn.getSessionId());
 			List<Trade> trads = resp.getTrades();
-
+			// 详细信息无法直接获取，再次调用trade.get获取详细信息
 			for (Trade td : trads) {
 				result.put(td.getTid(), getTradeFullInfo(td));
 			}
@@ -75,11 +66,11 @@ public class ImportTaobaoOrderJob extends AbstractJob {
 			for (int i = 1; i < maxPage; i++) {
 				req.setPageNo(i + 1);
 				try {
-					List<Trade> nextPage = client.tradesSoldGet(req,
+					List<Trade> nextPage = client.tradesSoldIncrementGet(req,
 							ssn.getSessionId()).getTrades();
-					for (Trade td : nextPage) {
+
+					for (Trade td : nextPage)
 						result.put(td.getTid(), getTradeFullInfo(td));
-					}
 				} catch (TaobaoApiException e) {
 					LogManager.getInstance().getLogger(getClass())
 							.error("Cannot Fetch Order", e);

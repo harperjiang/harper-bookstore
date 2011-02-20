@@ -20,7 +20,7 @@ import com.taobao.api.model.TradeGetRequest;
 public class UpdateTaobaoOrderJob extends AbstractJob {
 
 	@Override
-	protected void execute() {
+	protected Object execute() {
 		TOPSession ssn = TOPSessionManager.getInstance().getSession();
 
 		TaobaoRestClient client = ssn.getClient();
@@ -46,5 +46,6 @@ public class UpdateTaobaoOrderJob extends AbstractJob {
 		}
 
 		is.importTaobaoOrder(orders);
+		return null;
 	}
 }

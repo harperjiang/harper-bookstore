@@ -6,28 +6,29 @@ import org.harper.bookstore.service.TransactionContext;
 import org.harper.frm.core.logging.LogManager;
 import org.harper.frm.toplink.SessionManager;
 
-
 public abstract class AbstractJob implements Job {
 
 	private boolean readonly;
 
 	@Override
-	public void run() {
+	public Object call() {
 		startTransaction();
 		try {
-			execute();
+			Object result = execute();
 			if (readonly)
 				releaseTransaction();
 			else
 				commitTransaction();
+			return result;
 		} catch (Exception e) {
 			LogManager.getInstance().getLogger(getClass())
 					.error("Exception", e);
 			releaseTransaction();
+			throw new RuntimeException(e);
 		}
 	}
 
-	protected abstract void execute();
+	protected abstract Object execute();
 
 	public void startTransaction() {
 		UnitOfWork uow = SessionManager.getInstance().getSession()

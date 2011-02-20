@@ -1,5 +1,7 @@
 package org.harper.bookstore.job;
 
-public interface Job extends Runnable {
+import java.util.concurrent.Callable;
+
+public interface Job extends Callable<Object> {
 
 }
