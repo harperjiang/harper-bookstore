@@ -1,11 +1,10 @@
 package org.harper.bookstore.ui.order;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.harper.bookstore.domain.order.Order;
+import org.harper.bookstore.util.Utilities;
 import org.harper.frm.gui.swing.manager.AbstractBean;
 
 public class ViewOrderBean extends AbstractBean {
@@ -14,9 +13,9 @@ public class ViewOrderBean extends AbstractBean {
 
 	private String status = "ALL";
 
-	private Date startDate = DateUtils.addDays(new Date(), -7);
+	private Date startDate = Utilities.getBeginOfDate(7);
 
-	private Date stopDate = new Date();
+	private Date stopDate = Utilities.getEndOfDate();
 
 	private String partyId;
 
@@ -26,11 +25,6 @@ public class ViewOrderBean extends AbstractBean {
 
 	public ViewOrderBean() {
 		super();
-
-		Date stopDate = new Date();
-		stopDate = DateUtils.addSeconds(DateUtils.addDays(
-				DateUtils.truncate(stopDate, Calendar.DATE), 1), -1);
-		setStopDate(stopDate);
 	}
 
 	public String getOrderType() {
