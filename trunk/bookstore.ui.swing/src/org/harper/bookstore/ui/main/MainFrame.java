@@ -18,6 +18,7 @@ import org.harper.bookstore.ui.order.ViewPurchaseOrderController;
 import org.harper.bookstore.ui.print.PrintExpressOrderController;
 import org.harper.bookstore.ui.profile.BookManagerController;
 import org.harper.bookstore.ui.profile.BookSetManageController;
+import org.harper.bookstore.ui.setting.ContactInfoController;
 import org.harper.bookstore.ui.store.ManageStoreController;
 import org.harper.bookstore.ui.store.SiteInfoController;
 import org.harper.bookstore.ui.store.TransferPlanController;
@@ -38,7 +39,7 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		setLayout(new GridLayout(7, 1));
-		setSize(new Dimension(600, 300));
+		setSize(new Dimension(450, 300));
 		setResizable(false);
 
 		JToolBar orderToolBar = new JToolBar();
@@ -117,7 +118,8 @@ public class MainFrame extends JFrame {
 		importToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.import_taobao_order"), //$NON-NLS-1$
 				TaobaoCSVImportController.class));
-		importToolBar.add(new ControllerAction(Messages.getString("MainFrame.import_top"), //$NON-NLS-1$
+		importToolBar.add(new ControllerAction(Messages
+				.getString("MainFrame.import_top"), //$NON-NLS-1$
 				TOPImportController.class));
 
 		JToolBar printToolBar = new JToolBar();
@@ -127,6 +129,8 @@ public class MainFrame extends JFrame {
 		printToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.print_express"), //$NON-NLS-1$
 				PrintExpressOrderController.class));
+		printToolBar.add(new ControllerAction(Messages.getString("MainFrame.set_contact_info"), //$NON-NLS-1$
+				ContactInfoController.class));
 
 		setVisible(true);
 

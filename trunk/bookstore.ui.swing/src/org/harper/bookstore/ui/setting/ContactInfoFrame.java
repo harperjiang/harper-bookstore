@@ -26,7 +26,7 @@ public class ContactInfoFrame extends JFrame {
 		super();
 
 		setTitle("Contact Info Setting");
-		setSize(new Dimension(400, 400));
+		setSize(new Dimension(400, 300));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setLayout(new BorderLayout());
@@ -39,7 +39,8 @@ public class ContactInfoFrame extends JFrame {
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				getController().save();
+				ContactInfoFrame.this.dispose();
 			}
 		});
 

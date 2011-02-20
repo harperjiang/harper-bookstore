@@ -1,6 +1,7 @@
 package org.harper.bookstore.ui.setting;
 
 import org.harper.bookstore.ui.Controller;
+import org.harper.frm.gui.swing.manager.BindingManager;
 import org.harper.frm.gui.swing.manager.JTextBinding;
 
 public class ContactInfoController extends Controller {
@@ -12,7 +13,7 @@ public class ContactInfoController extends Controller {
 	public ContactInfoController() {
 		super();
 
-		this.frame = new ContactInfoFrame();
+		frame = new ContactInfoFrame();
 		frame.setController(this);
 
 		bean = new ContactInfoBean();
@@ -21,6 +22,7 @@ public class ContactInfoController extends Controller {
 	}
 
 	protected void initManager() {
+		manager = new BindingManager(bean);
 		manager.addBinding(new JTextBinding(frame.getPanel().getNameField(),
 				"name"));
 		manager.addBinding(new JTextBinding(frame.getPanel().getAddressArea(),

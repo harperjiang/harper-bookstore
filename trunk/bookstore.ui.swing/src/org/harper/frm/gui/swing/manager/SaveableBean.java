@@ -15,37 +15,46 @@ import org.apache.commons.lang.Validate;
 
 public abstract class SaveableBean extends AbstractBean {
 
+	private static Object lock;
+	{
+		lock = new Object();
+	}
+
 	public void save() {
-		SaveBeanInfo info = getClass().getAnnotation(SaveBeanInfo.class);
-		String propName = info.name() + ".properties";
-		Properties prop = new Properties();
+		synchronized (lock) {
+			SaveBeanInfo info = getClass().getAnnotation(SaveBeanInfo.class);
+			String propName = info.name() + ".properties";
+			Properties prop = new Properties();
 
-		saveTo(prop);
+			saveTo(prop);
 
-		try {
-			FileOutputStream fos = new FileOutputStream(propName);
-			prop.store(fos, null);
-			fos.close();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+			try {
+				FileOutputStream fos = new FileOutputStream(propName);
+				prop.store(fos, null);
+				fos.close();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 
 	public void load() {
-		SaveBeanInfo info = getClass().getAnnotation(SaveBeanInfo.class);
-		String propName = info.name() + ".properties";
+		synchronized (lock) {
+			SaveBeanInfo info = getClass().getAnnotation(SaveBeanInfo.class);
+			String propName = info.name() + ".properties";
 
-		Properties prop = new Properties();
-		try {
-			FileInputStream fis = new FileInputStream(propName);
-			prop.load(fis);
-			fis.close();
-		} catch (FileNotFoundException e) {
-			return;
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+			Properties prop = new Properties();
+			try {
+				FileInputStream fis = new FileInputStream(propName);
+				prop.load(fis);
+				fis.close();
+			} catch (FileNotFoundException e) {
+				return;
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			loadFrom(prop);
 		}
-		loadFrom(prop);
 	}
 
 	protected void saveTo(Properties prop) {
@@ -93,8 +102,9 @@ public abstract class SaveableBean extends AbstractBean {
 				}
 				if (pd.getPropertyType().isEnum()) {
 					if (null != val)
-						objval = Enum.valueOf((Class<? extends Enum>) pd
-								.getPropertyType(), val);
+						objval = Enum.valueOf(
+								(Class<? extends Enum>) pd.getPropertyType(),
+								val);
 				} else {
 					PropertyEditor pe = PropertyEditorManager.findEditor(pd
 							.getPropertyType());
