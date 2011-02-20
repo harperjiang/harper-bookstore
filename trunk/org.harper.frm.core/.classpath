@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry exported="true" kind="lib" path="lib/commons-beanutils-1.7.0.jar" sourcepath="D:/libs/apache-common/commons-beanutils-1.7.0-src.zip"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-jxpath-1.2.jar" sourcepath="D:/libs/apache-common/commons-jxpath-1.2-src.zip"/>
-	<classpathentry exported="true" kind="lib" path="lib/commons-lang-2.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-lang-2.4.jar" sourcepath="D:/libs/commons-lang-2.5/commons-lang-2.5-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.15.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/servlet.jar"/>
