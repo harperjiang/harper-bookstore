@@ -1,5 +1,9 @@
 package org.harper.bookstore.ui.order;
 
+import java.util.Calendar;
+import java.util.Date;
+
+import org.apache.commons.lang.time.DateUtils;
 import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.ui.Controller;
@@ -55,7 +59,7 @@ public class ViewOrderController extends Controller {
 				bean.getOrderNum(), bean.getOrderType(), bean.getStartDate(),
 				bean.getStopDate(), "ALL".equals(bean.getStatus()) ? null
 						: new int[] { Order.Status.valueOf(bean.getStatus())
-								.ordinal() }, null,bean.getPartyId()));
+								.ordinal() }, null, bean.getPartyId()));
 	}
 
 	public static void main(String[] args) {
