@@ -95,18 +95,21 @@ public abstract class Order extends Entity {
 	}
 
 	public BigDecimal getTotal() {
-		if (null != totalAmt)
-			return totalAmt;
-		BigDecimal sum = BigDecimal.ZERO;
-		if (!CollectionUtils.isEmpty(items))
-			for (OrderItem item : items) {
-				if (null != item.getUnitPrice())
-					sum = sum.add(item.getUnitPrice().multiply(
-							new BigDecimal(item.getCount())));
-			}
-		if (null != feeAmount)
-			sum = sum.add(feeAmount);
-		return sum;
+		if (Order.Status.NEW.ordinal() == getStatus()
+				|| Order.Status.DRAFT.ordinal() == getStatus()) {
+			BigDecimal sum = BigDecimal.ZERO;
+			if (!CollectionUtils.isEmpty(items))
+				for (OrderItem item : items) {
+					if (null != item.getUnitPrice())
+						sum = sum.add(item.getUnitPrice().multiply(
+								new BigDecimal(item.getCount())));
+				}
+			if (null != feeAmount)
+				sum = sum.add(feeAmount);
+			setTotalAmt(sum);
+			return sum;
+		}
+		return totalAmt;
 	}
 
 	public int getStatus() {
