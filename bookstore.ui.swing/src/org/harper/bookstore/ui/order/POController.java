@@ -16,11 +16,16 @@ import org.harper.bookstore.domain.order.PurchaseOrder;
 import org.harper.bookstore.domain.order.PurchaseOrder.DeliveryStatus;
 import org.harper.bookstore.domain.order.PurchaseOrder.Status;
 import org.harper.bookstore.domain.profile.Book;
+import org.harper.bookstore.domain.profile.ContactInfo;
+import org.harper.bookstore.domain.setting.express.ExpressOrderSettingBean;
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.service.OrderService;
+import org.harper.bookstore.service.PrintService;
 import org.harper.bookstore.service.StoreSiteService;
 import org.harper.bookstore.ui.Controller;
 import org.harper.bookstore.ui.order.print.POContainer;
+import org.harper.bookstore.ui.print.ExpressOrderLayout;
+import org.harper.bookstore.ui.setting.ContactInfoBean;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
 import org.harper.frm.gui.swing.manager.BindingManager;
@@ -29,6 +34,7 @@ import org.harper.frm.gui.swing.manager.IBinding;
 import org.harper.frm.gui.swing.manager.JComboBinding;
 import org.harper.frm.gui.swing.manager.JLabelBinding;
 import org.harper.frm.gui.swing.manager.JTextBinding;
+import org.harper.frm.gui.swing.print.ComponentPrintable;
 
 public class POController extends Controller {
 
@@ -213,7 +219,33 @@ public class POController extends Controller {
 	}
 
 	public void printExpress() {
-		throw new UnsupportedOperationException("Not implemented");
+		// Get Config Bean According to Company
+		ExpressOrderSettingBean printbean = new PrintService()
+				.getPrintSetting(getOrder().getDelivery().getCompany());
+		ExpressOrderLayout layout = new ExpressOrderLayout(printbean);
+
+		// From Info;
+		ContactInfoBean ciBean = new ContactInfoBean();
+		ciBean.load();
+
+		ContactInfo fromInfo = new ContactInfo();
+		fromInfo.setAddress(ciBean.getAddress());
+		fromInfo.setMobile(ciBean.getMobile());
+		fromInfo.setName(ciBean.getName());
+		layout.setFromInfo(fromInfo);
+
+		// To Info
+		ContactInfo toInfo = order.getContact();
+		layout.setToInfo(toInfo);
+
+		PrinterJob job = PrinterJob.getPrinterJob();
+		job.setPrintable(new ComponentPrintable(layout));
+		if (job.printDialog())
+			try {
+				job.print();
+			} catch (PrinterException e) {
+				throw new RuntimeException(e);
+			}
 	}
 
 	public static void main(String[] args) {
