@@ -11,6 +11,7 @@ import oracle.toplink.indirection.ValueHolder;
 import oracle.toplink.indirection.ValueHolderInterface;
 
 import org.apache.commons.lang.Validate;
+import org.harper.bookstore.domain.deliver.DeliveryItem;
 import org.harper.bookstore.domain.deliver.DeliveryOrder;
 import org.harper.bookstore.domain.profile.BookUnit;
 import org.harper.bookstore.domain.profile.Customer;
@@ -24,10 +25,6 @@ public class PurchaseOrder extends Order {
 	public static enum Status {
 		NEW, DRAFT, CONFIRM, FINISH, CANCEL;
 	}
-
-	private Date payDate;
-
-	private Date finishDate;
 
 	private Customer customer;
 
@@ -105,25 +102,27 @@ public class PurchaseOrder extends Order {
 	public void place() {
 		Validate.isTrue(getOrderStatus() == Status.NEW);
 		setStatus(Status.DRAFT.ordinal());
-		lockStorage();
+		// lockStorage();
 	}
 
 	public void confirm() {
 		Validate.isTrue(getOrderStatus() == Status.DRAFT);
 		setStatus(Status.CONFIRM.ordinal());
 		setTotalAmt(getTotal());
-		collectStorage();
+		// collectStorage();
 	}
 
 	public void cancel() {
 		int oldStatus = getStatus();
+		Validate.isTrue(getDeliveryStatus() == DeliveryStatus.NOT_SENT
+				.ordinal());
 		setStatus(Status.CANCEL.ordinal());
-		if (oldStatus == Status.DRAFT.ordinal()) {
-			releaseStorage();
-		}
-		if (oldStatus == Status.CONFIRM.ordinal()) {
-			returnStorage();
-		}
+		// if (oldStatus == Status.DRAFT.ordinal()) {
+		// releaseStorage();
+		// }
+		// if (oldStatus == Status.CONFIRM.ordinal()) {
+		// returnStorage();
+		// }
 	}
 
 	public void lockStorage() {
@@ -216,22 +215,6 @@ public class PurchaseOrder extends Order {
 		return dispItems;
 	}
 
-	public Date getPayDate() {
-		return payDate;
-	}
-
-	public void setPayDate(Date payDate) {
-		this.payDate = payDate;
-	}
-
-	public Date getFinishDate() {
-		return finishDate;
-	}
-
-	public void setFinishDate(Date finishDate) {
-		this.finishDate = finishDate;
-	}
-
 	public DeliveryOrder getDelivery() {
 		if (null == delivery.getValue())
 			delivery.setValue(new DeliveryOrder());
@@ -243,7 +226,7 @@ public class PurchaseOrder extends Order {
 	}
 
 	public List<DeliveryOrder> getDeliveryOrders() {
-		return (List<DeliveryOrder>)deliveryOrders.getValue();
+		return (List<DeliveryOrder>) deliveryOrders.getValue();
 	}
 
 	public void setDeliveryOrders(List<DeliveryOrder> deliveryOrders) {
@@ -269,12 +252,34 @@ public class PurchaseOrder extends Order {
 	/**
 	 * Make a quick, full delivery order for this PO
 	 */
-	public void quickDeliver(DeliveryOrder dorder) {
-
+	public void quickDeliver() {
+		Validate.isTrue(DeliveryStatus.NOT_SENT.ordinal() == getDeliveryStatus());
+		setDeliveryStatus(DeliveryStatus.FULLY_SENT.ordinal());
+		// Update the delivery order to be valid;
+		getDelivery().setValid(true);
+		getDelivery().setCreateDate(new Date());
+		for (OrderItem item : getItems()) {
+			// Create Fully Deliver Item
+			DeliveryItem ditem = new DeliveryItem();
+			ditem.setOrderItem(item);
+			ditem.setCount(item.getCount());
+			getDelivery().addItem(ditem);
+		}
+		getDelivery().getContact().copy(getContact());
+		getDeliveryOrders().add(getDelivery());
+		getDelivery().create();
+		getDelivery().deliver();
 	}
 
 	public void partialDeliver() {
-		
+		Validate.isTrue(DeliveryStatus.NOT_SENT.ordinal() == getDeliveryStatus());
+		setDeliveryStatus(DeliveryStatus.PARTIAL_SENT.ordinal());
+		// Update the delivery order to be valid;
+		getDelivery().setValid(true);
+		getDelivery().setCreateDate(new Date());
+		getDelivery().getContact().copy(getContact());
+		getDeliveryOrders().add(getDelivery());
+		getDelivery().create();
 	}
 
 	public void makeDelivery() {

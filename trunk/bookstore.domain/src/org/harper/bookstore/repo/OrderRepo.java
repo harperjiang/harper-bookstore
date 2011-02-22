@@ -24,5 +24,6 @@ public interface OrderRepo extends Repo {
 	public List<PurchaseOrder> getExternalOutstandingOrder();
 
 	public List<DeliveryOrder> searchDeliveryOrder(Date fromDate, Date toDate,
-			String poNumber, String consigneeName, String poCustomerId);
+			String poNumber, String consigneeName, String poCustomerId,
+			DeliveryOrder.Status status);
 }

@@ -103,7 +103,8 @@ public class TopLinkOrderRepo extends TopLinkRepo implements OrderRepo {
 
 	@Override
 	public List<DeliveryOrder> searchDeliveryOrder(Date fromDate, Date toDate,
-			String poNumber, String consigneeName, String poCustomerId) {
+			String poNumber, String consigneeName, String poCustomerId,
+			DeliveryOrder.Status status) {
 		ExpressionBuilder builder = new ExpressionBuilder();
 		Expression exp = builder;
 
@@ -115,7 +116,9 @@ public class TopLinkOrderRepo extends TopLinkRepo implements OrderRepo {
 		if (!StringUtils.isEmpty(consigneeName))
 			exp = exp.and(builder.get("contact").get("name")
 					.containsSubstring(consigneeName));
-
+		if (null != status) {
+			exp = exp.and(builder.get("status").equal(status.ordinal()));
+		}
 		ExpressionBuilder poBuilder = new ExpressionBuilder();
 		Expression poExp = poBuilder;
 		if (!StringUtils.isEmpty(poNumber))

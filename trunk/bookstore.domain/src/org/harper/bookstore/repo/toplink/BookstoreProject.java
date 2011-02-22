@@ -1431,6 +1431,11 @@ public ClassDescriptor buildDeliveryItemDescriptor() {
 	countMapping.setFieldName("order_delivery_item.book_count");
 	descriptor.addMapping(countMapping);
 	
+	DirectToFieldMapping unitCostMapping = new DirectToFieldMapping();
+	unitCostMapping.setAttributeName("unitCost");
+	unitCostMapping.setFieldName("order_delivery_item.unit_cost");
+	descriptor.addMapping(unitCostMapping);
+	
 	DirectToFieldMapping oidMapping = new DirectToFieldMapping();
 	oidMapping.setAttributeName("oid");
 	oidMapping.setFieldName("order_delivery_item.oid");

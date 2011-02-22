@@ -4,4 +4,5 @@ import org.harper.bookstore.domain.Entity;
 
 public class AR extends Entity {
 
+//	private
 }
