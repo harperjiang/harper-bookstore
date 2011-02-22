@@ -30,7 +30,7 @@ public class ViewDOFrame extends JFrame {
 	private JTextField poNumberField;
 
 	private JTable doItemTable;
-	
+
 	/*	
 	 * 
 	 */
@@ -44,74 +44,67 @@ public class ViewDOFrame extends JFrame {
 		setSize(800, 600);
 
 		setLayout(new BorderLayout());
-		
+
 		JToolBar toolBar = new JToolBar();
-		add(toolBar,BorderLayout.NORTH);
-		
+		add(toolBar, BorderLayout.NORTH);
+
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					controller.save(false);
-					JOptionPane.showMessageDialog(ViewDOFrame.this,
-							"Saved"); 
+					JOptionPane.showMessageDialog(ViewDOFrame.this, "Saved");
 				} catch (Exception ee) {
 					ee.printStackTrace();
 					JOptionPane.showMessageDialog(ViewDOFrame.this,
-							ee.getMessage(),
-							"Failed to Save", 
+							ee.getMessage(), "Failed to Save",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		toolBar.add(saveButton);
-		
+
 		JButton deliverButton = new JButton("Deliver");
 		deliverButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					controller.save(false);
-					JOptionPane.showMessageDialog(ViewDOFrame.this,
-							"Saved"); 
+					controller.deliver();
+					JOptionPane.showMessageDialog(ViewDOFrame.this, "Delivered");
 				} catch (Exception ee) {
 					ee.printStackTrace();
 					JOptionPane.showMessageDialog(ViewDOFrame.this,
-							ee.getMessage(),
-							"Failed to Save", 
+							ee.getMessage(), "Failed to Save",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		toolBar.add(deliverButton);
-		
+
 		JButton fallbackButton = new JButton("Fallback");
 		fallbackButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					controller.save(false);
-					JOptionPane.showMessageDialog(ViewDOFrame.this,
-							"Saved"); 
+					controller.fallback();
+					JOptionPane.showMessageDialog(ViewDOFrame.this, "Fallback");
 				} catch (Exception ee) {
 					ee.printStackTrace();
 					JOptionPane.showMessageDialog(ViewDOFrame.this,
-							ee.getMessage(),
-							"Failed to Save", 
+							ee.getMessage(), "Failed to Save",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		toolBar.add(fallbackButton);
-		
+
 		JPanel mainPanel = new JPanel();
-		add(mainPanel,BorderLayout.CENTER);
-		
+		add(mainPanel, BorderLayout.CENTER);
+
 		mainPanel.setLayout(new GridLayout(2, 1));
 
 		doItemTable = new JTable();
 		CommonTableModel ctm = new CommonTableModel();
 		ctm.initialize(ViewDeliveryItemTableData.class);
 		doItemTable.setModel(ctm);
-
 
 		doItemTable.setDefaultRenderer(Integer.TYPE,
 				new DefaultTableCellRenderer());
