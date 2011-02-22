@@ -89,10 +89,13 @@ public class DOController extends Controller {
 			throw new IllegalArgumentException("No Purchase Order Found");
 	}
 
-	public void save(boolean forceClose) {
+	public void save(boolean andSend) {
 		Validate.isTrue(!StringUtils.isEmpty(bean.getDelivery().getNumber()),
 				"Please input a valid Delivery Order number");
-		new OrderService().saveDeliveryOrder(bean.getDelivery());
+		OrderService os = new OrderService();
+		DeliveryOrder result = os.saveDeliveryOrder(bean.getDelivery());
+		if (andSend)
+			os.operateDelivery(result, DeliveryOrder.Status.DELIVERED.ordinal());
 	}
 
 	public static void main(String[] args) {

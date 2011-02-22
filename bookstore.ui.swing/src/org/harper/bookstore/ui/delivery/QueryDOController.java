@@ -4,6 +4,7 @@ import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
 import org.harper.frm.gui.swing.manager.BindingManager;
+import org.harper.frm.gui.swing.manager.JComboBinding;
 import org.harper.frm.gui.swing.manager.JTextBinding;
 
 public class QueryDOController extends Controller {
@@ -33,6 +34,7 @@ public class QueryDOController extends Controller {
 				"poNumber"));
 		manager.addBinding(new JTextBinding(frame.getPoCustomerIdField(),
 				"poCustomerId"));
+		manager.addBinding(new JComboBinding(frame.getStatusCombo(), "status"));
 		manager.addBinding(new TableBinding(frame.getQueryDoTable(), "orders"));
 		manager.loadAll();
 	}
@@ -40,7 +42,8 @@ public class QueryDOController extends Controller {
 	public void search() {
 		bean.setOrders(new OrderService().searchDeliveryOrder(
 				bean.getFromDate(), bean.getToDate(), bean.getPoNumber(),
-				bean.getConsigneeName(), bean.getPoCustomerId()));
+				bean.getConsigneeName(), bean.getPoCustomerId(),
+				bean.getStatus()));
 	}
 
 	public QueryDOBean getBean() {

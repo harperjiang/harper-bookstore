@@ -2,6 +2,7 @@ package org.harper.bookstore.ui.order;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,6 +16,7 @@ import javax.swing.JToolBar;
 
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.ui.common.LabeledTextArea;
+import org.harper.frm.gui.swing.comp.textfield.NumTextField;
 
 public class SOFrame extends JFrame {
 
@@ -26,7 +28,7 @@ public class SOFrame extends JFrame {
 	private JButton saveButton;
 
 	private JButton confirmButton;
-	
+
 	private JButton cancelButton;
 
 	private OrderItemTable itemTable;
@@ -36,6 +38,8 @@ public class SOFrame extends JFrame {
 	private SOController controller;
 
 	private JLabel subtotalAmountLabel;
+
+	private NumTextField transFeeField;
 
 	private LabeledTextArea remarkArea;
 
@@ -86,29 +90,29 @@ public class SOFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					controller.confirm();
-					JOptionPane
-							.showMessageDialog(SOFrame.this, "Order Confirmed");
+					JOptionPane.showMessageDialog(SOFrame.this,
+							"Order Confirmed");
 				} catch (Exception ee) {
 					ee.printStackTrace();
-					JOptionPane.showMessageDialog(SOFrame.this, "Exception", ee
-							.getMessage(), JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(SOFrame.this, "Exception",
+							ee.getMessage(), JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		toolBar.add(confirmButton);
-		
+
 		cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					controller.cancel();
-					JOptionPane
-							.showMessageDialog(SOFrame.this, "Order Cancelled");
+					JOptionPane.showMessageDialog(SOFrame.this,
+							"Order Cancelled");
 				} catch (Exception ee) {
 					ee.printStackTrace();
-					JOptionPane.showMessageDialog(SOFrame.this, "Exception", ee
-							.getMessage(), JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(SOFrame.this, "Exception",
+							ee.getMessage(), JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -134,12 +138,27 @@ public class SOFrame extends JFrame {
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new BorderLayout());
 
+		JPanel bottomUpPanel = new JPanel();
+		bottomUpPanel.setLayout(new FlowLayout());
+
+		JLabel transFeeLabel = new JLabel("Transportation Fee:");
+		bottomUpPanel.add(transFeeLabel);
+
+		transFeeField = new NumTextField();
+		transFeeField.setPreferredSize(new Dimension(100, 20));
+		bottomUpPanel.add(transFeeField);
+
+		JLabel splitterLabel = new JLabel();
+		splitterLabel.setPreferredSize(new Dimension(300, 20));
+		bottomUpPanel.add(splitterLabel);
 		JLabel subtotalLabel = new JLabel("Subtotal:");
-		bottomPanel.add(subtotalLabel);
+		bottomUpPanel.add(subtotalLabel);
 
 		subtotalAmountLabel = new JLabel();
 		subtotalAmountLabel.setPreferredSize(new Dimension(100, 20));
-		bottomPanel.add(subtotalAmountLabel, BorderLayout.NORTH);
+		bottomUpPanel.add(subtotalAmountLabel);
+
+		bottomPanel.add(bottomUpPanel, BorderLayout.NORTH);
 
 		remarkArea = new LabeledTextArea("Remark");
 		remarkArea.setPreferredSize(new Dimension(0, 100));
@@ -174,6 +193,10 @@ public class SOFrame extends JFrame {
 
 	public JTextArea getRemarkArea() {
 		return remarkArea.getTextField();
+	}
+
+	public NumTextField getTransFeeField() {
+		return transFeeField;
 	}
 
 }

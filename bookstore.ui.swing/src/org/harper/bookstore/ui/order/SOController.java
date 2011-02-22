@@ -1,6 +1,7 @@
 package org.harper.bookstore.ui.order;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import javax.swing.event.TableModelEvent;
@@ -15,6 +16,8 @@ import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.service.StoreSiteService;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.manager.BindingManager;
+import org.harper.frm.gui.swing.manager.ComponentBinding;
+import org.harper.frm.gui.swing.manager.IBinding;
 import org.harper.frm.gui.swing.manager.JComboBinding;
 import org.harper.frm.gui.swing.manager.JLabelBinding;
 import org.harper.frm.gui.swing.manager.JTextBinding;
@@ -88,6 +91,21 @@ public class SOController extends Controller {
 				.getNumberTextField(), "number"));
 		manager.addBinding(new JTextBinding(getOrderFrame().getRemarkArea(),
 				"remark"));
+		manager.addBinding(getOrderFrame().getTransFeeField().new NumTextBinding(
+				"feeAmount"));
+		manager.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals(IBinding.BINDING_VAL)) {
+					String attr = ((ComponentBinding) evt.getSource())
+							.getAttribute();
+					if ("feeAmount".equals(attr) || "items".equals(attr))
+						manager.propertyChange(new PropertyChangeEvent(order,
+								"total", null, order.getTotal()));
+				}
+			}
+		});
+		
 		manager.loadAll();
 	}
 

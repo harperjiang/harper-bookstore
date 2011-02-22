@@ -99,6 +99,16 @@ public class ViewDOController extends Controller {
 		new OrderService().saveDeliveryOrder(bean.getDelivery());
 	}
 
+	public void deliver() {
+		new OrderService().operateDelivery(bean.getDelivery(),
+				DeliveryOrder.Status.DELIVERED.ordinal());
+	}
+
+	public void fallback() {
+		new OrderService().operateDelivery(bean.getDelivery(),
+				DeliveryOrder.Status.RETURNED.ordinal());
+	}
+
 	public static void main(String[] args) {
 		new ViewDOController();
 	}
