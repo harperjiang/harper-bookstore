@@ -1,6 +1,7 @@
 package org.harper.bookstore.domain.deliver;
 
-import org.apache.commons.lang.Validate;
+import java.math.BigDecimal;
+
 import org.harper.bookstore.domain.Entity;
 import org.harper.bookstore.domain.Item;
 import org.harper.bookstore.domain.order.OrderItem;
@@ -15,6 +16,8 @@ public class DeliveryItem extends Entity implements Item {
 	private Book book;
 
 	private int count;
+
+	private BigDecimal unitCost;
 
 	public DeliveryOrder getHeader() {
 		return header;
@@ -49,6 +52,14 @@ public class DeliveryItem extends Entity implements Item {
 
 	public void setBook(Book book) {
 		this.book = book;
+	}
+
+	public BigDecimal getUnitCost() {
+		return unitCost;
+	}
+
+	public void setUnitCost(BigDecimal unitCost) {
+		this.unitCost = unitCost;
 	}
 
 }

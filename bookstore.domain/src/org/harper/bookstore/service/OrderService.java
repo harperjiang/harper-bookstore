@@ -268,13 +268,10 @@ public class OrderService extends Service {
 							.ordinal(), "Order Already Sent");
 			Validate.notNull(order.getDeliveryNumber(),
 					"Delivery Order Number should not be empty");
-			order.setDeliveryStatus(partial ? DeliveryStatus.PARTIAL_SENT
-					.ordinal() : DeliveryStatus.FULLY_SENT.ordinal());
-			// Update the delivery order to be valid;
-			order.getDelivery().setValid(true);
-			order.getDelivery().setCreateDate(new Date());
-			order.getDelivery().getContact().copy(order.getContact());
-			order.getDeliveryOrders().add(order.getDelivery());
+			if (partial)
+				order.partialDeliver();
+			else
+				order.quickDeliver();
 			PurchaseOrder retval = getRepoFactory().getCommonRepo()
 					.store(order);
 			commitTransaction();
@@ -289,6 +286,13 @@ public class OrderService extends Service {
 	public DeliveryOrder saveDeliveryOrder(DeliveryOrder order) {
 		startTransaction();
 		try {
+			Validate.isTrue(
+					order.getStatus() == DeliveryOrder.Status.NEW.ordinal()
+							|| order.getStatus() == DeliveryOrder.Status.DRAFT
+									.ordinal(),
+					"Only Draft Order could be amended");
+			if (order.getStatus() == DeliveryOrder.Status.NEW.ordinal())
+				order.create();
 			Validate.isTrue(!CollectionUtils.isEmpty(order.getItems()),
 					"Please input the item to be sent");
 
@@ -327,12 +331,36 @@ public class OrderService extends Service {
 
 	}
 
+	public DeliveryOrder operateDelivery(DeliveryOrder order, int status) {
+		startTransaction();
+		try {
+			switch (DeliveryOrder.Status.values()[status]) {
+			case DELIVERED:
+				order.deliver();
+			case RETURNED:
+				order.fallback();
+			case EXCEPTION:
+
+			default:
+			}
+			DeliveryOrder result = getRepoFactory().getCommonRepo()
+					.store(order);
+			commitTransaction();
+			return result;
+		} catch (Exception e) {
+			releaseTransaction();
+			throw new RuntimeException(e);
+		}
+	}
+
 	public List<DeliveryOrder> searchDeliveryOrder(Date fromDate, Date toDate,
-			String poNumber, String consigneeName, String poCustomerId) {
+			String poNumber, String consigneeName, String poCustomerId,
+			DeliveryOrder.Status status) {
 		startTransaction();
 		try {
 			return getRepoFactory().getOrderRepo().searchDeliveryOrder(
-					fromDate, toDate, poNumber, consigneeName, poCustomerId);
+					fromDate, toDate, poNumber, consigneeName, poCustomerId,
+					status);
 		} finally {
 			releaseTransaction();
 		}
