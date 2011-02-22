@@ -2,6 +2,7 @@ package org.harper.bookstore.domain.deliver;
 
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
 import oracle.toplink.indirection.ValueHolder;
@@ -127,4 +128,9 @@ public class DeliveryOrder extends Entity {
 		return contact;
 	}
 
+	public String getStatusStr() {
+		return ResourceBundle.getBundle(
+				"org.harper.bookstore.domain.deliver.DOStatus").getString(
+				Status.values()[getStatus()].name());
+	}
 }
