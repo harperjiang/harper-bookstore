@@ -176,9 +176,9 @@ public class DOFrame extends JFrame {
 			}
 		});
 		bottomPanel.add(saveButton);
-
-		JButton saveAndCloseButton = new JButton("Save and Force Close");
-		saveAndCloseButton.addActionListener(new ActionListener() {
+		
+		JButton saveAndSendButton = new JButton("Save and Send");
+		saveAndSendButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new Thread(new Runnable() {
@@ -188,10 +188,13 @@ public class DOFrame extends JFrame {
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									JOptionPane.showMessageDialog(DOFrame.this,
-											"Delivery Order Saved");
+											"Delivery Order Saved and Sent");
 								}
 							});
 						} catch (final Exception ex) {
+							ex.printStackTrace();
+							LogManager.getInstance().getLogger(DOFrame.class)
+									.error("Error on saving", ex);
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									JOptionPane.showMessageDialog(DOFrame.this,
@@ -204,7 +207,7 @@ public class DOFrame extends JFrame {
 				}).start();
 			}
 		});
-		bottomPanel.add(saveAndCloseButton);
+		bottomPanel.add(saveButton);
 
 		setVisible(true);
 	}

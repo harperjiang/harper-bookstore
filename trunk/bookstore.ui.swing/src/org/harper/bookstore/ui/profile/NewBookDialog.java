@@ -26,52 +26,51 @@ public class NewBookDialog extends JDialog {
 	private static final long serialVersionUID = 2055849990441811615L;
 
 	private JTextField isbnTextField;
-	
+
 	private JTextField bookTextField;
-	
+
 	private JTextArea descArea;
-	
+
 	private JButton saveButton;
-	
-	
+
 	public NewBookDialog(JFrame parent) {
-		super(parent,true);
+		super(parent, true);
 		setTitle("New Book");
-		setSize(400,480);
+		setSize(400, 480);
 		setLayout(new FlowLayout());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
+
 		JLabel isbnLabel = new JLabel("ISBN");
-		isbnLabel.setPreferredSize(new Dimension(80,20));
+		isbnLabel.setPreferredSize(new Dimension(80, 20));
 		add(isbnLabel);
-		
+
 		isbnTextField = new JTextField();
-		isbnTextField.setPreferredSize(new Dimension(300,20));
+		isbnTextField.setPreferredSize(new Dimension(300, 20));
 		add(isbnTextField);
-		
+
 		JLabel bookNameLabel = new JLabel("Book Name");
-		bookNameLabel.setPreferredSize(new Dimension(80,20));
+		bookNameLabel.setPreferredSize(new Dimension(80, 20));
 		add(bookNameLabel);
-		
+
 		bookTextField = new JTextField();
-		bookTextField.setPreferredSize(new Dimension(300,20));
+		bookTextField.setPreferredSize(new Dimension(300, 20));
 		add(bookTextField);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setPreferredSize(new Dimension(390,350));
+		scrollPane.setPreferredSize(new Dimension(390, 300));
 		descArea = new JTextArea();
 		scrollPane.setViewportView(descArea);
 		add(scrollPane);
-		
+
 		saveButton = new JButton("Save");
-		saveButton.addActionListener(new ActionListener(){
+		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Book book = new Book();
 				book.setIsbn(bean.getIsbn());
 				book.setName(bean.getBookName());
 				book.setDesc(bean.getDesc());
-				new ProfileService().newBook(book);
+				NewBookDialog.this.added = new ProfileService().newBook(book);
 				NewBookDialog.this.dispose();
 			}
 		});
@@ -79,17 +78,19 @@ public class NewBookDialog extends JDialog {
 
 		bean = new NewBookBean();
 		manager = new BindingManager(bean);
-		manager.addBinding(new JTextBinding(isbnTextField,"isbn"));
-		manager.addBinding(new JTextBinding(bookTextField,"bookName"));
-		manager.addBinding(new JTextBinding(descArea,"desc"));
-		
+		manager.addBinding(new JTextBinding(isbnTextField, "isbn"));
+		manager.addBinding(new JTextBinding(bookTextField, "bookName"));
+		manager.addBinding(new JTextBinding(descArea, "desc"));
+
 		setVisible(true);
 	}
 
 	private NewBookBean bean;
-	
+
+	private Book added;
+
 	private BindingManager manager;
-	
+
 	public JTextField getIsbnTextField() {
 		return isbnTextField;
 	}
@@ -104,5 +105,9 @@ public class NewBookDialog extends JDialog {
 
 	public static void main(String[] args) {
 		new NewBookDialog(null).setVisible(true);
+	}
+
+	public Book getAdded() {
+		return added;
 	}
 }

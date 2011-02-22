@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import org.harper.bookstore.domain.profile.Book;
 
-public class BookBean {
+public class BookBean implements Comparable<BookBean> {
 
 	private Book book;
 
@@ -50,4 +50,11 @@ public class BookBean {
 		book.setName(name);
 	}
 
+	@Override
+	public int compareTo(BookBean o) {
+		if (null == getBook() || null == o.getBook()
+				|| null == getBook().getIsbn() || null == o.getBook().getIsbn())
+			return 0;
+		return getBook().getIsbn().compareTo(o.getBook().getIsbn());
+	}
 }

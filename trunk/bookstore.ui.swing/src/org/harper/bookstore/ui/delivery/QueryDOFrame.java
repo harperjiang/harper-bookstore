@@ -8,8 +8,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import org.harper.bookstore.domain.deliver.DeliveryOrder;
+import org.harper.bookstore.ui.common.EnumListCellRenderer;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
 
@@ -40,6 +43,8 @@ public class QueryDOFrame extends JFrame {
 	private JTextField poNumberField;
 
 	private JTextField poCustomerIdField;
+
+	private JComboBox statusCombo;
 
 	private JTable queryDoTable;
 
@@ -124,8 +129,21 @@ public class QueryDOFrame extends JFrame {
 		poCustomerIdField = new JTextField();
 		topPanel.add(poCustomerIdField);
 
-		topPanel.add(new JLabel());
-		topPanel.add(new JLabel());
+		JLabel statusLabel = new JLabel("Status");
+		topPanel.add(statusLabel);
+
+		statusCombo = new JComboBox();
+		statusCombo.addItem(null);
+		for (DeliveryOrder.Status sta : DeliveryOrder.Status.values())
+			statusCombo.addItem(sta);
+		statusCombo
+				.setRenderer(new EnumListCellRenderer(
+						DeliveryOrder.Status.class,
+						ResourceBundle
+								.getBundle("org.harper.bookstore.ui.delivery.DOStatus"),
+						"ALL"));
+		topPanel.add(statusCombo);
+
 
 		JButton searchButton = new JButton("Search");
 		topPanel.add(searchButton);
@@ -161,6 +179,10 @@ public class QueryDOFrame extends JFrame {
 
 	public JTable getQueryDoTable() {
 		return queryDoTable;
+	}
+
+	public JComboBox getStatusCombo() {
+		return statusCombo;
 	}
 
 }

@@ -18,6 +18,8 @@ public class QueryDOBean extends AbstractBean {
 
 	private String poCustomerId;
 
+	private DeliveryOrder.Status status;
+
 	private List<DeliveryOrder> orders;
 
 	public QueryDOBean() {
@@ -67,6 +69,14 @@ public class QueryDOBean extends AbstractBean {
 
 	public List<DeliveryOrder> getOrders() {
 		return orders;
+	}
+
+	public DeliveryOrder.Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(DeliveryOrder.Status status) {
+		this.status = status;
 	}
 
 	public void setOrders(List<DeliveryOrder> orders) {

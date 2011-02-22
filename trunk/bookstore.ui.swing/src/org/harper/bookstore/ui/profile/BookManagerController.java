@@ -1,5 +1,6 @@
 package org.harper.bookstore.ui.profile;
 
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.service.ProfileService;
 import org.harper.bookstore.ui.Controller;
+import org.harper.frm.core.tools.insert.BinaryInserter;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
 import org.harper.frm.gui.swing.manager.BindingManager;
 
@@ -15,8 +17,6 @@ public class BookManagerController extends Controller {
 	private BookManageFrame frame;
 
 	private BookInfoBean model;
-
-	private BindingManager manager;
 
 	public BookManagerController() {
 		super();
@@ -71,6 +71,16 @@ public class BookManagerController extends Controller {
 			frame.bookTable.getSelectionModel().setSelectionInterval(index,
 					index);
 		}
+	}
+
+	public void add(Book book) {
+		BookBean bean = new BookBean();
+		bean.setBook(book);
+		bean.setPrice(null);
+		ArrayList<BookBean> newBooks = new ArrayList<BookBean>();
+		newBooks.addAll(model.getBooks());
+		new BinaryInserter().insert(bean, newBooks);
+		model.setBooks(newBooks);
 	}
 
 	public static void main(String[] args) {
