@@ -12,6 +12,7 @@ public class DeliveryOrderTableData extends AbstractTableData {
 		super();
 		descBeans.add(new ColumnDescBean(Date.class, "Create Date",
 				"createDate"));
+		descBeans.add(new ColumnDescBean(String.class, "Status", "statusStr"));
 		descBeans.add(new ColumnDescBean(ExpressCompany.class, "Company",
 				"company"));
 		descBeans.add(new ColumnDescBean(String.class, "Number", "number"));

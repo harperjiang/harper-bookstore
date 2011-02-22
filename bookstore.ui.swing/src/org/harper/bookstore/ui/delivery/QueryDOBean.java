@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.harper.bookstore.domain.deliver.DeliveryOrder;
+import org.harper.bookstore.util.Utilities;
 import org.harper.frm.gui.swing.manager.AbstractBean;
 
 public class QueryDOBean extends AbstractBean {
@@ -23,8 +24,8 @@ public class QueryDOBean extends AbstractBean {
 	private List<DeliveryOrder> orders;
 
 	public QueryDOBean() {
-		toDate = new Date();
-		fromDate = new Date(toDate.getTime() - 3600000 * 24 * 7);
+		toDate = Utilities.getEndOfDate();
+		fromDate = Utilities.getBeginOfDate(3);
 	}
 
 	public Date getFromDate() {
