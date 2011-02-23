@@ -61,7 +61,7 @@ public class InterfaceService extends Service {
 				}
 
 				StoreSite defaultSite = getRepoFactory().getStoreRepo()
-						.getDefaultSite();
+						.getDefaultOutputSite();
 
 				po = cust.placeOrder(null);
 				po.setSite(defaultSite);

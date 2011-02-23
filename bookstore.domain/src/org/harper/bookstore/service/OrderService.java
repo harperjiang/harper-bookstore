@@ -49,12 +49,12 @@ public class OrderService extends Service {
 						PurchaseOrder.class, order.getOid());
 				// Only Draft Order Could be edited;
 				if (PurchaseOrder.Status.DRAFT == orderToEdit.getOrderStatus()) {
-					orderToEdit.releaseStorage();
+//					orderToEdit.releaseStorage();
 
 					orderToEdit = (PurchaseOrder) getRepoFactory()
 							.getCommonRepo().store(order);
 
-					orderToEdit.lockStorage();
+//					orderToEdit.lockStorage();
 				} else {
 					// Allow Delivery Info to be updated when order is not sent
 					if (orderToEdit.getDeliveryStatus() == DeliveryStatus.NOT_SENT

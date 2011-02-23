@@ -80,13 +80,13 @@ public class TopLinkStoreRepo extends TopLinkRepo implements StoreRepo {
 	}
 
 	@Override
-	public StoreSite getDefaultSite() {
+	public StoreSite getDefaultOutputSite() {
 		return (StoreSite) TransactionContext
 				.getSession()
 				.readObject(
 						StoreSite.class,
 						new SQLCall(
-								"select * from store_site having pref_seq = min(pref_seq)"));
+								"select * from store_site where for_output = 1 having pref_seq = min(pref_seq)"));
 	}
 
 }

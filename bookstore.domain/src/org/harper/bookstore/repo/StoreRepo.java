@@ -12,7 +12,7 @@ public interface StoreRepo {
 	
 	public int checkBookExistance(Book book);
 	
-	public StoreSite getDefaultSite();
+	public StoreSite getDefaultOutputSite();
 	
 	public List<StoreSite> getAllStores();
 	

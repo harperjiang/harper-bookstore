@@ -125,7 +125,7 @@ public class PurchaseOrder extends Order {
 		// }
 	}
 
-	public void lockStorage() {
+	protected void lockStorage() {
 
 		// Retrieve Item from StoreSite
 		for (OrderItem item : getItems()) {
@@ -144,7 +144,7 @@ public class PurchaseOrder extends Order {
 		}
 	}
 
-	public void collectStorage() {
+	protected void collectStorage() {
 		StoreRepo storeRepo = RepoFactory.INSTANCE.getStoreRepo();
 
 		// Retrieve Item from StoreSite
@@ -172,7 +172,7 @@ public class PurchaseOrder extends Order {
 		}
 	}
 
-	public void releaseStorage() {
+	protected void releaseStorage() {
 		StoreRepo storeRepo = RepoFactory.INSTANCE.getStoreRepo();
 
 		// Retrieve Item from StoreSite
@@ -191,7 +191,7 @@ public class PurchaseOrder extends Order {
 		}
 	}
 
-	public void returnStorage() {
+	protected void returnStorage() {
 		// Retrieve Item from StoreSite
 		for (OrderItem item : getItems()) {
 			if (item.isAgent())

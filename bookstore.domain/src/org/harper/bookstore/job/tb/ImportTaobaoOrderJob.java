@@ -44,6 +44,16 @@ public class ImportTaobaoOrderJob extends AbstractJob {
 		this.stop = stop;
 	}
 
+	private TradeQueryStatus status = TradeQueryStatus.WAIT_BUYER_CONFIRM_GOODS;
+
+	public TradeQueryStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TradeQueryStatus status) {
+		this.status = status;
+	}
+
 	@Override
 	protected Object execute() {
 		TOPSession ssn = TOPSessionManager.getInstance().getSession();
@@ -53,11 +63,10 @@ public class ImportTaobaoOrderJob extends AbstractJob {
 		TradesSoldGetRequest req = new TradesSoldGetRequest();
 
 		req.setFields(TaobaoJobConstants.TRADE_INCREGET_FIELDS);
-		Date current = new Date();
 		req.setStartCreated(start);
 		req.setEndCreated(stop);
 		req.setPageSize(TaobaoJobConstants.PAGE_SIZE);
-		req.setStatus(TradeQueryStatus.WAIT_SELLER_SEND_GOODS.name());
+		req.setStatus(status.name());
 
 		Map<String, Trade> result = new HashMap<String, Trade>();
 		try {

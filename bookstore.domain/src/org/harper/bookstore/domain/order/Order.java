@@ -95,6 +95,18 @@ public abstract class Order extends Entity {
 		return null;
 	}
 
+	// Always calculate by item, not including transportation fee
+	public BigDecimal getSubtotal() {
+		BigDecimal sum = BigDecimal.ZERO;
+		if (!CollectionUtils.isEmpty(items))
+			for (OrderItem item : items) {
+				if (null != item.getUnitPrice())
+					sum = sum.add(item.getUnitPrice().multiply(
+							new BigDecimal(item.getCount())));
+			}
+		return sum;
+	}
+
 	public BigDecimal getTotal() {
 		if ((Order.Status.NEW.ordinal() == getStatus() || Order.Status.DRAFT
 				.ordinal() == getStatus()) && StringUtils.isEmpty(refno)) {
