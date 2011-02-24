@@ -94,6 +94,8 @@ public class POController extends Controller {
 					if ("feeAmount".equals(attr) || "items".equals(attr))
 						manager.propertyChange(new PropertyChangeEvent(order,
 								"total", null, order.getTotal()));
+					manager.propertyChange(new PropertyChangeEvent(order,
+							"subtotal", null, order.getSubtotal()));
 				}
 			}
 		});
@@ -128,7 +130,9 @@ public class POController extends Controller {
 		manager.addBinding(new TableBinding(getOrderFrame().getDispItemTable(),
 				"dispItems"));
 		manager.addBinding(new JLabelBinding(getOrderFrame()
-				.getSubtotalAmountLabel(), "total"));
+				.getSubtotalAmountLabel(), "subtotal"));
+		manager.addBinding(new JLabelBinding(getOrderFrame()
+				.getTotalAmountLabel(), "total"));
 		manager.addBinding(new JTextBinding(getOrderFrame().getHeaderPanel()
 				.getNumberTextField(), "number"));
 		manager.addBinding(new JTextBinding(getOrderFrame().getHeaderPanel()
