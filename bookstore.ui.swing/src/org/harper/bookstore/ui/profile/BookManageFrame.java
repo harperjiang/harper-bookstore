@@ -58,14 +58,16 @@ public class BookManageFrame extends JFrame {
 				JOptionPane.showMessageDialog(BookManageFrame.this, "Saved");
 			}
 		});
-		
+
 		JButton newButton = new JButton("Add Book");
 		newButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				NewBookDialog dialog = new NewBookDialog(BookManageFrame.this);
-				Book added = dialog.getAdded();
-				getController().add(added);
+				if (dialog.isOkay()) {
+					Book added = dialog.getAdded();
+					getController().add(added);
+				}
 			}
 		});
 		toolBar.add(saveButton);
@@ -135,6 +137,5 @@ public class BookManageFrame extends JFrame {
 	public BookManagerController getController() {
 		return controller;
 	}
-	
-	
+
 }

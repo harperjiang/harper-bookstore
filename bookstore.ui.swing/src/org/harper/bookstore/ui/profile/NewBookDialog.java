@@ -72,6 +72,7 @@ public class NewBookDialog extends JDialog {
 				book.setDesc(bean.getDesc());
 				NewBookDialog.this.added = new ProfileService().newBook(book);
 				NewBookDialog.this.dispose();
+				okay = true;
 			}
 		});
 		add(saveButton);
@@ -88,6 +89,8 @@ public class NewBookDialog extends JDialog {
 	private NewBookBean bean;
 
 	private Book added;
+
+	private boolean okay = false;
 
 	private BindingManager manager;
 
@@ -109,5 +112,9 @@ public class NewBookDialog extends JDialog {
 
 	public Book getAdded() {
 		return added;
+	}
+
+	public boolean isOkay() {
+		return okay;
 	}
 }
