@@ -10,6 +10,7 @@ import oracle.toplink.indirection.ValueHolderInterface;
 
 import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.Entity;
+import org.harper.bookstore.domain.order.PurchaseOrder;
 import org.harper.bookstore.domain.profile.BookUnit;
 import org.harper.bookstore.domain.profile.ContactInfo;
 import org.harper.bookstore.domain.store.StoreSite;
@@ -57,6 +58,8 @@ public class DeliveryOrder extends Entity {
 					item.getCount());
 			Validate.isTrue(bu.getCount() == item.getCount());
 			item.setUnitCost(bu.getUnitPrice());
+			item.getOrderItem().send(item.getCount());
+			((PurchaseOrder) item.getOrderItem().getOrder()).makeDelivery();
 		}
 	}
 
@@ -108,6 +111,13 @@ public class DeliveryOrder extends Entity {
 	public void removeItem(DeliveryItem remove) {
 		remove.setHeader(null);
 		this.getItems().remove(remove);
+	}
+
+	public void removeAllItems() {
+		for (DeliveryItem item : getItems()) {
+			item.setHeader(null);
+		}
+		this.getItems().clear();
 	}
 
 	// public void setItems(List<DeliveryItem> items) {

@@ -10,6 +10,7 @@ import org.harper.bookstore.domain.Entity;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.profile.ContactInfo;
 import org.harper.bookstore.domain.store.StoreSite;
+import org.harper.frm.core.tools.sort.HeapSorter;
 import org.springframework.util.CollectionUtils;
 
 public abstract class Order extends Entity {
@@ -62,7 +63,9 @@ public abstract class Order extends Entity {
 	public List<OrderItem> getItems() {
 		if (null == items)
 			items = new ArrayList<OrderItem>();
-		return items;
+		return new HeapSorter().sort(items, new String[] { "book.isbn" },
+				new boolean[] { true });
+
 	}
 
 	public void addItem(OrderItem item) {
