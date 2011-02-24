@@ -1,0 +1,1 @@
+alter table order_delivery_item add unit_cost decimal(10,2);
