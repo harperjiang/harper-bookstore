@@ -66,6 +66,8 @@ public class POFrame extends JFrame {
 	private POController controller;
 
 	private JLabel subtotalAmountLabel;
+	
+	private JLabel totalAmountLabel;
 
 	private NumTextField feeAmountField;
 
@@ -367,11 +369,32 @@ public class POFrame extends JFrame {
 		tab.add(Messages.getString("POFrame.deliveryTab"), deliveryPanel); //$NON-NLS-1$
 
 		JPanel feePanel = new JPanel();
-		feePanel.add(new JLabel(Messages.getString("POFrame.addFee"))); //$NON-NLS-1$
+		feePanel.setLayout(new GridLayout(2,1));
+		
+		JPanel feeUpPanel = new JPanel();
+		feeUpPanel.setLayout(new FlowLayout());
+		JPanel feeDownPanel = new JPanel();
+		feeDownPanel.setLayout(new FlowLayout());
+		
+		feePanel.add(feeUpPanel);
+		feePanel.add(feeDownPanel);
+		
+		
+		JLabel subtotalLabel = new JLabel("Subtotal:");
+		feeUpPanel.add(subtotalLabel);
+		
+		subtotalAmountLabel = new JLabel();
+		subtotalAmountLabel.setPreferredSize(new Dimension(100,20));
+		feeUpPanel.add(subtotalAmountLabel);
+		
+		feeDownPanel.add(new JLabel(Messages.getString("POFrame.addFee"))); //$NON-NLS-1$
 
 		feeAmountField = new NumTextField();
 		feeAmountField.setPreferredSize(new Dimension(150, 20));
-		feePanel.add(feeAmountField);
+		feeDownPanel.add(feeAmountField);
+		
+		
+		
 		centerPanel.add(feePanel, BorderLayout.SOUTH);
 
 		add(centerPanel, BorderLayout.CENTER);
@@ -382,13 +405,13 @@ public class POFrame extends JFrame {
 		JPanel stPanel = new JPanel();
 		stPanel.setLayout(new FlowLayout());
 
-		JLabel subtotalLabel = new JLabel(
+		JLabel totalLabel = new JLabel(
 				Messages.getString("POFrame.subtotal")); //$NON-NLS-1$
-		stPanel.add(subtotalLabel, BorderLayout.NORTH);
+		stPanel.add(totalLabel, BorderLayout.NORTH);
 
-		subtotalAmountLabel = new JLabel();
-		subtotalAmountLabel.setPreferredSize(new Dimension(100, 20));
-		stPanel.add(subtotalAmountLabel);
+		totalAmountLabel = new JLabel();
+		totalAmountLabel.setPreferredSize(new Dimension(100, 20));
+		stPanel.add(totalAmountLabel);
 
 		bottomPanel.add(stPanel, BorderLayout.NORTH);
 
@@ -460,6 +483,10 @@ public class POFrame extends JFrame {
 
 	public JTextArea getMemoArea() {
 		return memoArea.getTextField();
+	}
+
+	public JLabel getTotalAmountLabel() {
+		return totalAmountLabel;
 	}
 
 }
