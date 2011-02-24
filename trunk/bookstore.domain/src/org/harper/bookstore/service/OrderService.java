@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.deliver.DeliveryItem;
 import org.harper.bookstore.domain.deliver.DeliveryOrder;
+import org.harper.bookstore.domain.deliver.ExpressCompany;
 import org.harper.bookstore.domain.order.ListPrice;
 import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.domain.order.OrderItem;
@@ -49,12 +50,12 @@ public class OrderService extends Service {
 						PurchaseOrder.class, order.getOid());
 				// Only Draft Order Could be edited;
 				if (PurchaseOrder.Status.DRAFT == orderToEdit.getOrderStatus()) {
-//					orderToEdit.releaseStorage();
+					// orderToEdit.releaseStorage();
 
 					orderToEdit = (PurchaseOrder) getRepoFactory()
 							.getCommonRepo().store(order);
 
-//					orderToEdit.lockStorage();
+					// orderToEdit.lockStorage();
 				} else {
 					// Allow Delivery Info to be updated when order is not sent
 					if (orderToEdit.getDeliveryStatus() == DeliveryStatus.NOT_SENT
@@ -257,21 +258,16 @@ public class OrderService extends Service {
 	}
 
 	public PurchaseOrder sendOrder(PurchaseOrder order) {
-		return sendOrder(order, false);
-	}
-
-	public PurchaseOrder sendOrder(PurchaseOrder order, boolean partial) {
 		startTransaction();
 		try {
 			Validate.isTrue(
 					order.getDeliveryStatus() == DeliveryStatus.NOT_SENT
 							.ordinal(), "Order Already Sent");
-			Validate.notNull(order.getDeliveryNumber(),
+			Validate.isTrue(
+					order.getDelivery().getCompany() == ExpressCompany.NIL
+							|| !StringUtils.isEmpty(order.getDeliveryNumber()),
 					"Delivery Order Number should not be empty");
-			if (partial)
-				order.partialDeliver();
-			else
-				order.quickDeliver();
+			order.quickDeliver();
 			PurchaseOrder retval = getRepoFactory().getCommonRepo()
 					.store(order);
 			commitTransaction();
@@ -305,11 +301,12 @@ public class OrderService extends Service {
 					i--;
 					continue;
 				}
+
 				// Set Connection with PurchaseOrder
 				if (null != item.getOrderItem()) {
-					item.getOrderItem().setSentCount(
-							item.getOrderItem().getSentCount()
-									+ item.getCount());
+					// item.getOrderItem().setSentCount(
+					// item.getOrderItem().getSentCount()
+					// + item.getCount());
 
 					PurchaseOrder po = (PurchaseOrder) item.getOrderItem()
 							.getOrder();
@@ -317,7 +314,7 @@ public class OrderService extends Service {
 						po.setDelivery(order);
 					if (!po.getDeliveryOrders().contains(order))
 						po.getDeliveryOrders().add(order);
-					po.makeDelivery();
+					// po.makeDelivery();
 				}
 			}
 			DeliveryOrder result = getRepoFactory().getCommonRepo()

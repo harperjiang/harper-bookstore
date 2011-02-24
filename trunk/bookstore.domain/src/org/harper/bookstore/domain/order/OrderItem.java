@@ -30,7 +30,7 @@ public class OrderItem implements Item {
 	public OrderItem() {
 		super();
 	}
-	
+
 	public int getCount() {
 		return count;
 	}
@@ -110,8 +110,12 @@ public class OrderItem implements Item {
 	public void setSentCount(int sentCount) {
 		this.sentCount = sentCount;
 	}
-	
+
 	public int getUnsentCount() {
 		return getCount() - getSentCount();
+	}
+
+	public void send(int count) {
+		sentCount += count;
 	}
 }

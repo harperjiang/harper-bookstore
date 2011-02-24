@@ -11,7 +11,6 @@ import oracle.toplink.indirection.ValueHolder;
 import oracle.toplink.indirection.ValueHolderInterface;
 
 import org.apache.commons.lang.Validate;
-import org.harper.bookstore.domain.deliver.DeliveryItem;
 import org.harper.bookstore.domain.deliver.DeliveryOrder;
 import org.harper.bookstore.domain.profile.BookUnit;
 import org.harper.bookstore.domain.profile.Customer;
@@ -254,47 +253,35 @@ public class PurchaseOrder extends Order {
 	 */
 	public void quickDeliver() {
 		Validate.isTrue(DeliveryStatus.NOT_SENT.ordinal() == getDeliveryStatus());
-		setDeliveryStatus(DeliveryStatus.FULLY_SENT.ordinal());
 		// Update the delivery order to be valid;
 		getDelivery().setValid(true);
 		getDelivery().setCreateDate(new Date());
-		for (OrderItem item : getItems()) {
-			// Create Fully Deliver Item
-			DeliveryItem ditem = new DeliveryItem();
-			ditem.setOrderItem(item);
-			ditem.setCount(item.getCount());
-			getDelivery().addItem(ditem);
-		}
+
 		getDelivery().getContact().copy(getContact());
 		getDeliveryOrders().add(getDelivery());
 		getDelivery().create();
 		getDelivery().deliver();
 	}
 
-	public void partialDeliver() {
-		Validate.isTrue(DeliveryStatus.NOT_SENT.ordinal() == getDeliveryStatus());
-		setDeliveryStatus(DeliveryStatus.PARTIAL_SENT.ordinal());
-		// Update the delivery order to be valid;
-		getDelivery().setValid(true);
-		getDelivery().setCreateDate(new Date());
-		getDelivery().getContact().copy(getContact());
-		getDeliveryOrders().add(getDelivery());
-		getDelivery().create();
-	}
-
+	/**
+	 * Calculate the sent status based on item's sent amount
+	 */
 	public void makeDelivery() {
 		Validate.isTrue(getDeliveryStatus() != DeliveryStatus.FULLY_SENT
 				.ordinal());
-		for (OrderItem item : getItems()) {
-			if (item.getSentCount() == 0) {
-				setDeliveryStatus(DeliveryStatus.NOT_SENT.ordinal());
-				continue;
-			}
-			if (item.getCount() > item.getSentCount()) {
-				setDeliveryStatus(DeliveryStatus.PARTIAL_SENT.ordinal());
-				break;
-			}
+		int size = 0;
+		for (OrderItem item : getItems())
+			if (item.getCount() == item.getSentCount())
+				size += 2;
+			else if (item.getSentCount() == 0)
+				size += 0;
+			else
+				size += 1;
+		if (size == getItems().size() * 2)
 			setDeliveryStatus(DeliveryStatus.FULLY_SENT.ordinal());
-		}
+		else if (0 == size)
+			setDeliveryStatus(DeliveryStatus.NOT_SENT.ordinal());
+		else
+			setDeliveryStatus(DeliveryStatus.PARTIAL_SENT.ordinal());
 	}
 }

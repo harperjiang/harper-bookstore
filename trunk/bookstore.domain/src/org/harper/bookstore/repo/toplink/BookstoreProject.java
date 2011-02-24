@@ -574,6 +574,11 @@ public ClassDescriptor buildOrderItemDescriptor() {
 	// Event Manager.
 	
 	// Mappings.
+//	DirectToFieldMapping displaySequenceMapping = new DirectToFieldMapping();
+//	displaySequenceMapping.setAttributeName("displaySequence");
+//	displaySequenceMapping.setFieldName("order_item.disp_seq");
+//	descriptor.addMapping(displaySequenceMapping);
+	
 	DirectToFieldMapping countMapping = new DirectToFieldMapping();
 	countMapping.setAttributeName("count");
 	countMapping.setFieldName("order_item.count");
