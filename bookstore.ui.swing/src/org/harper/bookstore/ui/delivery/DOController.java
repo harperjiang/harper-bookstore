@@ -78,6 +78,7 @@ public class DOController extends Controller {
 								.getOid())
 					return;
 			}
+			bean.getDelivery().getContact().copy(po.getContact());
 			for (OrderItem oi : po.getItems()) {
 				DeliveryItem newdi = new DeliveryItem();
 				newdi.setHeader(bean.getDelivery());

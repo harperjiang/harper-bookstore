@@ -5,12 +5,16 @@ import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.harper.bookstore.domain.deliver.DeliveryItem;
 import org.harper.bookstore.domain.order.OrderItem;
 import org.harper.bookstore.domain.order.PurchaseOrder;
 import org.harper.bookstore.domain.order.PurchaseOrder.DeliveryStatus;
@@ -263,16 +267,46 @@ public class POController extends Controller {
 		Validate.isTrue(
 				PurchaseOrder.DeliveryStatus.NOT_SENT.ordinal() == order
 						.getDeliveryStatus(), "Order must be in unsent status");
+		Validate.isTrue(!StringUtils.isEmpty(order.getDelivery().getNumber()),
+				"Delivery Number should not be empty");
+		order.getDelivery().removeAllItems();
+		for (OrderItem item : order.getItems()) {
+			// Create Fully Deliver Item
+			DeliveryItem ditem = new DeliveryItem();
+			ditem.setOrderItem(item);
+			ditem.setCount(item.getCount());
+			order.getDelivery().addItem(ditem);
+		}
 		setOrder(new OrderService().sendOrder(order));
 	}
 
-	public void partialSend() {
+	public void partialSend(PartialSendBean psbean) {
 		Validate.isTrue(
 				PurchaseOrder.Status.CONFIRM.ordinal() == order.getStatus(),
 				"Order must first be approved");
 		Validate.isTrue(
 				PurchaseOrder.DeliveryStatus.NOT_SENT.ordinal() == order
 						.getDeliveryStatus(), "Order must be in unsent status");
-		setOrder(new OrderService().sendOrder(order, true));
+		order.getDelivery().removeAllItems();
+		Map<Book, Integer> sent = new HashMap<Book, Integer>();
+		for (PartialSendItemBean sendItemBean : psbean.getBeans()) {
+			Validate.isTrue(sendItemBean.getCount() >= sendItemBean.getSend());
+			if (0 == sendItemBean.getSend())
+				continue;
+			sent.put(sendItemBean.getBook(), sendItemBean.getSend());
+		}
+		if (0 == sent.size())
+			// Nothing to send
+			return;
+		for (OrderItem item : order.getItems()) {
+			// Create Fully Deliver Item
+			if (!sent.containsKey(item.getBook()))
+				continue;
+			DeliveryItem ditem = new DeliveryItem();
+			ditem.setOrderItem(item);
+			ditem.setCount(sent.get(item.getBook()));
+			order.getDelivery().addItem(ditem);
+		}
+		setOrder(new OrderService().sendOrder(order));
 	}
 }

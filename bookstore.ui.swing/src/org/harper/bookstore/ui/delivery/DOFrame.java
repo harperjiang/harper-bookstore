@@ -176,7 +176,7 @@ public class DOFrame extends JFrame {
 			}
 		});
 		bottomPanel.add(saveButton);
-		
+
 		JButton saveAndSendButton = new JButton("Save and Send");
 		saveAndSendButton.addActionListener(new ActionListener() {
 			@Override
@@ -207,7 +207,7 @@ public class DOFrame extends JFrame {
 				}).start();
 			}
 		});
-		bottomPanel.add(saveButton);
+		bottomPanel.add(saveAndSendButton);
 
 		setVisible(true);
 	}

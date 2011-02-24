@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultCellEditor;
@@ -66,7 +67,7 @@ public class POFrame extends JFrame {
 	private POController controller;
 
 	private JLabel subtotalAmountLabel;
-	
+
 	private JLabel totalAmountLabel;
 
 	private NumTextField feeAmountField;
@@ -252,9 +253,23 @@ public class POFrame extends JFrame {
 		partialSendButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					controller.partialSend();
-					JOptionPane.showMessageDialog(POFrame.this,
-							Messages.getString("POFrame.sendMsg")); //$NON-NLS-1$
+					PartialSendBean bean = new PartialSendBean();
+					List<PartialSendItemBean> itemBeans = new ArrayList<PartialSendItemBean>();
+					for (OrderItem item : controller.getOrder().getItems()) {
+						PartialSendItemBean itemBean = new PartialSendItemBean();
+						itemBean.setBook(item.getBook());
+						itemBean.setCount(item.getCount());
+						itemBean.setSend(0);
+						itemBeans.add(itemBean);
+					}
+					bean.setBeans(itemBeans);
+					PartialSendDialog dialog = new PartialSendDialog(bean);
+					if (dialog.isOkay()) {
+						controller.partialSend(bean);
+						JOptionPane.showMessageDialog(POFrame.this,
+								Messages.getString("POFrame.sendMsg")); //$NON-NLS-1$
+					}
+
 				} catch (Exception ee) {
 					LogManager.getInstance().getLogger(getClass())
 							.error(Messages.getString("POFrame.sendError"), ee); //$NON-NLS-1$
@@ -369,32 +384,29 @@ public class POFrame extends JFrame {
 		tab.add(Messages.getString("POFrame.deliveryTab"), deliveryPanel); //$NON-NLS-1$
 
 		JPanel feePanel = new JPanel();
-		feePanel.setLayout(new GridLayout(2,1));
-		
+		feePanel.setLayout(new GridLayout(2, 1));
+
 		JPanel feeUpPanel = new JPanel();
 		feeUpPanel.setLayout(new FlowLayout());
 		JPanel feeDownPanel = new JPanel();
 		feeDownPanel.setLayout(new FlowLayout());
-		
+
 		feePanel.add(feeUpPanel);
 		feePanel.add(feeDownPanel);
-		
-		
+
 		JLabel subtotalLabel = new JLabel("Subtotal:");
 		feeUpPanel.add(subtotalLabel);
-		
+
 		subtotalAmountLabel = new JLabel();
-		subtotalAmountLabel.setPreferredSize(new Dimension(100,20));
+		subtotalAmountLabel.setPreferredSize(new Dimension(100, 20));
 		feeUpPanel.add(subtotalAmountLabel);
-		
+
 		feeDownPanel.add(new JLabel(Messages.getString("POFrame.addFee"))); //$NON-NLS-1$
 
 		feeAmountField = new NumTextField();
 		feeAmountField.setPreferredSize(new Dimension(150, 20));
 		feeDownPanel.add(feeAmountField);
-		
-		
-		
+
 		centerPanel.add(feePanel, BorderLayout.SOUTH);
 
 		add(centerPanel, BorderLayout.CENTER);
@@ -405,8 +417,7 @@ public class POFrame extends JFrame {
 		JPanel stPanel = new JPanel();
 		stPanel.setLayout(new FlowLayout());
 
-		JLabel totalLabel = new JLabel(
-				Messages.getString("POFrame.subtotal")); //$NON-NLS-1$
+		JLabel totalLabel = new JLabel(Messages.getString("POFrame.subtotal")); //$NON-NLS-1$
 		stPanel.add(totalLabel, BorderLayout.NORTH);
 
 		totalAmountLabel = new JLabel();
@@ -416,18 +427,18 @@ public class POFrame extends JFrame {
 		bottomPanel.add(stPanel, BorderLayout.NORTH);
 
 		JPanel bottomCenterPanel = new JPanel();
-		bottomCenterPanel.setLayout(new GridLayout(2,1));
+		bottomCenterPanel.setLayout(new GridLayout(2, 1));
 
 		remarkArea = new LabeledTextArea(Messages.getString("POFrame.remark")); //$NON-NLS-1$
 		remarkArea.setPreferredSize(new Dimension(80, 100));
 		remarkArea.getTextField().setEditable(false);
 		remarkArea.getTextField().setEnabled(false);
 		bottomCenterPanel.add(remarkArea);
-		
+
 		memoArea = new LabeledTextArea("Memo");
 		memoArea.setPreferredSize(new Dimension(80, 100));
 		bottomCenterPanel.add(memoArea);
-		
+
 		bottomPanel.add(bottomCenterPanel, BorderLayout.CENTER);
 
 		add(bottomPanel, BorderLayout.SOUTH);
