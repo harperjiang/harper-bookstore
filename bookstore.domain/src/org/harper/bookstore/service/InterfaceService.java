@@ -15,6 +15,7 @@ import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.profile.Customer;
 import org.harper.bookstore.domain.profile.Source;
 import org.harper.bookstore.domain.store.StoreSite;
+import org.harper.bookstore.domain.taobao.TradeQueryStatus;
 import org.harper.bookstore.job.tb.ImportTaobaoOrderJob;
 import org.harper.bookstore.job.tb.IncreImportTaobaoOrderJob;
 import org.harper.bookstore.repo.OrderRepo;
@@ -129,7 +130,13 @@ public class InterfaceService extends Service {
 		ImportTaobaoOrderJob job = new ImportTaobaoOrderJob();
 		job.setStart(start);
 		job.setStop(stop);
-		return (Integer) job.call();
+		job.setStatus(TradeQueryStatus.WAIT_BUYER_CONFIRM_GOODS);
+		int sent = (Integer) job.call();
+
+		job.setStatus(TradeQueryStatus.WAIT_SELLER_SEND_GOODS);
+		int wait = (Integer) job.call();
+
+		return sent + wait;	
 	}
 
 	public int increImportTOPOrder() {
