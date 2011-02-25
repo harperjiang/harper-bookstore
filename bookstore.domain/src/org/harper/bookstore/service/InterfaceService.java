@@ -1,5 +1,6 @@
 package org.harper.bookstore.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,10 +9,13 @@ import java.util.Map;
 import oracle.toplink.sessions.UnitOfWork;
 
 import org.apache.commons.lang.StringUtils;
+import org.harper.bookstore.domain.order.CalcHelper;
 import org.harper.bookstore.domain.order.DisplayItem;
 import org.harper.bookstore.domain.order.OrderItem;
 import org.harper.bookstore.domain.order.PurchaseOrder;
 import org.harper.bookstore.domain.profile.Book;
+import org.harper.bookstore.domain.profile.BookSet;
+import org.harper.bookstore.domain.profile.BookUnit;
 import org.harper.bookstore.domain.profile.Customer;
 import org.harper.bookstore.domain.profile.Source;
 import org.harper.bookstore.domain.store.StoreSite;
@@ -92,8 +96,6 @@ public class InterfaceService extends Service {
 
 				// Only add items for new orders
 				if (0 == po.getOid()) {
-					// Real Item
-					OrderItem item = new OrderItem();
 					if (StringUtils.isEmpty(itemBean.getItemId())) {
 						continue;
 					}
@@ -101,10 +103,32 @@ public class InterfaceService extends Service {
 							itemBean.getItemId());
 					if (null == book)
 						continue;
-					item.setBook(book);
-					item.setCount(itemBean.getCount());
-					item.setUnitPrice(itemBean.getUnitPrice());
-					po.addItem(item);
+
+					if (book instanceof BookSet) {
+						BookSet set = (BookSet) book;
+
+						BigDecimal[] ups = CalcHelper.split(
+								itemBean.getUnitPrice(), set.getBooks());
+
+						for (int i = 0; i < ups.length; i++) {
+							BookUnit u = set.getBooks().get(i);
+							OrderItem item = new OrderItem();
+
+							item.setBook(u.getBook());
+							item.setCount(itemBean.getCount());
+							item.setUnitPrice(ups[i]);
+							po.addItem(item);
+						}
+
+					} else {
+						// Single Item
+						OrderItem item = new OrderItem();
+
+						item.setBook(book);
+						item.setCount(itemBean.getCount());
+						item.setUnitPrice(itemBean.getUnitPrice());
+						po.addItem(item);
+					}
 				}
 			}
 		}
@@ -136,7 +160,7 @@ public class InterfaceService extends Service {
 		job.setStatus(TradeQueryStatus.WAIT_SELLER_SEND_GOODS);
 		int wait = (Integer) job.call();
 
-		return sent + wait;	
+		return sent + wait;
 	}
 
 	public int increImportTOPOrder() {

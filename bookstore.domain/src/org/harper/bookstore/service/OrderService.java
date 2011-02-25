@@ -166,11 +166,11 @@ public class OrderService extends Service {
 	}
 
 	public List<Order> searchOrder(String num, String type, Date start,
-			Date stop, int[] status, int[] expStatus, String partyId) {
+			Date stop, int[] status, int[] expStatus, String partyId, String pws) {
 		startTransaction();
 		try {
 			return RepoFactory.INSTANCE.getOrderRepo().searchOrder(num, type,
-					start, stop, status, expStatus, partyId);
+					start, stop, status, expStatus, partyId, pws);
 		} finally {
 			releaseTransaction();
 		}

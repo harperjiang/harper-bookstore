@@ -50,6 +50,7 @@ public abstract class Order extends Entity {
 		createDate = new Date();
 		contact = new OrderContact();
 		contact.setOrder(this);
+		items = new ArrayList<OrderItem>();
 	}
 
 	public String getNumber() {
@@ -69,7 +70,7 @@ public abstract class Order extends Entity {
 	}
 
 	public void addItem(OrderItem item) {
-		this.getItems().add(item);
+		this.items.add(item);
 		item.setOrder(this);
 	}
 

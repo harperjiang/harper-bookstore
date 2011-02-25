@@ -15,7 +15,8 @@ public interface OrderRepo extends Repo {
 	public List<SupplyOrder> getSupplyOrder(Book book);
 
 	public List<Order> searchOrder(String number, String type, Date start,
-			Date stop, int[] status, int[] expressStatus, String partyId);
+			Date stop, int[] status, int[] expressStatus, String partyId,
+			String powersearch);
 
 	public PurchaseOrder getPurchaseOrderByRefno(String refno);
 
