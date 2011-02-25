@@ -7,8 +7,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.harper.frm.core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.harper.frm.data"/>
 	<classpathentry kind="lib" path="/bookstore.domain/mysql-connector-java-5.1.12-bin.jar"/>
-	<classpathentry kind="lib" path="D:/tools/toplink_101340/toplink/jlib/toplink.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/barbecue-1.5-beta1.jar"/>
+	<classpathentry kind="lib" path="/bookstore.domain/toplink.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
