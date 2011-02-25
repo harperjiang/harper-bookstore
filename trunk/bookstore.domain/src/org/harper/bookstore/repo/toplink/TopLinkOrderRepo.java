@@ -11,8 +11,10 @@ import oracle.toplink.queryframework.ReportQuery;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.deliver.DeliveryOrder;
+import org.harper.bookstore.domain.order.DisplayItem;
 import org.harper.bookstore.domain.order.ListPrice;
 import org.harper.bookstore.domain.order.Order;
+import org.harper.bookstore.domain.order.OrderItem;
 import org.harper.bookstore.domain.order.PurchaseOrder;
 import org.harper.bookstore.domain.order.SupplyOrder;
 import org.harper.bookstore.domain.profile.Book;
@@ -32,7 +34,7 @@ public class TopLinkOrderRepo extends TopLinkRepo implements OrderRepo {
 
 	@Override
 	public List<Order> searchOrder(String number, String type, Date start,
-			Date stop, int[] status, int[] expStatus, String partyId) {
+			Date stop, int[] status, int[] expStatus, String partyId, String pws) {
 		Validate.notNull(type);
 		ExpressionBuilder builder = new ExpressionBuilder();
 		Expression exp = builder;
@@ -54,7 +56,37 @@ public class TopLinkOrderRepo extends TopLinkRepo implements OrderRepo {
 			exp = exp.and(builder.get("createDate").greaterThanEqual(start));
 		if (stop != null)
 			exp = exp.and(builder.get("createDate").lessThanEqual(stop));
+		if (!StringUtils.isEmpty(pws)) {
+			// Search all items and display items
+			ExpressionBuilder itemBuilder = new ExpressionBuilder();
+			Expression itemExp = itemBuilder
+					.get("order")
+					.equal(builder)
+					.and(itemBuilder.get("book").get("name")
+							.containsSubstringIgnoringCase(pws));
+			ReportQuery itemQuery = new ReportQuery(OrderItem.class,
+					itemBuilder);
+			itemQuery.setSelectionCriteria(itemExp);
+			itemQuery.addAttribute("oid");
 
+			ExpressionBuilder ditemBuilder = new ExpressionBuilder();
+			Expression ditemExp = ditemBuilder
+					.get("order")
+					.equal(builder)
+					.and(ditemBuilder.get("name")
+							.containsSubstringIgnoringCase(pws));
+			ReportQuery ditemQuery = new ReportQuery(DisplayItem.class,
+					ditemBuilder);
+			ditemQuery.setSelectionCriteria(ditemExp);
+			ditemQuery.addAttribute("oid");
+			
+			if ("PO".equals(type)) {
+				exp = exp.and(builder.exists(itemQuery).or(
+						builder.exists(ditemQuery)));
+			} else {
+				exp = exp.and(builder.exists(itemQuery));
+			}
+		}
 		ReadAllQuery query = null;
 		if ("PO".equals(type)) {
 			query = new ReadAllQuery(PurchaseOrder.class);

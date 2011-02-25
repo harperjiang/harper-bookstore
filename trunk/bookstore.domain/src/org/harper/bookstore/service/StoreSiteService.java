@@ -22,7 +22,6 @@ import org.harper.bookstore.service.bean.BookReportItemBean2;
 import org.harper.frm.ValidateException;
 import org.harper.frm.core.tools.sort.HeapSorter;
 
-
 public class StoreSiteService extends Service {
 
 	public List<StoreSite> getAvailableSite(boolean forSell) {
@@ -72,68 +71,74 @@ public class StoreSiteService extends Service {
 			Book book = getRepoFactory().getProfileRepo().findBook(bookIsbn);
 			if (null == book)
 				throw ValidateException.noSuchBook(bookIsbn);
-			if (book instanceof BookSet)
-				throw ValidateException.isBookSet(bookIsbn);
-			// List<SupplyOrder> orders = getRepoFactory().getOrderRepo()
-			// .getSupplyOrder(book);
+			
+			
 			bean.setBook(book);
 
-			ListPrice listPrice = getRepoFactory().getOrderRepo().getListPrice(
-					book);
+			ListPrice listPrice = getRepoFactory().getOrderRepo()
+					.getListPrice(book);
 			if (null != listPrice) {
 				bean.setListPrice(listPrice.getPrice());
 			}
-
-			List<StoreSite> sites = getRepoFactory().getStoreRepo()
-					.getStoreSiteWithBook(book);
-			bean.setBookName(book.getName());
-
-			// if (null != orders) {
-			// BigDecimal sumAmount = BigDecimal.ZERO;
-			// int count = 0;
-			// for (SupplyOrder order : orders) {
-			// if (SupplyOrder.Status.CONFIRM.ordinal() != order
-			// .getStatus())
-			// continue;
-			// OrderItem item = order.getItem(book);
-			// sumAmount = sumAmount.add(item.getUnitPrice().multiply(
-			// new BigDecimal(item.getCount())));
-			// count += item.getCount();
-			// }
-			// sumAmount = sumAmount.setScale(2);
-			// bean.setAverageCost(0 == count ? BigDecimal.ZERO
-			// : sumAmount.divide(new BigDecimal(count),
-			// BigDecimal.ROUND_HALF_UP));
-			// bean.setTotalCount(count);
-			// }
-
-			int totalCount = 0;
-			BigDecimal subtotal = BigDecimal.ZERO;
-			if (null != sites) {
-				List<BookReportItemBean> itemBeans = new ArrayList<BookReportItemBean>();
-				for (StoreSite site : sites) {
-					StoreEntry entry = site.getEntry(book);
-					BookReportItemBean item = new BookReportItemBean();
-					item.setCount(entry.getCount());
-					item.setAvailable(entry.getAvailable());
-					item.setSiteName(site.getName());
-					itemBeans.add(item);
-
-					totalCount += item.getCount();
-					subtotal = subtotal.add(entry.getUnitPrice().multiply(
-							new BigDecimal(entry.getCount())));
-				}
-				bean.setItems(itemBeans);
-			}
-			if (totalCount == 0) {
-				bean.setAverageCost(BigDecimal.ZERO);
+			
+			if (book instanceof BookSet) {
+				return bean;
 			} else {
-				bean.setAverageCost(subtotal.divide(new BigDecimal(totalCount),
-						BigDecimal.ROUND_HALF_UP));
-			}
-			bean.setTotalCount(totalCount);
 
-			return bean;
+				// List<SupplyOrder> orders = getRepoFactory().getOrderRepo()
+				// .getSupplyOrder(book);
+
+				List<StoreSite> sites = getRepoFactory().getStoreRepo()
+						.getStoreSiteWithBook(book);
+				bean.setBookName(book.getName());
+
+				// if (null != orders) {
+				// BigDecimal sumAmount = BigDecimal.ZERO;
+				// int count = 0;
+				// for (SupplyOrder order : orders) {
+				// if (SupplyOrder.Status.CONFIRM.ordinal() != order
+				// .getStatus())
+				// continue;
+				// OrderItem item = order.getItem(book);
+				// sumAmount = sumAmount.add(item.getUnitPrice().multiply(
+				// new BigDecimal(item.getCount())));
+				// count += item.getCount();
+				// }
+				// sumAmount = sumAmount.setScale(2);
+				// bean.setAverageCost(0 == count ? BigDecimal.ZERO
+				// : sumAmount.divide(new BigDecimal(count),
+				// BigDecimal.ROUND_HALF_UP));
+				// bean.setTotalCount(count);
+				// }
+
+				int totalCount = 0;
+				BigDecimal subtotal = BigDecimal.ZERO;
+				if (null != sites) {
+					List<BookReportItemBean> itemBeans = new ArrayList<BookReportItemBean>();
+					for (StoreSite site : sites) {
+						StoreEntry entry = site.getEntry(book);
+						BookReportItemBean item = new BookReportItemBean();
+						item.setCount(entry.getCount());
+						item.setAvailable(entry.getAvailable());
+						item.setSiteName(site.getName());
+						itemBeans.add(item);
+
+						totalCount += item.getCount();
+						subtotal = subtotal.add(entry.getUnitPrice().multiply(
+								new BigDecimal(entry.getCount())));
+					}
+					bean.setItems(itemBeans);
+				}
+				if (totalCount == 0) {
+					bean.setAverageCost(BigDecimal.ZERO);
+				} else {
+					bean.setAverageCost(subtotal.divide(new BigDecimal(
+							totalCount), BigDecimal.ROUND_HALF_UP));
+				}
+				bean.setTotalCount(totalCount);
+
+				return bean;
+			}
 		} finally {
 			releaseTransaction();
 		}
