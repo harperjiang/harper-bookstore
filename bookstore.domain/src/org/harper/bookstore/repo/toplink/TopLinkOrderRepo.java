@@ -56,7 +56,10 @@ public class TopLinkOrderRepo extends TopLinkRepo implements OrderRepo {
 			exp = exp.and(builder.get("createDate").greaterThanEqual(start));
 		if (stop != null)
 			exp = exp.and(builder.get("createDate").lessThanEqual(stop));
+
+		// Search Remarks, Items and Contacts
 		if (!StringUtils.isEmpty(pws)) {
+			Expression pwsexp = null;
 			// Search all items and display items
 			ExpressionBuilder itemBuilder = new ExpressionBuilder();
 			Expression itemExp = itemBuilder
@@ -79,13 +82,25 @@ public class TopLinkOrderRepo extends TopLinkRepo implements OrderRepo {
 					ditemBuilder);
 			ditemQuery.setSelectionCriteria(ditemExp);
 			ditemQuery.addAttribute("oid");
-			
+
 			if ("PO".equals(type)) {
-				exp = exp.and(builder.exists(itemQuery).or(
-						builder.exists(ditemQuery)));
+				pwsexp = builder.exists(itemQuery).or(
+						builder.exists(ditemQuery));
 			} else {
-				exp = exp.and(builder.exists(itemQuery));
+				pwsexp = builder.exists(itemQuery);
 			}
+
+			// Search Remarks and memos
+			pwsexp = pwsexp.or(builder.get("remark")
+					.containsSubstringIgnoringCase(pws));
+			pwsexp = pwsexp.or(builder.get("memo")
+					.containsSubstringIgnoringCase(pws));
+			pwsexp = pwsexp.or(builder.get("contact").get("name")
+					.containsSubstringIgnoringCase(pws));
+			pwsexp = pwsexp.or(builder.get("contact").get("address")
+					.containsSubstringIgnoringCase(pws));
+
+			exp = exp.and(pwsexp);
 		}
 		ReadAllQuery query = null;
 		if ("PO".equals(type)) {
