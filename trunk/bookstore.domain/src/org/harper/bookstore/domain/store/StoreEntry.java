@@ -74,10 +74,14 @@ public class StoreEntry {
 	public void add(int count, BigDecimal unitPrice) {
 		if (0 == count)
 			return;
-		BigDecimal newUnitPrice = unitPrice.multiply(new BigDecimal(count))
-				.add(getUnitPrice().multiply(new BigDecimal(getCount())))
-				.divide(new BigDecimal(count + getCount()),
-						BigDecimal.ROUND_HALF_UP);
+		BigDecimal newUnitPrice = unitPrice;
+		if (0 != count + getCount())
+			// Solve the problem caused by negative Storage
+			newUnitPrice = unitPrice
+					.multiply(new BigDecimal(count))
+					.add(getUnitPrice().multiply(new BigDecimal(getCount())))
+					.divide(new BigDecimal(count + getCount()),
+							BigDecimal.ROUND_HALF_UP);
 		setCount(getCount() + count);
 		setUnitPrice(newUnitPrice);
 	}

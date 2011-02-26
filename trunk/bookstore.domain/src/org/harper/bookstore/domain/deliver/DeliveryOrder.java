@@ -64,7 +64,8 @@ public class DeliveryOrder extends Entity {
 	}
 
 	public void fallback() {
-		Validate.isTrue(getStatus() == Status.DELIVERED.ordinal());
+		Validate.isTrue(getStatus() == Status.DELIVERED.ordinal(),
+				"Can only fallback delivered order");
 		setStatus(Status.RETURNED.ordinal());
 
 		// Modify Storage
