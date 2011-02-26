@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.DefaultCellEditor;
@@ -29,6 +30,7 @@ import org.harper.bookstore.domain.order.OrderItem;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.ui.common.CheckBoxTableRenderer;
+import org.harper.bookstore.ui.common.ChooseDateDialog;
 import org.harper.bookstore.ui.common.ItemController;
 import org.harper.bookstore.ui.common.ItemController.TableCreator;
 import org.harper.bookstore.ui.common.LabeledTextArea;
@@ -233,7 +235,12 @@ public class POFrame extends JFrame {
 		sendButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					controller.send();
+					ChooseDateDialog dialog = new ChooseDateDialog(
+							POFrame.this, "Choose Send Date",
+							"Please choose the date of delivery", new Date());
+					if (!dialog.isOkay())
+						return;
+					controller.send(dialog.getBean().getDate());
 					JOptionPane.showMessageDialog(POFrame.this,
 							Messages.getString("POFrame.sendMsg")); //$NON-NLS-1$
 				} catch (Exception ee) {
@@ -263,7 +270,8 @@ public class POFrame extends JFrame {
 						itemBeans.add(itemBean);
 					}
 					bean.setBeans(itemBeans);
-					PartialSendDialog dialog = new PartialSendDialog(bean);
+					PartialSendDialog dialog = new PartialSendDialog(
+							POFrame.this, bean);
 					if (dialog.isOkay()) {
 						controller.partialSend(bean);
 						JOptionPane.showMessageDialog(POFrame.this,

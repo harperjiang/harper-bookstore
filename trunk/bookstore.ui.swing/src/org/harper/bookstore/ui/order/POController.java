@@ -5,6 +5,7 @@ import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -209,6 +210,7 @@ public class POController extends Controller {
 	public void confirm() {
 		Validate.isTrue(order.getOrderStatus() == Status.DRAFT,
 				"Order cannot be confirmed");
+		save();
 		setOrder(new OrderService().operateOrder(order, Status.CONFIRM));
 	}
 
@@ -261,7 +263,7 @@ public class POController extends Controller {
 		new POController();
 	}
 
-	public void send() {
+	public void send(Date createDate) {
 		Validate.isTrue(
 				PurchaseOrder.Status.CONFIRM.ordinal() == order.getStatus(),
 				"Order must first be approved");
@@ -272,6 +274,8 @@ public class POController extends Controller {
 				|| !StringUtils.isEmpty(order.getDelivery().getNumber()),
 				"Delivery Number should not be empty");
 		order.getDelivery().removeAllItems();
+		if (null != createDate)
+			order.getDelivery().setCreateDate(createDate);
 		for (OrderItem item : order.getItems()) {
 			// Create Fully Deliver Item
 			DeliveryItem ditem = new DeliveryItem();
@@ -289,6 +293,8 @@ public class POController extends Controller {
 		Validate.isTrue(
 				PurchaseOrder.DeliveryStatus.NOT_SENT.ordinal() == order
 						.getDeliveryStatus(), "Order must be in unsent status");
+		if (null != psbean.getSendDate())
+			order.getDelivery().setCreateDate(psbean.getSendDate());
 		order.getDelivery().removeAllItems();
 		Map<Book, Integer> sent = new HashMap<Book, Integer>();
 		for (PartialSendItemBean sendItemBean : psbean.getBeans()) {
