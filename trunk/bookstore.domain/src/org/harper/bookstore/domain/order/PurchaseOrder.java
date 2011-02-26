@@ -255,7 +255,8 @@ public class PurchaseOrder extends Order {
 		Validate.isTrue(DeliveryStatus.NOT_SENT.ordinal() == getDeliveryStatus());
 		// Update the delivery order to be valid;
 		getDelivery().setValid(true);
-		getDelivery().setCreateDate(new Date());
+		if (null == getDelivery().getCreateDate())
+			getDelivery().setCreateDate(new Date());
 
 		getDelivery().getContact().copy(getContact());
 		getDeliveryOrders().add(getDelivery());
