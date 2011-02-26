@@ -86,8 +86,8 @@ public class StoreSite extends Entity {
 	}
 
 	public int lock(Book book, int count) {
-		Validate.isTrue(isForOutput(),
-				"This store should not be used for output");
+		// Validate.isTrue(isForOutput(),
+		// "This store should not be used for output");
 		StoreEntry entry = getEntry(book);
 		if (StoreSettingBean.get().isAllowNegativeStock()) {
 			if (null == entry)
@@ -105,8 +105,8 @@ public class StoreSite extends Entity {
 	}
 
 	public BookUnit retrieve(Book book, int count) {
-		Validate.isTrue(isForOutput(),
-				"This store should not be used for output");
+		// Validate.isTrue(isForOutput(),
+		// "This store should not be used for output");
 
 		StoreEntry entry = getEntry(book);
 		if (StoreSettingBean.get().isAllowNegativeStock()) {
