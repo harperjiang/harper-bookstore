@@ -1,13 +1,18 @@
 package org.harper.bookstore.ui.order;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
@@ -15,6 +20,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
+import org.harper.frm.gui.swing.comp.textfield.DateTextField;
 import org.harper.frm.gui.swing.comp.textfield.NumTextField;
 import org.harper.frm.gui.swing.manager.BindingManager;
 
@@ -33,8 +39,8 @@ public class PartialSendDialog extends JDialog {
 
 	boolean okay;
 
-	public PartialSendDialog(PartialSendBean b) {
-		super();
+	public PartialSendDialog(JFrame parent, PartialSendBean b) {
+		super(parent);
 		setTitle("Select Items to be sent");
 		setSize(600, 400);
 		setModal(true);
@@ -57,8 +63,22 @@ public class PartialSendDialog extends JDialog {
 		setLayout(new BorderLayout());
 		add(scrollPane, BorderLayout.CENTER);
 
+		DateTextField dateField = new DateTextField(new SimpleDateFormat(
+				"yyyy-MM-dd"));
+
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new GridLayout(2, 1));
+
 		JToolBar toolBar = new JToolBar();
-		add(toolBar, BorderLayout.NORTH);
+		add(topPanel, BorderLayout.NORTH);
+
+		topPanel.add(toolBar);
+
+		JPanel newPanel = new JPanel();
+		newPanel.setLayout(new FlowLayout());
+		newPanel.add(new JLabel("Choose Delivery Date:"));
+		newPanel.add(dateField);
+		topPanel.add(newPanel);
 
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(new ActionListener() {
@@ -80,6 +100,7 @@ public class PartialSendDialog extends JDialog {
 		bean = null == b ? new PartialSendBean() : b;
 		manager = new BindingManager(bean);
 		manager.addBinding(new TableBinding(itemTable, "beans"));
+		manager.addBinding(dateField.new DateTextBinding("sendDate"));
 		manager.loadAll();
 
 		setVisible(true);
