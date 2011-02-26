@@ -9,6 +9,8 @@ import javax.swing.JTable;
 
 import org.harper.bookstore.domain.Item;
 import org.harper.bookstore.domain.profile.Book;
+import org.harper.bookstore.domain.profile.BookSet;
+import org.harper.bookstore.domain.profile.BookUnit;
 import org.harper.bookstore.repo.ProfileRepo;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.comp.table.data.AbstractTableData;
@@ -22,7 +24,7 @@ public abstract class ItemController<T extends Item> extends Controller {
 
 	private Map<String, T> items;
 
-	public ItemController(List<T> model,TableCreator creator) {
+	public ItemController(List<T> model, TableCreator creator) {
 		super();
 		this.view = new ItemTable<T>(creator);
 		this.view.setController(this);
@@ -61,17 +63,22 @@ public abstract class ItemController<T extends Item> extends Controller {
 	}
 
 	public void add(Book book) {
+		if (book instanceof BookSet) {
+			BookSet set = (BookSet) book;
+			for (BookUnit item : set.getBooks())
+				add(item.getBook());
+			return;
+		}
 		String isbn = book.getIsbn();
 		if (items.containsKey(book.getIsbn())) {
 			// Updated Row
 			Integer index = itemIndex.get(isbn);
 			T oldItem = items.get(isbn);
 			oldItem.setCount(oldItem.getCount() + 1);
-			view.getTableModel().updateRow(index,
-					createTableData(oldItem));
+			view.getTableModel().updateRow(index, createTableData(oldItem));
 			// Select The Row
-			view.getItemTable().getSelectionModel().setSelectionInterval(index,
-					index);
+			view.getItemTable().getSelectionModel()
+					.setSelectionInterval(index, index);
 		} else {
 			// New Row
 			int index = view.getTableModel().getRowCount();
@@ -81,14 +88,14 @@ public abstract class ItemController<T extends Item> extends Controller {
 			items.put(isbn, newItem);
 			itemIndex.put(isbn, index);
 			view.getTableModel().addRow(createTableData(newItem));
-			view.getItemTable().getSelectionModel().setSelectionInterval(index,
-					index);
+			view.getItemTable().getSelectionModel()
+					.setSelectionInterval(index, index);
 		}
 	}
 
 	public void remove(int index) {
-		T item = (T) ((AbstractTableData) view.getTableModel()
-				.getData().get(index)).getBean();
+		T item = (T) ((AbstractTableData) view.getTableModel().getData()
+				.get(index)).getBean();
 		items.remove(item.getBook().getIsbn());
 		itemIndex.remove(item.getBook().getIsbn());
 		view.getTableModel().removeRow(index);
@@ -97,15 +104,15 @@ public abstract class ItemController<T extends Item> extends Controller {
 	public ProfileRepo getProfileRepo() {
 		return getRepoFactory().getProfileRepo();
 	}
-	
+
 	public ItemTable<T> getView() {
 		return view;
 	}
 
 	protected abstract T createItem(Book book);
-	
+
 	protected abstract TableData createTableData(Object item);
-	
+
 	public static interface TableCreator {
 		public void createTable(JTable table);
 	}

@@ -59,7 +59,7 @@ public class ViewOrderController extends Controller {
 				bean.getOrderNum(), bean.getOrderType(), bean.getStartDate(),
 				bean.getStopDate(), "ALL".equals(bean.getStatus()) ? null
 						: new int[] { Order.Status.valueOf(bean.getStatus())
-								.ordinal() }, null, bean.getPartyId()));
+								.ordinal() }, null, bean.getPartyId(), null));
 	}
 
 	public static void main(String[] args) {

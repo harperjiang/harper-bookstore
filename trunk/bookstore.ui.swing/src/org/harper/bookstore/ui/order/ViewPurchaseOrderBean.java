@@ -23,6 +23,8 @@ public class ViewPurchaseOrderBean extends AbstractBean {
 	private String partyId;
 
 	private String orderNum;
+	
+	private String powersearch;
 
 	private PurchaseOrder.DeliveryStatus deliveryStatus = null;
 
@@ -88,6 +90,14 @@ public class ViewPurchaseOrderBean extends AbstractBean {
 		List<PurchaseOrder> oldResult = getSearchResults();
 		this.searchResults = searchResults;
 		firePropertyChange("searchResults", null, searchResults);
+	}
+
+	public String getPowersearch() {
+		return powersearch;
+	}
+
+	public void setPowersearch(String powersearch) {
+		this.powersearch = powersearch;
 	}
 
 }

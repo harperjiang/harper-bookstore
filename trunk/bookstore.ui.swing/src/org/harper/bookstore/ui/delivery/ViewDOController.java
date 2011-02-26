@@ -61,18 +61,12 @@ public class ViewDOController extends Controller {
 	}
 
 	public void loadPo() {
-		List<Order> pos = new OrderService()
-				.searchOrder(
-						bean.getPoNumber(),
-						"PO",
-						null,
-						null,
-						new int[] { Order.Status.CONFIRM.ordinal() },
-						new int[] {
-								PurchaseOrder.DeliveryStatus.PARTIAL_SENT
-										.ordinal(),
-								PurchaseOrder.DeliveryStatus.NOT_SENT.ordinal() },
-						null);
+		List<Order> pos = new OrderService().searchOrder(bean.getPoNumber(),
+				"PO", null, null, new int[] { Order.Status.CONFIRM.ordinal() },
+				new int[] {
+						PurchaseOrder.DeliveryStatus.PARTIAL_SENT.ordinal(),
+						PurchaseOrder.DeliveryStatus.NOT_SENT.ordinal() },
+				null, null);
 		if (pos.size() > 0) {
 			PurchaseOrder po = (PurchaseOrder) pos.get(0);
 			// Check whether this PO had been loaded before
