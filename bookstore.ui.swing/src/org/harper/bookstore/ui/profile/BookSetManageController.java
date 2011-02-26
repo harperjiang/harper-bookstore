@@ -1,12 +1,8 @@
 package org.harper.bookstore.ui.profile;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.harper.bookstore.domain.profile.Book;
-import org.harper.bookstore.domain.profile.BookSet;
-import org.harper.bookstore.domain.profile.BookUnit;
 import org.harper.bookstore.service.ProfileService;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
@@ -20,14 +16,18 @@ public class BookSetManageController extends Controller {
 
 	private BookSetBean bean;
 
-	public BookSetManageController() {
+	public BookSetManageController(BookSetBean bean) {
 		super();
 
 		frame = new BookSetManageFrame();
 		frame.setController(this);
 
-		bean = new BookSetBean();
+		this.bean = bean;
 		initManager();
+	}
+
+	public BookSetManageController() {
+		this(new BookSetBean());
 	}
 
 	protected void initManager() {
@@ -35,19 +35,11 @@ public class BookSetManageController extends Controller {
 		manager.addBinding(new JTextBinding(frame.getIsbnTextField(), "isbn"));
 		manager.addBinding(new JTextBinding(frame.getNameTextField(), "name"));
 		manager.addBinding(new TableBinding(frame.getBookTable(), "books"));
+		manager.loadAll();
 	}
 
 	public void save() {
-		BookSet set = new BookSet();
-		set.setIsbn(bean.getIsbn());
-		set.setName(bean.getName());
-		List<BookUnit> bul = new ArrayList<BookUnit>();
-		for (Book book : bean.getBooks()) {
-			bul.add(new BookUnit(book, 1, BigDecimal.ONE));
-		}
-		set.setBooks(bul);
-
-		new ProfileService().newBookSet(set);
+		new ProfileService().newBookSet(bean.getSet());
 
 		return;
 	}
@@ -57,7 +49,10 @@ public class BookSetManageController extends Controller {
 			return;
 		CommonTableModel ctm = (CommonTableModel) frame.getBookTable()
 				.getModel();
-		ctm.addRow(new BookInfoTableData(book));
+		BookSetItem item = new BookSetItem();
+		item.setBook(book);
+		item.setPercentage(BigDecimal.ONE);
+		ctm.addRow(new BookSetItemTableData(book));
 	}
 
 	public void remove(int index) {

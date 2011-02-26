@@ -46,6 +46,8 @@ public class ViewPurchaseOrderFrame extends JFrame {
 	JTextField partyIdField;
 
 	JTextField orderNumField;
+	
+	JTextField powersearchField;
 
 	JTable orderTable;
 
@@ -67,7 +69,7 @@ public class ViewPurchaseOrderFrame extends JFrame {
 		JPanel headerPanel = new JPanel();
 		mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-		headerPanel.setLayout(new GridLayout(4, 2, 5, 5));
+		headerPanel.setLayout(new GridLayout(5, 2, 5, 5));
 		headerPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		JLabel orderNumLabel = new JLabel(
@@ -135,6 +137,15 @@ public class ViewPurchaseOrderFrame extends JFrame {
 								.getBundle("org.harper.bookstore.ui.order.OrderStatus"),
 						"ALL"));
 		headerPanel.add(deliveryStatusCombo);
+		
+		JLabel powersearchLabel = new JLabel("Power Search:");
+		headerPanel.add(powersearchLabel);
+		
+		powersearchField = new JTextField();
+		headerPanel.add(powersearchField);
+//		
+		headerPanel.add(new JLabel());
+		headerPanel.add(new JLabel());
 
 		JButton searchButton = new JButton(
 				Messages.getString("ViewPurchaseOrderFrame.btn_search")); //$NON-NLS-1$
@@ -242,6 +253,10 @@ public class ViewPurchaseOrderFrame extends JFrame {
 
 	public JComboBox getDeliveryStatusCombo() {
 		return deliveryStatusCombo;
+	}
+
+	public JTextField getPowersearchField() {
+		return powersearchField;
 	}
 
 }

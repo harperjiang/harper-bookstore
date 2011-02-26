@@ -15,6 +15,7 @@ import javax.swing.event.TableModelEvent;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.deliver.DeliveryItem;
+import org.harper.bookstore.domain.deliver.ExpressCompany;
 import org.harper.bookstore.domain.order.OrderItem;
 import org.harper.bookstore.domain.order.PurchaseOrder;
 import org.harper.bookstore.domain.order.PurchaseOrder.DeliveryStatus;
@@ -267,7 +268,8 @@ public class POController extends Controller {
 		Validate.isTrue(
 				PurchaseOrder.DeliveryStatus.NOT_SENT.ordinal() == order
 						.getDeliveryStatus(), "Order must be in unsent status");
-		Validate.isTrue(!StringUtils.isEmpty(order.getDelivery().getNumber()),
+		Validate.isTrue(order.getDelivery().getCompany() == ExpressCompany.NIL
+				|| !StringUtils.isEmpty(order.getDelivery().getNumber()),
 				"Delivery Number should not be empty");
 		order.getDelivery().removeAllItems();
 		for (OrderItem item : order.getItems()) {

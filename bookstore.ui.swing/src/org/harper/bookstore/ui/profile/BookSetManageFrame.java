@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.swing.DefaultCellEditor;
@@ -25,9 +26,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.profile.BookSet;
 import org.harper.bookstore.ui.common.ISBNTextField;
-import org.harper.bookstore.ui.common.LabeledTextField;
 import org.harper.bookstore.ui.common.ISBNTextField.Callback;
+import org.harper.bookstore.ui.common.LabeledTextField;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
+import org.harper.frm.gui.swing.comp.textfield.NumTextField;
 
 public class BookSetManageFrame extends JFrame {
 
@@ -94,7 +96,7 @@ public class BookSetManageFrame extends JFrame {
 
 			@Override
 			public void call(Book book) {
-				if(book instanceof BookSet)
+				if (book instanceof BookSet)
 					return;
 				controller.add(book);
 			}
@@ -108,8 +110,8 @@ public class BookSetManageFrame extends JFrame {
 			@Override
 			public void exception(Exception e) {
 				e.printStackTrace();
-				JOptionPane.showMessageDialog(BookSetManageFrame.this, e
-						.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(BookSetManageFrame.this,
+						e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 
 		});
@@ -117,14 +119,20 @@ public class BookSetManageFrame extends JFrame {
 
 		bookTable = new JTable();
 		CommonTableModel ctm = new CommonTableModel();
-		ctm.initialize(BookInfoTableData.class);
+		ctm.initialize(BookSetItemTableData.class);
 		ctm.setAutoAdd(false);
+		ctm.setCellEditable(2, true);
 		bookTable.setModel(ctm);
 
 		bookTable.setDefaultRenderer(String.class,
 				new DefaultTableCellRenderer());
 		bookTable.setDefaultEditor(String.class, new DefaultCellEditor(
 				new JTextField()));
+		bookTable.setDefaultRenderer(BigDecimal.class,
+				new DefaultTableCellRenderer());
+		bookTable.setDefaultEditor(BigDecimal.class, new DefaultCellEditor(
+				new NumTextField()));
+
 		bookTable.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -133,7 +141,7 @@ public class BookSetManageFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(bookTable);
 

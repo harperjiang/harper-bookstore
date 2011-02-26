@@ -30,7 +30,7 @@ public class TableBinding extends ComponentBinding {
 			Object newValue = BeanAccess.getInstance().extract(model.getData(),
 					"bean");
 			itemChangeCallback((List<Object>)newValue,e);
-			firePropertyChange(oldValue, newValue);
+			firePropertyChange(null, newValue);
 		}
 	};
 
