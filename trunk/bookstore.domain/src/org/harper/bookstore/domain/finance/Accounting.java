@@ -8,7 +8,7 @@ import org.harper.bookstore.domain.Entity;
 public class Accounting extends Entity {
 
 	private Date createDate;
-
+	
 	private String subject;
 
 	private BigDecimal amount;

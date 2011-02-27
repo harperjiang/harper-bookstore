@@ -1,7 +1,9 @@
 package org.harper.bookstore.domain.finance;
 
-import org.harper.bookstore.domain.Entity;
 
-public class AP extends Entity {
+public class AP extends FinanceRecord {
 
+	public void place() {
+		
+	}
 }

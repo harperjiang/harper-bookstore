@@ -7,11 +7,15 @@ import org.harper.bookstore.domain.Entity;
 
 public class FinanceRecord extends Entity {
 
+	public static enum Status {
+		NEW, DRAFT, CONFIRM, FINISH
+	}
+
 	private Date createDate;
 
 	private Date recognizeDate;
-	
+
 	private List<ChargeItem> items;
 
-
+	private int status;
 }
