@@ -133,7 +133,7 @@ public class Transfer extends Entity {
 		status = Status.CONFIRM.ordinal();
 		setActionDate(new Date());
 		for (TransferItem item : items) {
-			getFromSite().lock(item.getBook(), item.getCount());
+//			getFromSite().lock(item.getBook(), item.getCount());
 			BookUnit retrieved = getFromSite().retrieve(item.getBook(),
 					item.getCount());
 			getToSite().putInto(retrieved.getBook(), retrieved.getCount(),
