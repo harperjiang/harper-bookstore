@@ -108,7 +108,7 @@ public class InterfaceService extends Service {
 						BookSet set = (BookSet) book;
 
 						BigDecimal[] ups = CalcHelper.split(
-								itemBean.getUnitPrice(), set.getBooks());
+								itemBean.getActualPrice(), set.getBooks());
 
 						for (int i = 0; i < ups.length; i++) {
 							BookUnit u = set.getBooks().get(i);

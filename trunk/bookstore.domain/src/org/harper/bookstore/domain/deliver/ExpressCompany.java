@@ -7,11 +7,13 @@ import org.harper.bookstore.domain.setting.express.HTOrderSettingBean;
 import org.harper.bookstore.domain.setting.express.SFOrderSettingBean;
 import org.harper.bookstore.domain.setting.express.YTOOrderSettingBean;
 import org.harper.bookstore.domain.setting.express.YundaOrderSettingBean;
+import org.harper.bookstore.domain.setting.express.ZJSOrderSettingBean;
 
 public enum ExpressCompany {
 
-	NIL, YUNDA(YundaOrderSettingBean.class), HT(HTOrderSettingBean.class), SF(
-			SFOrderSettingBean.class), YTO(YTOOrderSettingBean.class);
+	YUNDA(YundaOrderSettingBean.class), HT(HTOrderSettingBean.class), SF(
+			SFOrderSettingBean.class), YTO(YTOOrderSettingBean.class), ZJS(
+			ZJSOrderSettingBean.class), NIL;
 
 	Class<? extends ExpressOrderSettingBean> defBeanClass;
 

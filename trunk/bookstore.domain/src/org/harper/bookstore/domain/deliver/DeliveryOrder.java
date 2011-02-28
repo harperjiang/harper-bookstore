@@ -73,6 +73,9 @@ public class DeliveryOrder extends Entity {
 			StoreSite site = item.getOrderItem().getOrder().getSite();
 			site.putInto(item.getOrderItem().getBook(), item.getCount(),
 					item.getUnitCost());
+			item.getOrderItem().setSentCount(
+					item.getOrderItem().getSentCount() - item.getCount());
+			((PurchaseOrder) item.getOrderItem().getOrder()).makeDelivery();
 		}
 	}
 
@@ -89,7 +92,7 @@ public class DeliveryOrder extends Entity {
 	}
 
 	public void setNumber(String number) {
-		this.number = number;
+		this.number = null == number ? null : number.toUpperCase();
 	}
 
 	public Date getCreateDate() {
