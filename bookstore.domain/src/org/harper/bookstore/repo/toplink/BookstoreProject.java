@@ -8,7 +8,6 @@ import oracle.toplink.mappings.DirectToFieldMapping;
 import oracle.toplink.mappings.ManyToManyMapping;
 import oracle.toplink.mappings.OneToManyMapping;
 import oracle.toplink.mappings.OneToOneMapping;
-import oracle.toplink.publicinterface.Descriptor;
 import oracle.toplink.sequencing.TableSequence;
 import oracle.toplink.sessions.DatabaseLogin;
 
@@ -195,6 +194,16 @@ public ClassDescriptor buildBookDescriptor() {
 	// Event Manager.
 	
 	// Mappings.
+	DirectToFieldMapping weightMapping = new DirectToFieldMapping();
+	weightMapping.setAttributeName("weight");
+	weightMapping.setFieldName("profile_book.weight");
+	descriptor.addMapping(weightMapping);
+	
+	DirectToFieldMapping pageMapping = new DirectToFieldMapping();
+	pageMapping.setAttributeName("page");
+	pageMapping.setFieldName("profile_book.page");
+	descriptor.addMapping(pageMapping);
+	
 	DirectToFieldMapping descMapping = new DirectToFieldMapping();
 	descMapping.setAttributeName("desc");
 	descMapping.setFieldName("profile_book.description");

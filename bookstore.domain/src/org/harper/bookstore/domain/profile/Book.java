@@ -12,6 +12,13 @@ public class Book extends Entity {
 
 	private String name;
 
+	/**
+	 * Weight in kg
+	 */
+	private BigDecimal weight;
+
+	private int page;
+
 	private String desc;
 
 	public String getIsbn() {
@@ -36,6 +43,22 @@ public class Book extends Entity {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	public BigDecimal getWeight() {
+		return weight;
+	}
+
+	public void setWeight(BigDecimal weight) {
+		this.weight = weight;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
 	}
 
 	@Override

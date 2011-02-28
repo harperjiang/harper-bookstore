@@ -334,10 +334,12 @@ public class OrderService extends Service {
 			switch (DeliveryOrder.Status.values()[status]) {
 			case DELIVERED:
 				order.deliver();
+				break;
 			case RETURNED:
 				order.fallback();
+				break;
 			case EXCEPTION:
-
+				break;
 			default:
 			}
 			DeliveryOrder result = getRepoFactory().getCommonRepo()
