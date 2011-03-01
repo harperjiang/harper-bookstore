@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -260,16 +259,7 @@ public class POFrame extends JFrame {
 		partialSendButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					PartialSendBean bean = new PartialSendBean();
-					List<PartialSendItemBean> itemBeans = new ArrayList<PartialSendItemBean>();
-					for (OrderItem item : controller.getOrder().getItems()) {
-						PartialSendItemBean itemBean = new PartialSendItemBean();
-						itemBean.setBook(item.getBook());
-						itemBean.setCount(item.getCount());
-						itemBean.setSend(0);
-						itemBeans.add(itemBean);
-					}
-					bean.setBeans(itemBeans);
+					PartialSendBean bean = new PartialSendBean(controller.getOrder());
 					PartialSendDialog dialog = new PartialSendDialog(
 							POFrame.this, bean);
 					if (dialog.isOkay()) {

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.harper.bookstore.domain.order.OrderItem;
+import org.harper.bookstore.domain.order.PurchaseOrder;
 import org.harper.frm.gui.swing.manager.AbstractBean;
 
 public class PartialSendBean extends AbstractBean {
@@ -19,6 +21,19 @@ public class PartialSendBean extends AbstractBean {
 		beans = new ArrayList<PartialSendItemBean>();
 	}
 
+	public PartialSendBean(PurchaseOrder order) {
+		this();
+		List<PartialSendItemBean> itemBeans = new ArrayList<PartialSendItemBean>();
+		for (OrderItem item : order.getItems()) {
+			PartialSendItemBean itemBean = new PartialSendItemBean();
+			itemBean.setBook(item.getBook());
+			itemBean.setCount(item.getCount());
+			itemBean.setSend(0);
+			itemBeans.add(itemBean);
+		}
+		setBeans(itemBeans);
+	}
+	
 	public List<PartialSendItemBean> getBeans() {
 		return beans;
 	}
