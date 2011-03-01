@@ -1,8 +1,9 @@
 package org.harper.bookstore.ui.order;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.harper.bookstore.domain.order.Order;
+import org.harper.bookstore.domain.order.PurchaseOrder;
 import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
@@ -64,6 +65,14 @@ public class ViewPurchaseOrderController extends Controller {
 				.getPowersearch()));
 	}
 
+	public void batchDeliver(int[] selected) {
+		List<PurchaseOrder> orders = new ArrayList<PurchaseOrder>();
+		for (int i : selected) {
+			orders.add(getBean().getSearchResults().get(i));
+		}
+		
+	}
+
 	public static void main(String[] args) {
 		new ViewPurchaseOrderController(null);
 	}
@@ -79,4 +88,5 @@ public class ViewPurchaseOrderController extends Controller {
 	public ViewPurchaseOrderBean getBean() {
 		return bean;
 	}
+
 }
