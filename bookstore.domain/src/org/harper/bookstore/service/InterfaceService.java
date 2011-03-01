@@ -126,7 +126,7 @@ public class InterfaceService extends Service {
 
 						item.setBook(book);
 						item.setCount(itemBean.getCount());
-						item.setUnitPrice(itemBean.getUnitPrice());
+						item.setUnitPrice(itemBean.getActualPrice());
 						po.addItem(item);
 					}
 				}
