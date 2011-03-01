@@ -21,7 +21,6 @@ public class ReturnKeyAdapter extends KeyAdapter {
 				} catch (Exception ex) {
 					run.handleException(ex);
 				} finally {
-
 					((JTextComponent) e.getComponent()).setText(null);
 				}
 		}

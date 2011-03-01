@@ -14,10 +14,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.harper.bookstore.domain.order.Order;
@@ -25,6 +27,8 @@ import org.harper.bookstore.domain.order.PurchaseOrder;
 import org.harper.bookstore.domain.order.PurchaseOrder.DeliveryStatus;
 import org.harper.bookstore.domain.order.SupplyOrder;
 import org.harper.bookstore.ui.common.EnumListCellRenderer;
+import org.harper.bookstore.ui.common.ExceptionRunnable;
+import org.harper.bookstore.ui.common.ReturnKeyAdapter;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
 
@@ -143,6 +147,25 @@ public class ViewPurchaseOrderFrame extends JFrame {
 
 		powersearchField = new JTextField();
 		headerPanel.add(powersearchField);
+		powersearchField.addKeyListener(new ReturnKeyAdapter(
+				new ExceptionRunnable() {
+					@Override
+					public void run() {
+						getController().search();
+					}
+
+					@Override
+					public void handleException(final Exception e) {
+						SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								JOptionPane.showMessageDialog(
+										ViewPurchaseOrderFrame.this,
+										e.getMessage(), "Error",
+										JOptionPane.ERROR_MESSAGE);
+							}
+						});
+					}
+				}));
 		//
 		headerPanel.add(new JLabel());
 		headerPanel.add(new JLabel());

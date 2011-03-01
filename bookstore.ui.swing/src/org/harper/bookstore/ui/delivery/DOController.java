@@ -75,6 +75,7 @@ public class DOController extends Controller {
 			bean.getDelivery().getContact().copy(po.getContact());
 			for (OrderItem oi : po.getItems()) {
 				DeliveryItem newdi = new DeliveryItem();
+				newdi.setCount(oi.getUnsentCount());
 				newdi.setHeader(bean.getDelivery());
 				newdi.setOrderItem(oi);
 				bean.getDelivery().addItem(newdi);
