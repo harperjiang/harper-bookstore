@@ -94,6 +94,10 @@ public class DOController extends Controller {
 			os.operateDelivery(result, DeliveryOrder.Status.DELIVERED.ordinal());
 	}
 
+	public DeliveryOrderBean getBean() {
+		return bean;
+	}
+
 	public static void main(String[] args) {
 		new DOController();
 	}

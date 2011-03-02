@@ -22,8 +22,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.harper.bookstore.domain.deliver.DeliveryItem;
 import org.harper.bookstore.domain.order.OrderItem;
 import org.harper.bookstore.domain.profile.Book;
+import org.harper.bookstore.ui.common.ActionThread;
 import org.harper.bookstore.ui.common.CheckBoxTableRenderer;
-import org.harper.bookstore.ui.common.ExceptionRunnable;
 import org.harper.bookstore.ui.common.ItemController;
 import org.harper.bookstore.ui.common.ItemController.TableCreator;
 import org.harper.bookstore.ui.common.ReturnKeyAdapter;
@@ -62,25 +62,18 @@ public class DOFrame extends JFrame {
 		poNumberField = new JTextField();
 		poNumberField.setPreferredSize(new Dimension(200, 25));
 		topPanel.add(poNumberField);
-		poNumberField.addKeyListener(new ReturnKeyAdapter(
-				new ExceptionRunnable() {
-					public void run() {
-						getController().loadPo();
-					}
+		poNumberField.addKeyListener(new ReturnKeyAdapter(new ActionThread() {
+			public void execute() {
+				getController().loadPo();
+			}
 
-					public void handleException(final Exception ex) {
-						LogManager.getInstance().getLogger(DOFrame.class)
-								.error("Exception when saving", ex);
-						SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-								JOptionPane.showMessageDialog(DOFrame.this,
-										ex.getMessage(), "Failed to load",
-										JOptionPane.ERROR_MESSAGE);
-							}
-						});
-
-					}
-				}));
+			public void exception(final Exception ex) {
+				LogManager.getInstance().getLogger(DOFrame.class)
+						.error("Exception when saving", ex);
+				JOptionPane.showMessageDialog(DOFrame.this, ex.getMessage(),
+						"Failed to load", JOptionPane.ERROR_MESSAGE);
+			}
+		}));
 
 		JButton loadPoButton = new JButton("Load");
 		loadPoButton.addActionListener(new ActionListener() {

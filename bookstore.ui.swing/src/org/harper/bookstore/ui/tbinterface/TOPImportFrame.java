@@ -11,7 +11,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 
+import org.harper.bookstore.ui.common.ActionThread;
+import org.harper.bookstore.ui.common.JProgressBarJobMonitor;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
 
 public class TOPImportFrame extends JFrame {
@@ -26,11 +29,14 @@ public class TOPImportFrame extends JFrame {
 	private DateTextField startDateField;
 
 	private DateTextField stopDateField;
+	
+	private JProgressBar progressBar;
 
 	public TOPImportFrame() {
 		super();
 		setTitle("TOP Import");
-		setSize(450, 100);
+		setSize(450, 125);
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setLayout(new FlowLayout());
@@ -49,23 +55,49 @@ public class TOPImportFrame extends JFrame {
 		stopDateField.setPreferredSize(new Dimension(140, 20));
 		add(stopDateField);
 
-		JButton importButton = new JButton("Import");
+		final JButton importButton = new JButton("Import");
 		importButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					int result = getController().execute();
-					JOptionPane.showMessageDialog(TOPImportFrame.this,
-							MessageFormat.format("{0} order(s) are imported",
-									result), "Done", JOptionPane.PLAIN_MESSAGE);
+					progressBar.setVisible(true);
+					importButton.setEnabled(false);
+					new ActionThread() {
+						int result;
+						@Override
+						public void execute() {
+							result = getController().execute(new JProgressBarJobMonitor(progressBar));
+						}
+						
+						public void success() {
+							JOptionPane.showMessageDialog(TOPImportFrame.this,
+									MessageFormat.format("{0} order(s) are imported",
+											result), "Done", JOptionPane.PLAIN_MESSAGE);
+							progressBar.setVisible(false);
+							importButton.setEnabled(true);
+						}
+
+						@Override
+						public void exception(Exception ex) {
+							JOptionPane.showMessageDialog(TOPImportFrame.this,
+									"Exception occurred:" + ex.getMessage(), "Error",
+									JOptionPane.ERROR_MESSAGE);							
+						}
+						
+					}.start(); 
+					
+					
 				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(TOPImportFrame.this,
-							"Exception occurred:" + ex.getMessage(), "Error",
-							JOptionPane.ERROR_MESSAGE);
+					
 				}
 			}
 		});
 		add(importButton);
 
+		progressBar = new JProgressBar();
+		progressBar.setPreferredSize(new Dimension(430,20));
+		progressBar.setVisible(false);
+		add(progressBar);
+		
 		setVisible(true);
 	}
 
@@ -83,6 +115,10 @@ public class TOPImportFrame extends JFrame {
 
 	public DateTextField getStopDateField() {
 		return stopDateField;
+	}
+
+	public JProgressBar getProgressBar() {
+		return progressBar;
 	}
 
 }

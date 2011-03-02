@@ -3,9 +3,13 @@ package org.harper.bookstore.ui.order;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
+import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.domain.order.PurchaseOrder;
+import org.harper.bookstore.domain.profile.ContactInfo;
 import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.ui.Controller;
+import org.harper.bookstore.ui.delivery.DOController;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
 import org.harper.frm.gui.swing.manager.BindingManager;
 import org.harper.frm.gui.swing.manager.JComboBinding;
@@ -67,10 +71,32 @@ public class ViewPurchaseOrderController extends Controller {
 
 	public void batchDeliver(int[] selected) {
 		List<PurchaseOrder> orders = new ArrayList<PurchaseOrder>();
+		ContactInfo ci = null;
 		for (int i : selected) {
-			orders.add(getBean().getSearchResults().get(i));
+			PurchaseOrder po = getBean().getSearchResults().get(i);
+			Validate.isTrue(
+					Order.Status.CONFIRM.ordinal() == po.getStatus()
+							&& (PurchaseOrder.DeliveryStatus.NOT_SENT.ordinal() == po
+									.getDeliveryStatus() || PurchaseOrder.DeliveryStatus.PARTIAL_SENT
+									.ordinal() == po.getDeliveryStatus()),
+					"You can only send Confirmed orders that had not been sent yet");
+			if (null == ci) {
+				ci = po.getContact();
+			} else {
+				Validate.isTrue(ci.equals(po.getContact()),
+						"Can only send orders with same address");
+			}
+			orders.add(po);
 		}
-		
+		DOController doc = new DOController();
+		for (PurchaseOrder po : orders) {
+			try {
+				doc.getBean().setPoNumber(po.getNumber());
+				doc.loadPo();
+			} catch (IllegalArgumentException e) {
+
+			}
+		}
 	}
 
 	public static void main(String[] args) {
