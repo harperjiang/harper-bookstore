@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.harper.bookstore.domain.order.PurchaseOrder;
 import org.harper.bookstore.job.AbstractJob;
+import org.harper.bookstore.job.JobMonitor;
 import org.harper.bookstore.repo.RepoFactory;
 import org.harper.bookstore.service.InterfaceService;
 import org.harper.bookstore.service.bean.TaobaoOrderBean;
@@ -20,7 +21,7 @@ import com.taobao.api.model.TradeGetRequest;
 public class UpdateTaobaoOrderJob extends AbstractJob {
 
 	@Override
-	protected Object execute() {
+	protected Object execute(JobMonitor monitor) {
 		TOPSession ssn = TOPSessionManager.getInstance().getSession();
 
 		TaobaoRestClient client = ssn.getClient();

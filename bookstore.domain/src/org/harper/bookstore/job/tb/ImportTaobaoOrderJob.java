@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.harper.bookstore.domain.taobao.TradeQueryStatus;
 import org.harper.bookstore.job.AbstractJob;
+import org.harper.bookstore.job.JobMonitor;
 import org.harper.bookstore.service.InterfaceService;
 import org.harper.bookstore.service.bean.TaobaoOrderBean;
 import org.harper.bookstore.task.tb.ConvertTaobaoOrderTask;
@@ -55,7 +56,9 @@ public class ImportTaobaoOrderJob extends AbstractJob {
 	}
 
 	@Override
-	protected Object execute() {
+	protected Object execute(JobMonitor monitor) {
+		if (null != monitor)
+			monitor.start();
 		TOPSession ssn = TOPSessionManager.getInstance().getSession();
 
 		TaobaoRestClient client = ssn.getClient();
@@ -101,7 +104,16 @@ public class ImportTaobaoOrderJob extends AbstractJob {
 
 		List<TaobaoOrderBean> orders = new ConvertTaobaoOrderTask()
 				.convert(result.values());
-		return new InterfaceService().importTaobaoOrder(orders);
+		InterfaceService is = new InterfaceService();
+		int total = 0;
+		monitor.stop();
+		monitor.start(orders.size());
+		for (TaobaoOrderBean orderBean : orders) {
+			total += is.importTaobaoOrder(orderBean) ? 1 : 0;
+			monitor.progress(1);
+		}
+		monitor.stop();
+		return total;
 	}
 
 	protected Trade getTradeFullInfo(Trade trade) throws TaobaoApiException {
