@@ -26,8 +26,8 @@ import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.domain.order.PurchaseOrder;
 import org.harper.bookstore.domain.order.PurchaseOrder.DeliveryStatus;
 import org.harper.bookstore.domain.order.SupplyOrder;
+import org.harper.bookstore.ui.common.ActionThread;
 import org.harper.bookstore.ui.common.EnumListCellRenderer;
-import org.harper.bookstore.ui.common.ExceptionRunnable;
 import org.harper.bookstore.ui.common.ReturnKeyAdapter;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
@@ -148,14 +148,14 @@ public class ViewPurchaseOrderFrame extends JFrame {
 		powersearchField = new JTextField();
 		headerPanel.add(powersearchField);
 		powersearchField.addKeyListener(new ReturnKeyAdapter(
-				new ExceptionRunnable() {
+				new ActionThread() {
 					@Override
-					public void run() {
+					public void execute() {
 						getController().search();
 					}
 
 					@Override
-					public void handleException(final Exception e) {
+					public void exception(final Exception e) {
 						SwingUtilities.invokeLater(new Runnable() {
 							public void run() {
 								JOptionPane.showMessageDialog(
@@ -175,7 +175,20 @@ public class ViewPurchaseOrderFrame extends JFrame {
 		searchButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getController().search();
+				new ActionThread() {
+					@Override
+					public void execute() {
+						getController().search();
+					}
+
+					@Override
+					public void exception(Exception ex) {
+						JOptionPane.showMessageDialog(
+								ViewPurchaseOrderFrame.this, ex.getMessage(),
+								"Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}.start();
+
 			}
 		});
 		headerPanel.add(searchButton);
@@ -203,11 +216,25 @@ public class ViewPurchaseOrderFrame extends JFrame {
 		JButton batchDeliverButton = new JButton("Batch Delivery");
 		batchDeliverButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int[] selected = ViewPurchaseOrderFrame.this.getOrderTable()
-						.getSelectedRows();
-				getController().batchDeliver(selected);
+				final int[] selected = ViewPurchaseOrderFrame.this
+						.getOrderTable().getSelectedRows();
+				new ActionThread() {
+					@Override
+					public void execute() {
+						getController().batchDeliver(selected);
+					}
+
+					@Override
+					public void exception(Exception ex) {
+						JOptionPane.showMessageDialog(
+								ViewPurchaseOrderFrame.this, ex.getMessage(),
+								"Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}.start();
+
 			}
 		});
+		headerPanel.add(batchDeliverButton);
 
 		orderTable = new JTable();
 		CommonTableModel ctm = new CommonTableModel();

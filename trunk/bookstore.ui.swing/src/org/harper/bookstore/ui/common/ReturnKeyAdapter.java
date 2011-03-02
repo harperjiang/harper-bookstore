@@ -7,22 +7,17 @@ import javax.swing.text.JTextComponent;
 
 public class ReturnKeyAdapter extends KeyAdapter {
 
-	private ExceptionRunnable run;
+	private ActionThread run;
 
-	public ReturnKeyAdapter(ExceptionRunnable run) {
+	public ReturnKeyAdapter(ActionThread run) {
 		this.run = run;
 	}
 
 	public void keyTyped(KeyEvent e) {
 		if ('\n' == e.getKeyChar()) {
 			if (null != run)
-				try {
-					run.run();
-				} catch (Exception ex) {
-					run.handleException(ex);
-				} finally {
-					((JTextComponent) e.getComponent()).setText(null);
-				}
+				run.start();
+			((JTextComponent) e.getComponent()).setText(null);
 		}
 	}
 }
