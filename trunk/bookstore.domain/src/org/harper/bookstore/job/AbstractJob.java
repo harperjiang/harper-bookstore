@@ -10,11 +10,15 @@ public abstract class AbstractJob implements Job {
 
 	private boolean readonly;
 
-	@Override
 	public Object call() {
+		return call(null);
+	}
+
+	@Override
+	public Object call(JobMonitor monitor) {
 		startTransaction();
 		try {
-			Object result = execute();
+			Object result = execute(monitor);
 			if (readonly)
 				releaseTransaction();
 			else
@@ -28,7 +32,7 @@ public abstract class AbstractJob implements Job {
 		}
 	}
 
-	protected abstract Object execute();
+	protected abstract Object execute(JobMonitor monitor);
 
 	public void startTransaction() {
 		UnitOfWork uow = SessionManager.getInstance().getSession()

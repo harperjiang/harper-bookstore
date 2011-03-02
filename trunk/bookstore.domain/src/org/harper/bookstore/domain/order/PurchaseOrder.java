@@ -260,7 +260,8 @@ public class PurchaseOrder extends Order {
 
 		getDelivery().getContact().copy(getContact());
 		getDeliveryOrders().add(getDelivery());
-		getDelivery().create();
+		if (DeliveryOrder.Status.NEW.ordinal() == getDelivery().getStatus())
+			getDelivery().create();
 		getDelivery().deliver();
 	}
 

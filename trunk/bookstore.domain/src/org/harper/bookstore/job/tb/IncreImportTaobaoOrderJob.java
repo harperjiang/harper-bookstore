@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.harper.bookstore.domain.taobao.TradeQueryStatus;
 import org.harper.bookstore.job.AbstractJob;
+import org.harper.bookstore.job.JobMonitor;
 import org.harper.bookstore.service.InterfaceService;
 import org.harper.bookstore.service.bean.TaobaoOrderBean;
 import org.harper.bookstore.task.tb.ConvertTaobaoOrderTask;
@@ -35,7 +36,7 @@ public class IncreImportTaobaoOrderJob extends AbstractJob {
 	}
 
 	@Override
-	public Object execute() {
+	public Object execute(JobMonitor monitor) {
 		TOPSession ssn = TOPSessionManager.getInstance().getSession();
 
 		TaobaoRestClient client = ssn.getClient();

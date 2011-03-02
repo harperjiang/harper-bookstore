@@ -1,7 +1,7 @@
 package org.harper.bookstore.job;
 
-import java.util.concurrent.Callable;
+public interface Job {
 
-public interface Job extends Callable<Object> {
+	public Object call(JobMonitor monitor);
 
 }

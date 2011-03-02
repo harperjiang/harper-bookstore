@@ -64,7 +64,9 @@ public abstract class Order extends Entity {
 	public List<OrderItem> getItems() {
 		if (null == items)
 			items = new ArrayList<OrderItem>();
-		return new HeapSorter().sort(items, new String[] { "book.isbn" },
+		if (0 == items.size())
+			return items;
+		return new HeapSorter(true).sort(items, new String[] { "book.isbn" },
 				new boolean[] { true });
 
 	}
