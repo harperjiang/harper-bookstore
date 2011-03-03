@@ -52,7 +52,7 @@ public class BookSetManageController extends Controller {
 		BookSetItem item = new BookSetItem();
 		item.setBook(book);
 		item.setPercentage(BigDecimal.ONE);
-		ctm.addRow(new BookSetItemTableData(book));
+		ctm.addRow(new BookSetItemTableData(item));
 	}
 
 	public void remove(int index) {

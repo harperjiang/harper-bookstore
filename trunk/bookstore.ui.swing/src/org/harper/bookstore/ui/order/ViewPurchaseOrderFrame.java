@@ -175,7 +175,7 @@ public class ViewPurchaseOrderFrame extends JFrame {
 		searchButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new ActionThread() {
+				new Thread(new ActionThread() {
 					@Override
 					public void execute() {
 						getController().search();
@@ -187,7 +187,7 @@ public class ViewPurchaseOrderFrame extends JFrame {
 								ViewPurchaseOrderFrame.this, ex.getMessage(),
 								"Error", JOptionPane.ERROR_MESSAGE);
 					}
-				}.start();
+				}).start();
 
 			}
 		});
@@ -218,7 +218,7 @@ public class ViewPurchaseOrderFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				final int[] selected = ViewPurchaseOrderFrame.this
 						.getOrderTable().getSelectedRows();
-				new ActionThread() {
+				new Thread(new ActionThread() {
 					@Override
 					public void execute() {
 						getController().batchDeliver(selected);
@@ -230,7 +230,7 @@ public class ViewPurchaseOrderFrame extends JFrame {
 								ViewPurchaseOrderFrame.this, ex.getMessage(),
 								"Error", JOptionPane.ERROR_MESSAGE);
 					}
-				}.start();
+				}).start();
 
 			}
 		});

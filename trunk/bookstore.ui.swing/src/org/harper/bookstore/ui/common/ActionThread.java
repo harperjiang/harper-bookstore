@@ -2,7 +2,7 @@ package org.harper.bookstore.ui.common;
 
 import javax.swing.SwingUtilities;
 
-public abstract class ActionThread extends Thread {
+public abstract class ActionThread implements Runnable {
 	public void run() {
 		try {
 			execute();
