@@ -111,7 +111,9 @@ public class InterfaceService extends Service {
 
 							item.setBook(book);
 							item.setCount(itemBean.getCount());
-							item.setUnitPrice(itemBean.getActualPrice());
+							item.setUnitPrice(itemBean.getActualPrice().divide(
+									new BigDecimal(itemBean.getCount()), 2,
+									BigDecimal.ROUND_HALF_UP));
 							po.addItem(item);
 						}
 					}
