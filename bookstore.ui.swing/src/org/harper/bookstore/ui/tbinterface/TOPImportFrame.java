@@ -29,7 +29,7 @@ public class TOPImportFrame extends JFrame {
 	private DateTextField startDateField;
 
 	private DateTextField stopDateField;
-	
+
 	private JProgressBar progressBar;
 
 	public TOPImportFrame() {
@@ -61,17 +61,23 @@ public class TOPImportFrame extends JFrame {
 				try {
 					progressBar.setVisible(true);
 					importButton.setEnabled(false);
-					new ActionThread() {
+					new Thread(new ActionThread() {
 						int result;
+
 						@Override
 						public void execute() {
-							result = getController().execute(new JProgressBarJobMonitor(progressBar));
+							result = getController().execute(
+									new JProgressBarJobMonitor(progressBar));
 						}
-						
+
 						public void success() {
-							JOptionPane.showMessageDialog(TOPImportFrame.this,
-									MessageFormat.format("{0} order(s) are imported",
-											result), "Done", JOptionPane.PLAIN_MESSAGE);
+							JOptionPane
+									.showMessageDialog(
+											TOPImportFrame.this,
+											MessageFormat
+													.format("{0} order(s) are imported",
+															result), "Done",
+											JOptionPane.PLAIN_MESSAGE);
 							progressBar.setVisible(false);
 							importButton.setEnabled(true);
 						}
@@ -79,25 +85,23 @@ public class TOPImportFrame extends JFrame {
 						@Override
 						public void exception(Exception ex) {
 							JOptionPane.showMessageDialog(TOPImportFrame.this,
-									"Exception occurred:" + ex.getMessage(), "Error",
-									JOptionPane.ERROR_MESSAGE);							
+									"Exception occurred:" + ex.getMessage(),
+									"Error", JOptionPane.ERROR_MESSAGE);
 						}
-						
-					}.start(); 
-					
-					
+					}).start();
+
 				} catch (Exception ex) {
-					
+
 				}
 			}
 		});
 		add(importButton);
 
 		progressBar = new JProgressBar();
-		progressBar.setPreferredSize(new Dimension(430,20));
+		progressBar.setPreferredSize(new Dimension(430, 20));
 		progressBar.setVisible(false);
 		add(progressBar);
-		
+
 		setVisible(true);
 	}
 

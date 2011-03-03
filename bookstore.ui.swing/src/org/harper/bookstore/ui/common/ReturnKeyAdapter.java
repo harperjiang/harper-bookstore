@@ -15,8 +15,15 @@ public class ReturnKeyAdapter extends KeyAdapter {
 
 	public void keyTyped(KeyEvent e) {
 		if ('\n' == e.getKeyChar()) {
-			if (null != run)
-				run.start();
+			if (null != run) {
+				Thread thread = new Thread(run);
+				thread.start();
+				try {
+					thread.join();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
 			((JTextComponent) e.getComponent()).setText(null);
 		}
 	}
