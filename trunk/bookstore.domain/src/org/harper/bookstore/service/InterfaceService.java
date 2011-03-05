@@ -20,7 +20,6 @@ import org.harper.bookstore.domain.profile.Customer;
 import org.harper.bookstore.domain.profile.Source;
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.domain.taobao.TradeQueryStatus;
-import org.harper.bookstore.job.JobMonitor;
 import org.harper.bookstore.job.tb.ImportTaobaoOrderJob;
 import org.harper.bookstore.job.tb.IncreImportTaobaoOrderJob;
 import org.harper.bookstore.repo.OrderRepo;
@@ -68,66 +67,69 @@ public class InterfaceService extends Service {
 				po.setRefStatus(orderBean.getStatus().desc());
 
 				po.setCreateDate(orderBean.getCreateTime());
+				
+				po.setTotalAmt(orderBean.getTotalAmount());
+				po.setFeeAmount(orderBean.getTransFeeAmount());
+				po.setRemark(orderBean.getBuyerMemo());
+				po.setMemo(orderBean.getSellerMemo());
+				po.getContact().setAddress(orderBean.getAddress());
+				po.getContact().setName(orderBean.getName());
+				po.getContact().setPhone(orderBean.getPhone());
+				po.getContact().setMobile(orderBean.getMobile());
 
-				for (TaobaoItemBean itemBean : orderBean.getItems()) {
-					// Display Item
-					DisplayItem dispItem = new DisplayItem();
-					dispItem.setName(itemBean.getName());
-					dispItem.setCount(itemBean.getCount());
-					dispItem.setUnitPrice(itemBean.getUnitPrice());
-					dispItem.setActualPrice(itemBean.getActualPrice());
-
-					po.addDispItem(dispItem);
-
-					// Only add items for new orders
-					if (0 == po.getOid()) {
-						if (StringUtils.isEmpty(itemBean.getItemId())) {
-							continue;
-						}
-						Book book = RepoFactory.INSTANCE.getProfileRepo()
-								.findBook(itemBean.getItemId());
-						if (null == book)
-							continue;
-
-						if (book instanceof BookSet) {
-							BookSet set = (BookSet) book;
-
-							BigDecimal[] ups = CalcHelper.split(
-									itemBean.getActualPrice(), set.getBooks());
-
-							for (int i = 0; i < ups.length; i++) {
-								BookUnit u = set.getBooks().get(i);
-								OrderItem item = new OrderItem();
-
-								item.setBook(u.getBook());
-								item.setCount(itemBean.getCount());
-								item.setUnitPrice(ups[i]);
-								po.addItem(item);
-							}
-
-						} else {
-							// Single Item
-							OrderItem item = new OrderItem();
-
-							item.setBook(book);
-							item.setCount(itemBean.getCount());
-							item.setUnitPrice(itemBean.getActualPrice().divide(
-									new BigDecimal(itemBean.getCount()), 2,
-									BigDecimal.ROUND_HALF_UP));
-							po.addItem(item);
-						}
-					}
-				}
 				po.place();
 			}
-			po.setTotalAmt(orderBean.getTotalAmount());
-			po.setFeeAmount(orderBean.getTransFeeAmount());
-			po.setRemark(orderBean.getBuyerMemo());
-			po.setMemo(orderBean.getSellerMemo());
-			po.getContact().setAddress(orderBean.getAddress());
-			po.getContact().setName(orderBean.getName());
-			po.getContact().setPhone(orderBean.getPhone());
-			po.getContact().setMobile(orderBean.getMobile());
+			for (TaobaoItemBean itemBean : orderBean.getItems()) {
+				// Display Item
+				DisplayItem dispItem = new DisplayItem();
+				dispItem.setName(itemBean.getName());
+				dispItem.setCount(itemBean.getCount());
+				dispItem.setUnitPrice(itemBean.getUnitPrice());
+				dispItem.setActualPrice(itemBean.getActualPrice());
+
+				po.addDispItem(dispItem);
+
+				// Only add items for new orders
+				if (0 == po.getOid()) {
+					if (StringUtils.isEmpty(itemBean.getItemId())) {
+						continue;
+					}
+					Book book = RepoFactory.INSTANCE.getProfileRepo().findBook(
+							itemBean.getItemId());
+					if (null == book)
+						continue;
+
+					if (book instanceof BookSet) {
+						BookSet set = (BookSet) book;
+
+						BigDecimal[] ups = CalcHelper.split(
+								itemBean.getActualPrice(), set.getBooks());
+
+						for (int i = 0; i < ups.length; i++) {
+							BookUnit u = set.getBooks().get(i);
+							OrderItem item = new OrderItem();
+
+							item.setBook(u.getBook());
+							item.setCount(itemBean.getCount());
+							item.setUnitPrice(ups[i]);
+							po.addItem(item);
+						}
+
+					} else {
+						// Single Item
+						OrderItem item = new OrderItem();
+
+						item.setBook(book);
+						item.setCount(itemBean.getCount());
+						item.setUnitPrice(itemBean.getActualPrice().divide(
+								new BigDecimal(itemBean.getCount()), 2,
+								BigDecimal.ROUND_HALF_UP));
+						po.addItem(item);
+					}
+				}
+			}
+
+			
 
 			getRepoFactory().getCommonRepo().store(po);
 
