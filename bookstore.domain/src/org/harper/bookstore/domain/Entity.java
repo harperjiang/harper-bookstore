@@ -5,7 +5,6 @@ import java.beans.PropertyChangeSupport;
 
 import org.harper.frm.core.IAdaptor;
 
-
 public abstract class Entity implements IAdaptor {
 
 	private PropertyChangeSupport support;
@@ -15,6 +14,8 @@ public abstract class Entity implements IAdaptor {
 	private int version;
 
 	private boolean valid;
+
+	private String creator;
 
 	public Entity() {
 		super();
@@ -77,6 +78,14 @@ public abstract class Entity implements IAdaptor {
 		if (a == null)
 			return false;
 		return a.equals(b);
+	}
+
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
 	}
 
 }
