@@ -4,6 +4,8 @@ import java.util.Stack;
 
 import oracle.toplink.sessions.Session;
 
+import org.harper.frm.mediator.MediatorTransaction;
+
 public class TransactionContext {
 
 	private static ThreadLocal<Stack<Session>> context = new ThreadLocal<Stack<Session>>() {
@@ -12,16 +14,31 @@ public class TransactionContext {
 			return new Stack<Session>();
 		}
 	};
-	
+
+	private static ThreadLocal<Stack<MediatorTransaction>> mcontext = new ThreadLocal<Stack<MediatorTransaction>>() {
+		@Override
+		protected Stack<MediatorTransaction> initialValue() {
+			return new Stack<MediatorTransaction>();
+		}
+	};
+
 	public static Session getSession() {
-		return (Session)get().peek();
+		return get().peek();
 	}
 	
-	public synchronized static Stack<Session> get(){
+	public static MediatorTransaction getMediatorTransaction() {
+		return getMT().peek();
+	}
+
+	public synchronized static Stack<Session> get() {
 		return context.get();
 	}
+
+	public synchronized static Stack<MediatorTransaction> getMT() {
+		return mcontext.get();
+	}
 	
-	public static String CONTEXT= "Context";
-	
+	public static String CONTEXT = "Context";
+
 	public static String CONTEXT_TYPE = "Context.type";
 }

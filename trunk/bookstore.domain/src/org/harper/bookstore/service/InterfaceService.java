@@ -1,5 +1,6 @@
 package org.harper.bookstore.service;
 
+import java.beans.PropertyChangeEvent;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import org.harper.bookstore.repo.OrderRepo;
 import org.harper.bookstore.repo.RepoFactory;
 import org.harper.bookstore.service.bean.TaobaoItemBean;
 import org.harper.bookstore.service.bean.TaobaoOrderBean;
+import org.harper.frm.mediator.MediatorTransaction.Entry;
 
 public class InterfaceService extends Service {
 
@@ -129,7 +131,11 @@ public class InterfaceService extends Service {
 				// Already included;
 				// Update Status
 				po = repo.getPurchaseOrderByRefno(orderBean.getUid());
+				String oldRefStatus = po.getRefStatus();
 				po.setRefStatus(orderBean.getStatus().name());
+				TransactionContext.getMediatorTransaction().addEvent(
+						new Entry("po", new PropertyChangeEvent(po,
+								"refStatus", oldRefStatus, po.getRefStatus())));
 			} else {
 				po = composeOrder(orderBean);
 			}
