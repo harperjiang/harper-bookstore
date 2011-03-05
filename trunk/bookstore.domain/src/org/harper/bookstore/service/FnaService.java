@@ -1,10 +1,10 @@
 package org.harper.bookstore.service;
 
-import org.harper.bookstore.domain.finance.Accounting;
+import org.harper.bookstore.domain.finance.AccountEntry;
 
 public class FnaService extends Service {
 
-	public void addAccountingRecord(Accounting record) {
+	public void addAccountingRecord(AccountEntry record) {
 		startTransaction();
 		try {
 			getRepoFactory().getCommonRepo().store(record);

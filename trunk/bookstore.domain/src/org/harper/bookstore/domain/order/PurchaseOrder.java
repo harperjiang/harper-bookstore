@@ -17,6 +17,7 @@ import org.harper.bookstore.domain.profile.Customer;
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.repo.RepoFactory;
 import org.harper.bookstore.repo.StoreRepo;
+import org.harper.bookstore.service.TaobaoOrderStatus;
 import org.harper.frm.ValidateException;
 
 public class PurchaseOrder extends Order {
@@ -73,6 +74,12 @@ public class PurchaseOrder extends Order {
 
 	public String getRefStatus() {
 		return refStatus;
+	}
+
+	public String getRefStatusDesc() {
+		if (null == refStatus)
+			return null;
+		return TaobaoOrderStatus.valueOf(refStatus).desc();
 	}
 
 	public void setRefStatus(String refStatus) {

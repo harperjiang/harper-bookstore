@@ -9,7 +9,7 @@ public enum TaobaoOrderStatus {
 	TRADE_BUYER_SIGNED("买家已签收"),
 	TRADE_FINISHED("交易成功"),
 	TRADE_CLOSED("交易关闭"),
-	TRADE_CLOSED_BY_TAOBAO("交易被淘宝关闭"); 
+	TRADE_CLOSED_BY_TAOBAO("交易被淘宝关闭");
 	
 	String desc;
 	
