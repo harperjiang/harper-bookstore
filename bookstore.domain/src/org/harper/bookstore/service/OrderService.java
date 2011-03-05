@@ -267,6 +267,7 @@ public class OrderService extends Service {
 					order.getDelivery().getCompany() == ExpressCompany.NIL
 							|| !StringUtils.isEmpty(order.getDeliveryNumber()),
 					"Delivery Order Number should not be empty");
+
 			order.quickDeliver();
 			PurchaseOrder retval = getRepoFactory().getCommonRepo()
 					.store(order);
