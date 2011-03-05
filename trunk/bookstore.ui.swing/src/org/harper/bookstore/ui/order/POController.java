@@ -154,7 +154,7 @@ public class POController extends Controller {
 		manager.addBinding(new JTextBinding(getOrderFrame().getHeaderPanel()
 				.getRefnoTextField(), "refno"));
 		manager.addBinding(new JTextBinding(getOrderFrame().getHeaderPanel()
-				.getRefStatusTextField(), "refStatus"));
+				.getRefStatusTextField(), "refStatusDesc"));
 
 		manager.addBinding(new JComboBinding(getOrderFrame().getDeliveryPanel()
 				.getCompanyCombo(), "delivery.company"));
