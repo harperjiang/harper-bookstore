@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="taobao-base-2.0-SNAPSHOT-isv.jar" sourcepath="D:/libs/taobao-platform/taobao-base-2.0-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="lib" path="taobao-framework-2.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="toplink.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.harper.frm.mediator"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

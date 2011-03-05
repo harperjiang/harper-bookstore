@@ -79,7 +79,11 @@ public class PurchaseOrder extends Order {
 	public String getRefStatusDesc() {
 		if (null == refStatus)
 			return null;
-		return TaobaoOrderStatus.valueOf(refStatus).desc();
+		try {
+			return TaobaoOrderStatus.valueOf(refStatus).desc();
+		} catch (Exception e) {
+			return refStatus;
+		}
 	}
 
 	public void setRefStatus(String refStatus) {
