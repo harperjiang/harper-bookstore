@@ -29,6 +29,91 @@ import org.harper.bookstore.service.bean.TaobaoOrderBean;
 
 public class InterfaceService extends Service {
 
+	protected PurchaseOrder composeOrder(TaobaoOrderBean orderBean) {
+		Customer cust = getRepoFactory().getProfileRepo().getCustomer(
+				Source.TAOBAO.name(), orderBean.getCustomerId());
+		if (null == cust) {
+			cust = new Customer();
+			cust.setId(orderBean.getCustomerId());
+			cust.setSource(Source.TAOBAO.name());
+			cust = RepoFactory.INSTANCE.getCommonRepo().store(cust);
+		}
+
+		StoreSite defaultSite = getRepoFactory().getStoreRepo()
+				.getDefaultOutputSite();
+
+		PurchaseOrder po = cust.placeOrder(null);
+		po.setSite(defaultSite);
+
+		po.setRefno(orderBean.getUid());
+		po.setRefStatus(orderBean.getStatus().desc());
+
+		po.setCreateDate(orderBean.getCreateTime());
+
+		po.setTotalAmt(orderBean.getTotalAmount());
+		po.setFeeAmount(orderBean.getTransFeeAmount());
+		po.setRemark(orderBean.getBuyerMemo());
+		po.setMemo(orderBean.getSellerMemo());
+		po.getContact().setAddress(orderBean.getAddress());
+		po.getContact().setName(orderBean.getName());
+		po.getContact().setPhone(orderBean.getPhone());
+		po.getContact().setMobile(orderBean.getMobile());
+
+		for (TaobaoItemBean itemBean : orderBean.getItems()) {
+			// Display Item
+			DisplayItem dispItem = new DisplayItem();
+			dispItem.setName(itemBean.getName());
+			dispItem.setCount(itemBean.getCount());
+			dispItem.setUnitPrice(itemBean.getUnitPrice());
+			dispItem.setActualPrice(itemBean.getActualPrice());
+
+			po.addDispItem(dispItem);
+
+			// Only add items for new orders
+			if (0 == po.getOid()) {
+				if (StringUtils.isEmpty(itemBean.getItemId())) {
+					continue;
+				}
+				Book book = RepoFactory.INSTANCE.getProfileRepo().findBook(
+						itemBean.getItemId());
+				if (null == book)
+					continue;
+
+				if (book instanceof BookSet) {
+					BookSet set = (BookSet) book;
+
+					BigDecimal[] ups = CalcHelper.split(
+							itemBean.getActualPrice(), set.getBooks());
+
+					for (int i = 0; i < ups.length; i++) {
+						BookUnit u = set.getBooks().get(i);
+						OrderItem item = new OrderItem();
+
+						item.setBook(u.getBook());
+						item.setCount(itemBean.getCount());
+						item.setUnitPrice(ups[i]);
+						po.addItem(item);
+					}
+
+				} else {
+					// Single Item
+					OrderItem item = new OrderItem();
+
+					item.setBook(book);
+					item.setCount(itemBean.getCount());
+					item.setUnitPrice(itemBean.getActualPrice().divide(
+							new BigDecimal(itemBean.getCount()), 2,
+							BigDecimal.ROUND_HALF_UP));
+					po.addItem(item);
+				}
+			}
+		}
+
+		po.place();
+
+		return po;
+	}
+
 	public boolean importTaobaoOrder(TaobaoOrderBean orderBean) {
 		startTransaction();
 		try {
@@ -44,92 +129,10 @@ public class InterfaceService extends Service {
 				// Already included;
 				// Update Status
 				po = repo.getPurchaseOrderByRefno(orderBean.getUid());
-
-				po.removeAllDispItems();
-				po.setRefStatus(orderBean.getStatus().desc());
+				po.setRefStatus(orderBean.getStatus().name());
 			} else {
-				Customer cust = getRepoFactory().getProfileRepo().getCustomer(
-						Source.TAOBAO.name(), orderBean.getCustomerId());
-				if (null == cust) {
-					cust = new Customer();
-					cust.setId(orderBean.getCustomerId());
-					cust.setSource(Source.TAOBAO.name());
-					cust = RepoFactory.INSTANCE.getCommonRepo().store(cust);
-				}
-
-				StoreSite defaultSite = getRepoFactory().getStoreRepo()
-						.getDefaultOutputSite();
-
-				po = cust.placeOrder(null);
-				po.setSite(defaultSite);
-
-				po.setRefno(orderBean.getUid());
-				po.setRefStatus(orderBean.getStatus().desc());
-
-				po.setCreateDate(orderBean.getCreateTime());
-				
-				po.setTotalAmt(orderBean.getTotalAmount());
-				po.setFeeAmount(orderBean.getTransFeeAmount());
-				po.setRemark(orderBean.getBuyerMemo());
-				po.setMemo(orderBean.getSellerMemo());
-				po.getContact().setAddress(orderBean.getAddress());
-				po.getContact().setName(orderBean.getName());
-				po.getContact().setPhone(orderBean.getPhone());
-				po.getContact().setMobile(orderBean.getMobile());
-
-				po.place();
+				po = composeOrder(orderBean);
 			}
-			for (TaobaoItemBean itemBean : orderBean.getItems()) {
-				// Display Item
-				DisplayItem dispItem = new DisplayItem();
-				dispItem.setName(itemBean.getName());
-				dispItem.setCount(itemBean.getCount());
-				dispItem.setUnitPrice(itemBean.getUnitPrice());
-				dispItem.setActualPrice(itemBean.getActualPrice());
-
-				po.addDispItem(dispItem);
-
-				// Only add items for new orders
-				if (0 == po.getOid()) {
-					if (StringUtils.isEmpty(itemBean.getItemId())) {
-						continue;
-					}
-					Book book = RepoFactory.INSTANCE.getProfileRepo().findBook(
-							itemBean.getItemId());
-					if (null == book)
-						continue;
-
-					if (book instanceof BookSet) {
-						BookSet set = (BookSet) book;
-
-						BigDecimal[] ups = CalcHelper.split(
-								itemBean.getActualPrice(), set.getBooks());
-
-						for (int i = 0; i < ups.length; i++) {
-							BookUnit u = set.getBooks().get(i);
-							OrderItem item = new OrderItem();
-
-							item.setBook(u.getBook());
-							item.setCount(itemBean.getCount());
-							item.setUnitPrice(ups[i]);
-							po.addItem(item);
-						}
-
-					} else {
-						// Single Item
-						OrderItem item = new OrderItem();
-
-						item.setBook(book);
-						item.setCount(itemBean.getCount());
-						item.setUnitPrice(itemBean.getActualPrice().divide(
-								new BigDecimal(itemBean.getCount()), 2,
-								BigDecimal.ROUND_HALF_UP));
-						po.addItem(item);
-					}
-				}
-			}
-
-			
 
 			getRepoFactory().getCommonRepo().store(po);
 
@@ -162,99 +165,14 @@ public class InterfaceService extends Service {
 				// Already included;
 				// Update Status
 				po = repo.getPurchaseOrderByRefno(orderBean.getUid());
-
-				po.removeAllDispItems();
 				po.setRefStatus(orderBean.getStatus().desc());
 				exist.put(orderBean.getUid(), po);
 			} else {
-
-				Customer cust = getRepoFactory().getProfileRepo().getCustomer(
-						Source.TAOBAO.name(), orderBean.getCustomerId());
-				if (null == cust) {
-					cust = new Customer();
-					cust.setId(orderBean.getCustomerId());
-					cust.setSource(Source.TAOBAO.name());
-					cust = RepoFactory.INSTANCE.getCommonRepo().store(cust);
-				}
-
-				StoreSite defaultSite = getRepoFactory().getStoreRepo()
-						.getDefaultOutputSite();
-
-				po = cust.placeOrder(null);
-				po.setSite(defaultSite);
+				po = composeOrder(orderBean);
 				news.put(orderBean.getUid(), po);
 			}
-			po.setCreateDate(orderBean.getCreateTime());
-			po.setTotalAmt(orderBean.getTotalAmount());
-			po.setFeeAmount(orderBean.getTransFeeAmount());
-			po.setRemark(orderBean.getBuyerMemo());
-			po.setMemo(orderBean.getSellerMemo());
-			po.setRefno(orderBean.getUid());
-			po.getContact().setAddress(orderBean.getAddress());
-			po.getContact().setName(orderBean.getName());
-			po.getContact().setPhone(orderBean.getPhone());
-			po.getContact().setMobile(orderBean.getMobile());
-			po.setRefStatus(orderBean.getStatus().desc());
-
-			for (TaobaoItemBean itemBean : orderBean.getItems()) {
-				// Display Item
-				DisplayItem dispItem = new DisplayItem();
-				dispItem.setName(itemBean.getName());
-				dispItem.setCount(itemBean.getCount());
-				dispItem.setUnitPrice(itemBean.getUnitPrice());
-				dispItem.setActualPrice(itemBean.getActualPrice());
-
-				po.addDispItem(dispItem);
-
-				// Only add items for new orders
-				if (0 == po.getOid()) {
-					if (StringUtils.isEmpty(itemBean.getItemId())) {
-						continue;
-					}
-					Book book = RepoFactory.INSTANCE.getProfileRepo().findBook(
-							itemBean.getItemId());
-					if (null == book)
-						continue;
-
-					if (book instanceof BookSet) {
-						BookSet set = (BookSet) book;
-
-						BigDecimal[] ups = CalcHelper.split(
-								itemBean.getActualPrice(), set.getBooks());
-
-						for (int i = 0; i < ups.length; i++) {
-							BookUnit u = set.getBooks().get(i);
-							OrderItem item = new OrderItem();
-
-							item.setBook(u.getBook());
-							item.setCount(itemBean.getCount());
-							item.setUnitPrice(ups[i]);
-							po.addItem(item);
-						}
-
-					} else {
-						// Single Item
-						OrderItem item = new OrderItem();
-
-						item.setBook(book);
-						item.setCount(itemBean.getCount());
-						item.setUnitPrice(itemBean.getActualPrice());
-						po.addItem(item);
-					}
-				}
-			}
 		}
 
-		for (PurchaseOrder po : news.values()) {
-			po.place();
-			// if (po.getStatus() != PurchaseOrder.Status.CONFIRM.ordinal()
-			// && TaobaoOrderStatus.TRADE_FINISHED
-			// .equals(TaobaoOrderStatus.getByDesc(po
-			// .getRefStatus()))) {
-			// // Auto Confirm
-			// po.confirm();
-			// }
-		}
 		((UnitOfWork) TransactionContext.getSession()).validateObjectSpace();
 		getRepoFactory().getCommonRepo().store(exist.values());
 		getRepoFactory().getCommonRepo().store(news.values());

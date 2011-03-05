@@ -5,10 +5,12 @@ import java.util.Date;
 
 import org.harper.bookstore.domain.Entity;
 
-public class Accounting extends Entity {
+public class AccountEntry extends Entity {
+
+	private Account account;
 
 	private Date createDate;
-	
+
 	private String subject;
 
 	private BigDecimal amount;
@@ -16,6 +18,14 @@ public class Accounting extends Entity {
 	private String refType;
 
 	private String refNumber;
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
+	}
 
 	public Date getCreateDate() {
 		return createDate;

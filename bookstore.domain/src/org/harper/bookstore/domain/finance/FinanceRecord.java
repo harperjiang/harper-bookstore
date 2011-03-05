@@ -10,6 +10,8 @@ public class FinanceRecord extends Entity {
 	public static enum Status {
 		NEW, DRAFT, CONFIRM, FINISH
 	}
+	
+	private Account account;
 
 	private Date createDate;
 
