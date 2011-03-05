@@ -56,6 +56,7 @@ public BookstoreProject() {
 	addDescriptor(buildDeliveryOrderDescriptor());
 	addDescriptor(buildDeliveryItemDescriptor());
 	addDescriptor(buildTopLinkCommonRepo$NumGenDescriptor());
+	addDescriptor(buildTodoItemDescriptor());
 	
 }
 
@@ -1468,6 +1469,41 @@ public ClassDescriptor buildDeliveryItemDescriptor() {
 	orderItemMapping.dontUseIndirection();
 	orderItemMapping.addForeignKeyFieldName("order_delivery_item.item_oid", "order_item.oid");
 	descriptor.addMapping(orderItemMapping);
+	
+	return descriptor;
+}
+
+public ClassDescriptor buildTodoItemDescriptor() {
+	RelationalDescriptor descriptor = new RelationalDescriptor();
+	descriptor.setJavaClass(org.harper.bookstore.domain.todo.TodoItem.class);
+	descriptor.addTableName("todo_item");
+	descriptor.addPrimaryKeyFieldName("todo_item.oid");
+	
+	// Descriptor Properties.
+	descriptor.useFullIdentityMap();
+	descriptor.setIdentityMapSize(100);
+	descriptor.useRemoteFullIdentityMap();
+	descriptor.setRemoteIdentityMapSize(100);
+	descriptor.setSequenceNumberFieldName("todo_item.oid");
+	descriptor.setSequenceNumberName("todo_item");
+	descriptor.setAlias("TodoItem");
+	
+	// Query Manager.
+	descriptor.getQueryManager().checkCacheForDoesExist();
+	
+	
+	// Event Manager.
+	
+	// Mappings.
+	descriptor.addDirectMapping("oid", "todo_item.oid");
+	descriptor.addDirectMapping("status", "todo_item.status");
+	descriptor.addDirectMapping("subject", "todo_item.subject");
+	descriptor.addDirectMapping("content", "todo_item.content");
+	descriptor.addDirectMapping("solution", "todo_item.solution");
+	descriptor.addDirectMapping("privilege", "todo_item.privilege");
+	descriptor.addDirectMapping("createDate", "todo_item.create_date");
+	descriptor.addDirectMapping("dueDate", "todo_item.due_date");
+	descriptor.addDirectMapping("resolveDate", "todo_item.resolve_date");
 	
 	return descriptor;
 }
