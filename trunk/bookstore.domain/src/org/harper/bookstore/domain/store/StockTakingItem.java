@@ -3,9 +3,10 @@ package org.harper.bookstore.domain.store;
 import java.math.BigDecimal;
 
 import org.harper.bookstore.domain.Entity;
+import org.harper.bookstore.domain.Item;
 import org.harper.bookstore.domain.profile.Book;
 
-public class StockTakingItem extends Entity {
+public class StockTakingItem extends Entity implements Item {
 
 	private Book book;
 
@@ -55,6 +56,16 @@ public class StockTakingItem extends Entity {
 
 	public void setHeader(StockTaking header) {
 		this.header = header;
+	}
+
+	@Override
+	public int getCount() {
+		return currentCount;
+	}
+
+	@Override
+	public void setCount(int count) {
+		setCurrentCount(count);
 	}
 
 }
