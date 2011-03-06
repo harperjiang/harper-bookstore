@@ -1,5 +1,7 @@
 package org.harper.bookstore.domain.store;
 
+import java.math.BigDecimal;
+
 import org.harper.bookstore.domain.Entity;
 import org.harper.bookstore.domain.profile.Book;
 
@@ -7,7 +9,13 @@ public class StockTakingItem extends Entity {
 
 	private Book book;
 
-	private int count;
+	private int currentCount;
+
+	private int originCount;
+
+	private BigDecimal unitPrice;
+
+	private StockTaking header;
 
 	public Book getBook() {
 		return book;
@@ -17,12 +25,36 @@ public class StockTakingItem extends Entity {
 		this.book = book;
 	}
 
-	public int getCount() {
-		return count;
+	public int getCurrentCount() {
+		return currentCount;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
+	public void setCurrentCount(int currentCount) {
+		this.currentCount = currentCount;
+	}
+
+	public int getOriginCount() {
+		return originCount;
+	}
+
+	public void setOriginCount(int originCount) {
+		this.originCount = originCount;
+	}
+
+	public BigDecimal getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(BigDecimal unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
+	public StockTaking getHeader() {
+		return header;
+	}
+
+	public void setHeader(StockTaking header) {
+		this.header = header;
 	}
 
 }
