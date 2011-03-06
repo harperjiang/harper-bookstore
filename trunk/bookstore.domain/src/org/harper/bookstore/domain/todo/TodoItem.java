@@ -2,7 +2,9 @@ package org.harper.bookstore.domain.todo;
 
 import java.util.Date;
 
-public class TodoItem {
+import org.harper.bookstore.domain.Entity;
+
+public class TodoItem extends Entity {
 
 	public static enum Privilege {
 		URGENT, HIGH, NORMAL, LOW, REFERENCE
