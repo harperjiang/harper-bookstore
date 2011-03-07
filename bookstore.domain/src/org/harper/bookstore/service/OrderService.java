@@ -290,7 +290,9 @@ public class OrderService extends Service {
 					"Only Draft Order could be amended");
 			if (order.getStatus() == DeliveryOrder.Status.NEW.ordinal())
 				order.create();
-			Validate.isTrue(!CollectionUtils.isEmpty(order.getItems()),
+			Validate.isTrue(
+					order.isSendMissed()
+							|| !CollectionUtils.isEmpty(order.getItems()),
 					"Please input the item to be sent");
 
 			for (int i = 0; i < order.getItems().size(); i++) {

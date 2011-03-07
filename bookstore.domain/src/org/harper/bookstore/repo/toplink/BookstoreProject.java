@@ -1367,6 +1367,8 @@ public ClassDescriptor buildDeliveryOrderDescriptor() {
 	
 	// Mappings.
 	descriptor.addDirectMapping("valid", "order_delivery.valid");
+	descriptor.addDirectMapping("sendMissed","order_delivery.send_missed");
+	descriptor.addDirectMapping("remark","order_delivery.remark");
 	
 	DirectToFieldMapping statusMapping = new DirectToFieldMapping();
 	statusMapping.setAttributeName("status");
