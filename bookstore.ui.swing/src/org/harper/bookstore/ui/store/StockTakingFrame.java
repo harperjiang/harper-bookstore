@@ -56,6 +56,8 @@ public class StockTakingFrame extends JFrame {
 		siteCombo.setRenderer(new SiteListRenderer());
 		headerPanel.add(siteCombo);
 
+		
+		
 		// Create Table;
 		itemController = new ItemController<StockTakingItem>(null,
 				new TableCreator() {
@@ -79,6 +81,8 @@ public class StockTakingFrame extends JFrame {
 			}
 
 		};
+		centerPanel.add(itemController.getView().getItemTable(),
+				BorderLayout.CENTER);
 
 		setVisible(true);
 	}

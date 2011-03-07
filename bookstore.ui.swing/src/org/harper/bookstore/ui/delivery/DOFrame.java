@@ -2,9 +2,11 @@ package org.harper.bookstore.ui.delivery;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -15,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -24,8 +27,10 @@ import org.harper.bookstore.domain.order.OrderItem;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.ui.common.ActionThread;
 import org.harper.bookstore.ui.common.CheckBoxTableRenderer;
+import org.harper.bookstore.ui.common.ChooseDateDialog;
 import org.harper.bookstore.ui.common.ItemController;
 import org.harper.bookstore.ui.common.ItemController.TableCreator;
+import org.harper.bookstore.ui.common.LabeledTextArea;
 import org.harper.bookstore.ui.common.ReturnKeyAdapter;
 import org.harper.bookstore.ui.order.DeliveryPanel;
 import org.harper.frm.core.logging.LogManager;
@@ -39,7 +44,11 @@ public class DOFrame extends JFrame {
 
 	private JTextField poNumberField;
 
+	private JCheckBox missedCheck;
+
 	private ItemController<DeliveryItem> doItemController;
+
+	private LabeledTextArea remarkArea;
 	/**
 	 * 
 	 */
@@ -50,7 +59,7 @@ public class DOFrame extends JFrame {
 
 		setTitle("Create Delivery Order");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setSize(800, 400);
+		setSize(800, 500);
 
 		setLayout(new BorderLayout());
 
@@ -59,12 +68,16 @@ public class DOFrame extends JFrame {
 		JLabel poLabel = new JLabel("PO Number");
 		topPanel.add(poLabel);
 
-		poNumberField = new JTextField();
-		poNumberField.setPreferredSize(new Dimension(200, 25));
-		topPanel.add(poNumberField);
-		poNumberField.addKeyListener(new ReturnKeyAdapter(new ActionThread() {
+		final JTabbedPane tabbedPane = new JTabbedPane();
+		final ActionThread loadAction = new ActionThread() {
 			public void execute() {
 				getController().loadPo();
+			}
+
+			public void success() {
+				if (getMissedCheck().isSelected()) {
+					tabbedPane.setSelectedIndex(1);
+				}
 			}
 
 			public void exception(final Exception ex) {
@@ -73,19 +86,26 @@ public class DOFrame extends JFrame {
 				JOptionPane.showMessageDialog(DOFrame.this, ex.getMessage(),
 						"Failed to load", JOptionPane.ERROR_MESSAGE);
 			}
-		}));
+		};
+
+		poNumberField = new JTextField();
+		poNumberField.setPreferredSize(new Dimension(200, 25));
+		topPanel.add(poNumberField);
+		poNumberField.addKeyListener(new ReturnKeyAdapter(loadAction));
 
 		JButton loadPoButton = new JButton("Load");
 		loadPoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.loadPo();
+				new Thread(loadAction).start();
 			}
 		});
 		topPanel.add(loadPoButton);
 
+		missedCheck = new JCheckBox("Send Missed");
+		topPanel.add(missedCheck);
+
 		add(topPanel, BorderLayout.NORTH);
 
-		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
 
 		doItemController = new ItemController<DeliveryItem>(null,
@@ -132,8 +152,14 @@ public class DOFrame extends JFrame {
 
 		tabbedPane.add("Item Info", doItemController.getView());
 
+		JPanel secondPanel = new JPanel();
+		secondPanel.setLayout(new GridLayout(2, 1));
 		panel = new DeliveryPanel();
-		tabbedPane.addTab("Delivery Info", panel);
+		secondPanel.add(panel);
+		tabbedPane.addTab("Delivery Info", secondPanel);
+
+		remarkArea = new LabeledTextArea("Remark");
+		secondPanel.add(remarkArea);
 
 		JPanel bottomPanel = new JPanel();
 		add(bottomPanel, BorderLayout.SOUTH);
@@ -177,7 +203,11 @@ public class DOFrame extends JFrame {
 				new Thread(new Runnable() {
 					public void run() {
 						try {
-							controller.save(true);
+							ChooseDateDialog dialog = new ChooseDateDialog(
+									DOFrame.this, "Choose Date",
+									"Please choose send date", new Date());
+
+							controller.save(dialog.getBean().getDate(), true);
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									JOptionPane.showMessageDialog(DOFrame.this,
@@ -225,6 +255,14 @@ public class DOFrame extends JFrame {
 
 	public ItemController<DeliveryItem> getDoItemController() {
 		return doItemController;
+	}
+
+	public JCheckBox getMissedCheck() {
+		return missedCheck;
+	}
+
+	public JTextArea getRemarkArea() {
+		return remarkArea.getTextField();
 	}
 
 }
