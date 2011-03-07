@@ -1,11 +1,14 @@
 package org.harper.bookstore.ui.store;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.store.StockTakingItem;
@@ -43,9 +46,15 @@ public class StockTakingFrame extends JFrame {
 		JPanel headerPanel = new JPanel();
 		centerPanel.add(headerPanel, BorderLayout.NORTH);
 
+		headerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		headerPanel.setLayout(new GridLayout(1, 2, 5, 5));
+
+		JLabel siteLabel = new JLabel("Store Site:");
+		headerPanel.add(siteLabel);
+
 		siteCombo = new JComboBox();
 		siteCombo.setRenderer(new SiteListRenderer());
-		add(siteCombo);
+		headerPanel.add(siteCombo);
 
 		// Create Table;
 		itemController = new ItemController<StockTakingItem>(null,
