@@ -33,6 +33,10 @@ public class DeliveryOrder extends Entity {
 
 	private ContactInfo contact;
 
+	private boolean sendMissed;
+
+	private String remark;
+
 	public DeliveryOrder() {
 		setStatus(Status.NEW.ordinal());
 		contact = new ContactInfo();
@@ -147,4 +151,21 @@ public class DeliveryOrder extends Entity {
 				"org.harper.bookstore.domain.deliver.DOStatus").getString(
 				Status.values()[getStatus()].name());
 	}
+
+	public boolean isSendMissed() {
+		return sendMissed;
+	}
+
+	public void setSendMissed(boolean sendMissed) {
+		this.sendMissed = sendMissed;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
 }
