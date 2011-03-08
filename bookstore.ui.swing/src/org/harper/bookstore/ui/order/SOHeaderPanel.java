@@ -1,21 +1,18 @@
 package org.harper.bookstore.ui.order;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.harper.bookstore.domain.profile.Customer;
-import org.harper.bookstore.domain.store.StoreSite;
+import org.harper.bookstore.ui.common.SiteListRenderer;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
 
 public class SOHeaderPanel extends JPanel {
@@ -128,22 +125,7 @@ public class SOHeaderPanel extends JPanel {
 		c.weightx = 1.0;
 		c.gridx = 1;
 		layout.setConstraints(siteCombo, c);
-		siteCombo.setRenderer(new DefaultListCellRenderer() {
-			private static final long serialVersionUID = -8062361344485367288L;
-
-			@Override
-			public Component getListCellRendererComponent(JList list,
-					Object value, int index, boolean isSelected,
-					boolean cellHasFocus) {
-				JLabel superLabel = (JLabel) super
-						.getListCellRendererComponent(list, value, index,
-								isSelected, cellHasFocus);
-				if (value instanceof StoreSite)
-					superLabel.setText(((StoreSite) value).getName());
-				return superLabel;
-			}
-
-		});
+		siteCombo.setRenderer(new SiteListRenderer());
 		add(siteCombo);
 	}
 
