@@ -259,7 +259,8 @@ public class POFrame extends JFrame {
 		partialSendButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					PartialSendBean bean = new PartialSendBean(controller.getOrder());
+					PartialSendBean bean = new PartialSendBean(controller
+							.getOrder());
 					PartialSendDialog dialog = new PartialSendDialog(
 							POFrame.this, bean);
 					if (dialog.isOkay()) {
@@ -350,6 +351,7 @@ public class POFrame extends JFrame {
 				item.setBook(book);
 				item.setUnitPrice(getController().getListPrice(book));
 				item.setCount(1);
+				
 				return item;
 			}
 
