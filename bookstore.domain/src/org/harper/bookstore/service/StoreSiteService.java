@@ -11,6 +11,7 @@ import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.order.ListPrice;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.profile.BookSet;
+import org.harper.bookstore.domain.store.StockTaking;
 import org.harper.bookstore.domain.store.StoreEntry;
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.domain.store.Transfer;
@@ -71,16 +72,15 @@ public class StoreSiteService extends Service {
 			Book book = getRepoFactory().getProfileRepo().findBook(bookIsbn);
 			if (null == book)
 				throw ValidateException.noSuchBook(bookIsbn);
-			
-			
+
 			bean.setBook(book);
 
-			ListPrice listPrice = getRepoFactory().getOrderRepo()
-					.getListPrice(book);
+			ListPrice listPrice = getRepoFactory().getOrderRepo().getListPrice(
+					book);
 			if (null != listPrice) {
 				bean.setListPrice(listPrice.getPrice());
 			}
-			
+
 			if (book instanceof BookSet) {
 				return bean;
 			} else {
@@ -192,6 +192,57 @@ public class StoreSiteService extends Service {
 			default:
 				throw new IllegalStateException(trans.getStatus().name() + ":"
 						+ newStatus.name());
+			}
+			return trans;
+		} finally {
+			commitTransaction();
+		}
+	}
+
+	public StockTaking saveStockTaking(StockTaking st) {
+		startTransaction();
+		try {
+			StockTaking orderToEdit = null;
+			if (st.getOid() == 0) {
+				// New Order
+				orderToEdit = (StockTaking) getRepoFactory().getCommonRepo()
+						.store(st);
+				orderToEdit.create();
+			} else {
+				// Existing Order
+				orderToEdit = RepoFactory.INSTANCE.getOrderRepo().readObject(
+						StockTaking.class, st.getOid());
+				// Only Draft Order Could be edited;
+				Validate.isTrue(
+						StockTaking.Status.DRAFT.ordinal() == orderToEdit
+								.getStatus(), "Only Draft Order can be edited");
+				orderToEdit = (StockTaking) getRepoFactory().getCommonRepo()
+						.store(st);
+			}
+			commitTransaction();
+			return orderToEdit;
+		} catch (Exception e) {
+			releaseTransaction();
+			throw new RuntimeException(e);
+		}
+	}
+
+	public StockTaking operateStockTaking(StockTaking st, int to) {
+		startTransaction();
+		try {
+			StockTaking trans = RepoFactory.INSTANCE.getOrderRepo().readObject(
+					StockTaking.class, st.getOid());
+			StockTaking.Status toStatus = StockTaking.Status.values()[to];
+			switch (toStatus) {
+			case CONFIRM:
+				st.confirm();
+				break;
+			case CANCEL:
+				trans.cancel();
+				break;
+			default:
+				throw new IllegalStateException(StockTaking.Status.values()[st.getStatus()].name() + ":"
+						+ toStatus.name());
 			}
 			return trans;
 		} finally {

@@ -56,12 +56,16 @@ public class DeliveryOrder extends Entity {
 
 		// Modify Storage
 		for (DeliveryItem item : getItems()) {
-			StoreSite site = item.getOrderItem().getOrder().getSite();
-			site.lock(item.getOrderItem().getBook(), item.getCount());
-			BookUnit bu = site.retrieve(item.getOrderItem().getBook(),
-					item.getCount());
-			Validate.isTrue(bu.getCount() == item.getCount());
-			item.setUnitCost(bu.getUnitPrice());
+			if (item.getOrderItem().isAgent()) {
+				item.setUnitCost(item.getOrderItem().getUnitCost());
+			} else {
+				StoreSite site = item.getOrderItem().getOrder().getSite();
+				site.lock(item.getOrderItem().getBook(), item.getCount());
+				BookUnit bu = site.retrieve(item.getOrderItem().getBook(),
+						item.getCount());
+				Validate.isTrue(bu.getCount() == item.getCount());
+				item.setUnitCost(bu.getUnitPrice());
+			}
 			item.getOrderItem().send(item.getCount());
 			((PurchaseOrder) item.getOrderItem().getOrder()).makeDelivery();
 		}

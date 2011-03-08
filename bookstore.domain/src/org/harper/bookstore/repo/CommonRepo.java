@@ -12,6 +12,8 @@ public interface CommonRepo extends Repo{
 	
 	public String NUMBER_TYPE_BR = "BR";
 	
+	public String NUMBER_TYPE_ST = "ST";
+	
 	public String getNumber(String type);
 	
 	public void store(Collection<?> cols);

@@ -68,4 +68,9 @@ public class StockTakingItem extends Entity implements Item {
 		setCurrentCount(count);
 	}
 
+	public BigDecimal getDiscrepancy() {
+		if(null == unitPrice)
+			return null;
+		return new BigDecimal(currentCount-originCount).multiply(unitPrice);
+	}
 }
