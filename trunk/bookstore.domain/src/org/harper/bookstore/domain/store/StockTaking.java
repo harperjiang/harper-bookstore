@@ -10,7 +10,7 @@ import org.harper.bookstore.domain.Entity;
 public class StockTaking extends Entity {
 
 	public static enum Status {
-		DRAFT, CONFIRM;
+		DRAFT, CONFIRM, CANCEL;
 	}
 
 	private StoreSite site;
@@ -19,9 +19,11 @@ public class StockTaking extends Entity {
 
 	private String number;
 
-	private Date createDate;
+	private Date createDate = new Date();
 
 	private Date confirmDate;
+
+	private String remark;
 
 	private List<StockTakingItem> items;
 
@@ -33,13 +35,15 @@ public class StockTaking extends Entity {
 		Validate.isTrue(0 == getOid());
 		Validate.isTrue(Status.DRAFT.ordinal() == getStatus());
 		setStatus(Status.DRAFT.ordinal());
-		setCreateDate(new Date());
+		if (null == getCreateDate())
+			setCreateDate(new Date());
 	}
 
 	public void confirm() {
 		Validate.isTrue(Status.DRAFT.ordinal() == getStatus());
 		setStatus(Status.CONFIRM.ordinal());
-		setConfirmDate(new Date());
+		if (null == getConfirmDate())
+			setConfirmDate(new Date());
 		for (StockTakingItem item : items) {
 			StoreEntry entry = getSite().getEntry(item.getBook());
 			if (null == entry) {
@@ -61,6 +65,11 @@ public class StockTaking extends Entity {
 				}
 			}
 		}
+	}
+	
+	public void cancel() {
+		Validate.isTrue(Status.DRAFT.ordinal() == getStatus());
+		setStatus(Status.CANCEL.ordinal());
 	}
 
 	public Date getConfirmDate() {
@@ -118,4 +127,15 @@ public class StockTaking extends Entity {
 		this.status = status;
 	}
 
+	public String getStatusStr() {
+		return Status.values()[getStatus()].name();
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }
