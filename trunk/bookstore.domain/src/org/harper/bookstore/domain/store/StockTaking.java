@@ -23,6 +23,8 @@ public class StockTaking extends Entity {
 
 	private Date confirmDate;
 
+	private BigDecimal discrepancy;
+
 	private String remark;
 
 	private List<StockTakingItem> items;
@@ -66,7 +68,7 @@ public class StockTaking extends Entity {
 			}
 		}
 	}
-	
+
 	public void cancel() {
 		Validate.isTrue(Status.DRAFT.ordinal() == getStatus());
 		setStatus(Status.CANCEL.ordinal());
@@ -138,4 +140,13 @@ public class StockTaking extends Entity {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+
+	public BigDecimal getDiscrepancy() {
+		return discrepancy;
+	}
+
+	public void setDiscrepancy(BigDecimal discrepancy) {
+		this.discrepancy = discrepancy;
+	}
+
 }
