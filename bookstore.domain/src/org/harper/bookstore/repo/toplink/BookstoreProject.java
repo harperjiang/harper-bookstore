@@ -57,6 +57,8 @@ public BookstoreProject() {
 	addDescriptor(buildDeliveryItemDescriptor());
 	addDescriptor(buildTopLinkCommonRepo$NumGenDescriptor());
 	addDescriptor(buildTodoItemDescriptor());
+	addDescriptor(buildStockTakingDescriptor());
+	addDescriptor(buildStockTakingItemDescriptor());
 	
 }
 
@@ -1506,6 +1508,132 @@ public ClassDescriptor buildTodoItemDescriptor() {
 	descriptor.addDirectMapping("createDate", "todo_item.create_date");
 	descriptor.addDirectMapping("dueDate", "todo_item.due_date");
 	descriptor.addDirectMapping("resolveDate", "todo_item.resolve_date");
+	
+	return descriptor;
+}
+
+public ClassDescriptor buildStockTakingDescriptor() {
+	RelationalDescriptor descriptor = new RelationalDescriptor();
+	descriptor.setJavaClass(org.harper.bookstore.domain.store.StockTaking.class);
+	descriptor.addTableName("store_stock_take");
+	descriptor.addPrimaryKeyFieldName("store_stock_take.oid");
+	
+	// Descriptor Properties.
+	descriptor.useSoftCacheWeakIdentityMap();
+	descriptor.setIdentityMapSize(100);
+	descriptor.useRemoteSoftCacheWeakIdentityMap();
+	descriptor.setRemoteIdentityMapSize(100);
+	descriptor.setSequenceNumberFieldName("store_stock_take.oid");
+	descriptor.setSequenceNumberName("store_stock_take");
+	descriptor.setAlias("StockTaking");
+	
+	
+	// Query Manager.
+	descriptor.getQueryManager().checkCacheForDoesExist();
+	
+	
+	// Event Manager.
+	
+	// Mappings.
+	DirectToFieldMapping createDateMapping = new DirectToFieldMapping();
+	createDateMapping.setAttributeName("createDate");
+	createDateMapping.setFieldName("store_stock_take.create_date");
+	descriptor.addMapping(createDateMapping);
+	
+	DirectToFieldMapping confirmDateMapping = new DirectToFieldMapping();
+	confirmDateMapping.setAttributeName("confirmDate");
+	confirmDateMapping.setFieldName("store_stock_take.confirm_date");
+	descriptor.addMapping(confirmDateMapping);
+	
+	DirectToFieldMapping expectActionDateMapping = new DirectToFieldMapping();
+	expectActionDateMapping.setAttributeName("expectActionDate");
+	expectActionDateMapping.setFieldName("store_transfer.expect_action_date");
+	descriptor.addMapping(expectActionDateMapping);
+	
+	DirectToFieldMapping numberMapping = new DirectToFieldMapping();
+	numberMapping.setAttributeName("number");
+	numberMapping.setFieldName("store_stock_take.tr_number");
+	descriptor.addMapping(numberMapping);
+	
+	DirectToFieldMapping oidMapping = new DirectToFieldMapping();
+	oidMapping.setAttributeName("oid");
+	oidMapping.setFieldName("store_transfer.oid");
+	descriptor.addMapping(oidMapping);
+	
+	DirectToFieldMapping statusMapping = new DirectToFieldMapping();
+	statusMapping.setAttributeName("status");
+	statusMapping.setFieldName("store_transfer.status");
+	descriptor.addMapping(statusMapping);
+	
+	OneToOneMapping siteMapping = new OneToOneMapping();
+	siteMapping.setAttributeName("site");
+	siteMapping.setReferenceClass(org.harper.bookstore.domain.store.StoreSite.class);
+	siteMapping.dontUseIndirection();
+	siteMapping.addForeignKeyFieldName("store_stock_take.site", "store_site.oid");
+	descriptor.addMapping(siteMapping);
+	
+	OneToManyMapping itemsMapping = new OneToManyMapping();
+	itemsMapping.setAttributeName("items");
+	itemsMapping.setReferenceClass(org.harper.bookstore.domain.store.StockTakingItem.class);
+	itemsMapping.useTransparentCollection();
+	itemsMapping.useCollectionClass(oracle.toplink.indirection.IndirectList.class);
+	itemsMapping.addTargetForeignKeyFieldName("store_stock_take_item.header", "store_stock_take.oid");
+	descriptor.addMapping(itemsMapping);
+	
+	return descriptor;
+}
+
+public ClassDescriptor buildStockTakingItemDescriptor() {
+	RelationalDescriptor descriptor = new RelationalDescriptor();
+	descriptor.setJavaClass(org.harper.bookstore.domain.store.StockTakingItem.class);
+	descriptor.addTableName("store_stock_take_item");
+	descriptor.addPrimaryKeyFieldName("store_stock_take_item.oid");
+	
+	// Descriptor Properties.
+	descriptor.useSoftCacheWeakIdentityMap();
+	descriptor.setIdentityMapSize(100);
+	descriptor.useRemoteSoftCacheWeakIdentityMap();
+	descriptor.setRemoteIdentityMapSize(100);
+	descriptor.setSequenceNumberFieldName("store_stock_take_item.oid");
+	descriptor.setSequenceNumberName("store_stock_take_item");
+	descriptor.setAlias("StockTakingItem");
+	
+	
+	// Query Manager.
+	descriptor.getQueryManager().checkCacheForDoesExist();
+	
+	
+	// Event Manager.
+	
+	// Mappings.
+	DirectToFieldMapping currentCountMapping = new DirectToFieldMapping();
+	currentCountMapping.setAttributeName("currentCount");
+	currentCountMapping.setFieldName("store_stock_take_item.current_count");
+	descriptor.addMapping(currentCountMapping);
+	
+	DirectToFieldMapping originCountMapping = new DirectToFieldMapping();
+	originCountMapping.setAttributeName("originCount");
+	originCountMapping.setFieldName("store_stock_take_item.expect_count");
+	descriptor.addMapping(originCountMapping);
+	
+	DirectToFieldMapping oidMapping = new DirectToFieldMapping();
+	oidMapping.setAttributeName("oid");
+	oidMapping.setFieldName("store_stock_take_item.oid");
+	descriptor.addMapping(oidMapping);
+	
+	OneToOneMapping bookMapping = new OneToOneMapping();
+	bookMapping.setAttributeName("book");
+	bookMapping.setReferenceClass(org.harper.bookstore.domain.profile.Book.class);
+	bookMapping.dontUseIndirection();
+	bookMapping.addForeignKeyFieldName("store_stock_take_item.book_oid", "profile_book.oid");
+	descriptor.addMapping(bookMapping);
+	
+	OneToOneMapping headerMapping = new OneToOneMapping();
+	headerMapping.setAttributeName("header");
+	headerMapping.setReferenceClass(org.harper.bookstore.domain.store.StockTaking.class);
+	headerMapping.dontUseIndirection();
+	headerMapping.addForeignKeyFieldName("store_stock_take_item.header", "store_stock_take.oid");
+	descriptor.addMapping(headerMapping);
 	
 	return descriptor;
 }
