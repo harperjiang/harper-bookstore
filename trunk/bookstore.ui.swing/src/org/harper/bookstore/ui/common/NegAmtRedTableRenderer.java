@@ -23,7 +23,8 @@ public class NegAmtRedTableRenderer extends DefaultTableCellRenderer {
 				.compareTo(BigDecimal.ZERO) < 0)
 				|| (value instanceof Number && ((Number) value).doubleValue() < 0)) {
 			superLabel.setForeground(Color.RED);
-		}
+		} else
+			superLabel.setForeground(Color.BLUE);
 		return superLabel;
 	}
 }
