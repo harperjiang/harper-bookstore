@@ -20,7 +20,9 @@ import org.harper.bookstore.ui.profile.BookManagerController;
 import org.harper.bookstore.ui.profile.BookSetManageController;
 import org.harper.bookstore.ui.setting.ContactInfoController;
 import org.harper.bookstore.ui.store.ManageStoreController;
+import org.harper.bookstore.ui.store.QueryStockTakingController;
 import org.harper.bookstore.ui.store.SiteInfoController;
+import org.harper.bookstore.ui.store.StockTakingController;
 import org.harper.bookstore.ui.store.TransferPlanController;
 import org.harper.bookstore.ui.store.ViewTransferController;
 import org.harper.bookstore.ui.tbinterface.TOPImportController;
@@ -80,6 +82,10 @@ public class MainFrame extends JFrame {
 		reportToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.view_transfer"), //$NON-NLS-1$
 				ViewTransferController.class));
+		reportToolBar.add(new ControllerAction("Stock Taking",
+				StockTakingController.class));
+		reportToolBar.add(new ControllerAction("View Stock Taking",
+				QueryStockTakingController.class));
 		reportToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.manage_store"), //$NON-NLS-1$
 				ManageStoreController.class));
@@ -129,7 +135,8 @@ public class MainFrame extends JFrame {
 		printToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.print_express"), //$NON-NLS-1$
 				PrintExpressOrderController.class));
-		printToolBar.add(new ControllerAction(Messages.getString("MainFrame.set_contact_info"), //$NON-NLS-1$
+		printToolBar.add(new ControllerAction(Messages
+				.getString("MainFrame.set_contact_info"), //$NON-NLS-1$
 				ContactInfoController.class));
 
 		setVisible(true);

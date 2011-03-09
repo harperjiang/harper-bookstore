@@ -37,7 +37,8 @@ public class EnumListCellRenderer extends DefaultListCellRenderer {
 			text = defaultValue;
 		else
 			text = ((Enum) value).name();
-		text = res.getString(text);
+		if (null != res)
+			text = res.getString(text);
 		label.setText(text);
 		return label;
 	}

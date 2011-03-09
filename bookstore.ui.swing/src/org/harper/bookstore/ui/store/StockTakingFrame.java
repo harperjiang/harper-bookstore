@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -26,6 +27,7 @@ import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.store.StockTakingItem;
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.ui.common.ActionThread;
+import org.harper.bookstore.ui.common.ChooseDateDialog;
 import org.harper.bookstore.ui.common.ItemController;
 import org.harper.bookstore.ui.common.ItemController.TableCreator;
 import org.harper.bookstore.ui.common.NegAmtRedTableRenderer;
@@ -47,6 +49,8 @@ public class StockTakingFrame extends JFrame {
 	private JComboBox siteCombo;
 
 	private DateTextField createDateField;
+	
+	private JTextField numberField;
 
 	private JTextField statusField;
 
@@ -83,6 +87,7 @@ public class StockTakingFrame extends JFrame {
 
 					@Override
 					public void exception(Exception ex) {
+						ex.printStackTrace();
 						JOptionPane.showMessageDialog(StockTakingFrame.this,
 								ex.getMessage(), "Error",
 								JOptionPane.ERROR_MESSAGE);
@@ -100,7 +105,11 @@ public class StockTakingFrame extends JFrame {
 					@Override
 					public void execute() {
 						getController().save();
-						getController().confirm();
+						ChooseDateDialog dd = new ChooseDateDialog(
+								StockTakingFrame.this, "Confirm Date",
+								"Input Confirm Date", new Date());
+						if (dd.isOkay())
+							getController().confirm(dd.getBean().getDate());
 					}
 
 					@Override
@@ -111,6 +120,7 @@ public class StockTakingFrame extends JFrame {
 
 					@Override
 					public void exception(Exception ex) {
+						ex.printStackTrace();
 						JOptionPane.showMessageDialog(StockTakingFrame.this,
 								ex.getMessage(), "Error",
 								JOptionPane.ERROR_MESSAGE);
@@ -143,15 +153,19 @@ public class StockTakingFrame extends JFrame {
 		createDateField = new DateTextField(new SimpleDateFormat("yyyy-MM-dd"));
 		headerPanel.add(createDateField);
 
+		JLabel numberLabel = new JLabel("Number");
+		headerPanel.add(numberLabel);
+		
+		numberField = new JTextField();
+		numberField.setEditable(false);
+		headerPanel.add(numberField);
+		
 		JLabel statusLabel = new JLabel("Status");
 		headerPanel.add(statusLabel);
 
 		statusField = new JTextField();
 		statusField.setEditable(false);
 		headerPanel.add(statusField);
-
-		headerPanel.add(new JLabel());
-		headerPanel.add(new JLabel());
 
 		// Create Table;
 		itemController = new ItemController<StockTakingItem>(null,
@@ -219,10 +233,6 @@ public class StockTakingFrame extends JFrame {
 		return controller;
 	}
 
-	public void setController(StockTakingController controller) {
-		this.controller = controller;
-	}
-
 	public JComboBox getSiteCombo() {
 		return siteCombo;
 	}
@@ -237,6 +247,10 @@ public class StockTakingFrame extends JFrame {
 
 	public ItemController<StockTakingItem> getItemController() {
 		return itemController;
+	}
+
+	public JTextField getNumberField() {
+		return numberField;
 	}
 
 }

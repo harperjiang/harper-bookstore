@@ -1,5 +1,6 @@
 package org.harper.bookstore.ui.store;
 
+import java.util.Date;
 import java.util.List;
 
 import org.harper.bookstore.domain.store.StockTaking;
@@ -39,6 +40,7 @@ public class StockTakingController extends Controller {
 		manager.addBinding(new JTextBinding(frame.getStatusField(), "statusStr"));
 		manager.addBinding(new TableBinding(frame.getItemController().getView()
 				.getItemTable(), "items"));
+		manager.addBinding(new JTextBinding(frame.getNumberField(), "number"));
 
 		manager.loadAll();
 	}
@@ -69,9 +71,11 @@ public class StockTakingController extends Controller {
 		manager.setBean(taking);
 	}
 
-	public void confirm() {
+	public void confirm(Date confirmDate) {
+		bean.setConfirmDate(confirmDate);
 		StockTaking taking = new StoreSiteService().operateStockTaking(bean,
 				StockTaking.Status.CONFIRM.ordinal());
+
 		manager.setBean(taking);
 	}
 
