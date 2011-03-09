@@ -1,6 +1,7 @@
 package org.harper.bookstore.repo.toplink;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import oracle.toplink.expressions.Expression;
@@ -13,6 +14,8 @@ import oracle.toplink.queryframework.SQLCall;
 import oracle.toplink.sessions.Session;
 
 import org.harper.bookstore.domain.profile.Book;
+import org.harper.bookstore.domain.store.StockTaking;
+import org.harper.bookstore.domain.store.StockTaking.Status;
 import org.harper.bookstore.domain.store.StoreEntry;
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.domain.store.Transfer;
@@ -87,6 +90,26 @@ public class TopLinkStoreRepo extends TopLinkRepo implements StoreRepo {
 						StoreSite.class,
 						new SQLCall(
 								"select * from store_site where for_output = 1 having pref_seq = min(pref_seq)"));
+	}
+
+	@Override
+	public List<StockTaking> searchStockTaking(Date from, Date to,
+			StoreSite site, Status status) {
+		ExpressionBuilder builder = new ExpressionBuilder();
+		Expression exp = builder;
+		if (null != from)
+			exp = exp.and(builder.get("createDate").greaterThanEqual(from));
+		if (null != to)
+			exp = exp.and(builder.get("createDate").lessThanEqual(to));
+		if (null != site)
+			exp = exp.and(builder.get("site").equal(site));
+		if (null != status)
+			exp = exp.and(builder.get("status").equal(status.ordinal()));
+		ReadAllQuery raq = new ReadAllQuery();
+		raq.setReferenceClass(StockTaking.class);
+		raq.setSelectionCriteria(exp);
+		raq.addOrdering(builder.get("createDate").descending());
+		return (List) TransactionContext.getSession().executeQuery(raq);
 	}
 
 }
