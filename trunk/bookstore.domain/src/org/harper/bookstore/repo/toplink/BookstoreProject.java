@@ -1545,24 +1545,19 @@ public ClassDescriptor buildStockTakingDescriptor() {
 	confirmDateMapping.setFieldName("store_stock_take.confirm_date");
 	descriptor.addMapping(confirmDateMapping);
 	
-	DirectToFieldMapping expectActionDateMapping = new DirectToFieldMapping();
-	expectActionDateMapping.setAttributeName("expectActionDate");
-	expectActionDateMapping.setFieldName("store_transfer.expect_action_date");
-	descriptor.addMapping(expectActionDateMapping);
-	
 	DirectToFieldMapping numberMapping = new DirectToFieldMapping();
 	numberMapping.setAttributeName("number");
-	numberMapping.setFieldName("store_stock_take.tr_number");
+	numberMapping.setFieldName("store_stock_take.st_number");
 	descriptor.addMapping(numberMapping);
 	
 	DirectToFieldMapping oidMapping = new DirectToFieldMapping();
 	oidMapping.setAttributeName("oid");
-	oidMapping.setFieldName("store_transfer.oid");
+	oidMapping.setFieldName("store_stock_take.oid");
 	descriptor.addMapping(oidMapping);
 	
 	DirectToFieldMapping statusMapping = new DirectToFieldMapping();
 	statusMapping.setAttributeName("status");
-	statusMapping.setFieldName("store_transfer.status");
+	statusMapping.setFieldName("store_stock_take.status");
 	descriptor.addMapping(statusMapping);
 	
 	OneToOneMapping siteMapping = new OneToOneMapping();
@@ -1615,6 +1610,11 @@ public ClassDescriptor buildStockTakingItemDescriptor() {
 	originCountMapping.setAttributeName("originCount");
 	originCountMapping.setFieldName("store_stock_take_item.expect_count");
 	descriptor.addMapping(originCountMapping);
+	
+	DirectToFieldMapping unitPriceMapping = new DirectToFieldMapping();
+	unitPriceMapping.setAttributeName("unitPrice");
+	unitPriceMapping.setFieldName("store_stock_take_item.unit_price");
+	descriptor.addMapping(unitPriceMapping);
 	
 	DirectToFieldMapping oidMapping = new DirectToFieldMapping();
 	oidMapping.setAttributeName("oid");

@@ -63,6 +63,17 @@ public class StoreSiteService extends Service {
 		}
 	}
 
+	public List<StockTaking> searchStockTakings(Date from, Date to,
+			StockTaking.Status status, StoreSite site) {
+		startTransaction();
+		try {
+			return getRepoFactory().getStoreRepo().searchStockTaking(from, to,
+					site, status);
+		} finally {
+			releaseTransaction();
+		}
+	}
+
 	public BookReportBean getBookReport(String bookIsbn) {
 		startTransaction();
 		try {
@@ -205,6 +216,9 @@ public class StoreSiteService extends Service {
 			StockTaking orderToEdit = null;
 			if (st.getOid() == 0) {
 				// New Order
+				if (StringUtils.isEmpty(st.getNumber()))
+					st.setNumber(RepoFactory.INSTANCE.getCommonRepo()
+							.getNumber(CommonRepo.NUMBER_TYPE_ST));
 				orderToEdit = (StockTaking) getRepoFactory().getCommonRepo()
 						.store(st);
 				orderToEdit.create();
@@ -241,8 +255,9 @@ public class StoreSiteService extends Service {
 				trans.cancel();
 				break;
 			default:
-				throw new IllegalStateException(StockTaking.Status.values()[st.getStatus()].name() + ":"
-						+ toStatus.name());
+				throw new IllegalStateException(
+						StockTaking.Status.values()[st.getStatus()].name()
+								+ ":" + toStatus.name());
 			}
 			return trans;
 		} finally {

@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.Entity;
+import org.harper.frm.core.tools.sort.HeapSorter;
+import org.springframework.util.CollectionUtils;
 
 public class StockTaking extends Entity {
 
@@ -107,7 +109,10 @@ public class StockTaking extends Entity {
 	}
 
 	public List<StockTakingItem> getItems() {
-		return items;
+		if (CollectionUtils.isEmpty(items))
+			return items;
+		return new HeapSorter(true).sort(items, new String[] { "book.isbn" },
+				new boolean[] { true });
 	}
 
 	public void addItem(StockTakingItem item) {
@@ -147,6 +152,10 @@ public class StockTaking extends Entity {
 
 	public void setDiscrepancy(BigDecimal discrepancy) {
 		this.discrepancy = discrepancy;
+	}
+
+	public Date getDate() {
+		return null != confirmDate ? confirmDate : createDate;
 	}
 
 }
