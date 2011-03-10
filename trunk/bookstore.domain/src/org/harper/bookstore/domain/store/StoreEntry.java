@@ -3,11 +3,12 @@ package org.harper.bookstore.domain.store;
 import java.math.BigDecimal;
 
 import org.apache.commons.lang.Validate;
+import org.harper.bookstore.domain.Entity;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.profile.BookUnit;
 import org.harper.bookstore.domain.setting.StoreSettingBean;
 
-public class StoreEntry {
+public class StoreEntry extends Entity {
 
 	private int oid;
 
@@ -46,7 +47,9 @@ public class StoreEntry {
 	}
 
 	public void setCount(int count) {
+		int old = getCount();
 		this.count = count;
+		getSupport().firePropertyChange("count", old, count);
 	}
 
 	public int getOid() {
@@ -62,13 +65,15 @@ public class StoreEntry {
 	}
 
 	public void setLockedCount(int lockedCount) {
+		int old = getLockedCount();
 		this.lockedCount = lockedCount;
+		getSupport().firePropertyChange("lockedCount", old, count);
 	}
 
 	public void lock(int tryCount) {
 		if (!StoreSettingBean.get().isAllowNegativeStock())
 			Validate.isTrue(count - lockedCount >= tryCount);
-		lockedCount += tryCount;
+		setLockedCount(getLockedCount() + tryCount);
 	}
 
 	public void add(int count, BigDecimal unitPrice) {
@@ -88,14 +93,14 @@ public class StoreEntry {
 
 	public BookUnit consume(int tryCount) {
 		Validate.isTrue(tryCount <= lockedCount);
-		lockedCount -= tryCount;
-		count -= tryCount;
+		setLockedCount(getLockedCount() - tryCount);
+		setCount(getCount() - tryCount);
 		return new BookUnit(book, tryCount, unitPrice);
 	}
 
 	public void cancelLock(int tryCount) {
 		Validate.isTrue(tryCount <= lockedCount);
-		lockedCount -= tryCount;
+		setLockedCount(getLockedCount() - tryCount);
 	}
 
 	public BigDecimal getUnitPrice() {

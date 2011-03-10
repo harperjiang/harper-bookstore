@@ -4,6 +4,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import org.harper.frm.core.IAdaptor;
+import org.harper.mediator.MediatorManager;
 
 public abstract class Entity implements IAdaptor {
 
@@ -19,8 +20,8 @@ public abstract class Entity implements IAdaptor {
 
 	public Entity() {
 		super();
-
 		support = new PropertyChangeSupport(this);
+		addPropertyChangeListener(MediatorManager.probe);
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -86,6 +87,10 @@ public abstract class Entity implements IAdaptor {
 
 	public void setCreator(String creator) {
 		this.creator = creator;
+	}
+
+	protected PropertyChangeSupport getSupport() {
+		return support;
 	}
 
 }
