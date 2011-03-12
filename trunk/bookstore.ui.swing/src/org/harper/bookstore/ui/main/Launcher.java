@@ -2,6 +2,7 @@ package org.harper.bookstore.ui.main;
 
 import javax.swing.SwingUtilities;
 
+import org.harper.bookstore.MediatorInitializer;
 import org.harper.bookstore.ui.common.ProgressDialog;
 import org.harper.bookstore.ui.common.UIStandard;
 import org.harper.frm.toplink.SessionManager;
@@ -48,12 +49,15 @@ public class Launcher {
 
 		launcher.start("Initializing...");
 
-		launcher.step("Connect to Database...");
 		// Init DB connection
+		launcher.step("Connect to Database...");
 		SessionManager.getInstance().getSession();
+		
 		// TODO Get cache from server side
 		launcher.step("Refreshing local data...");
-
+		
+		launcher.step("Initializing Program Modules...");
+		MediatorInitializer.init();
 		// Start GUI
 		// Hide Dialog
 		launcher.stop();

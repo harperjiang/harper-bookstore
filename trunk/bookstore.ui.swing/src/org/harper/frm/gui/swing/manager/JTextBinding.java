@@ -1,6 +1,7 @@
 package org.harper.frm.gui.swing.manager;
 
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
@@ -27,10 +28,12 @@ public class JTextBinding extends ComponentBinding {
 	@Override
 	public void setValue(Object value) {
 		super.setValue(value);
-		JTextComponent textComp = (JTextComponent) getComponent();
+		final JTextComponent textComp = (JTextComponent) getComponent();
 		textComp.getDocument().removeDocumentListener(docListener);
+
 		if (getValue() != null)
 			textComp.setText(String.valueOf(getValue()));
+
 		textComp.getDocument().addDocumentListener(docListener);
 	}
 
@@ -39,19 +42,19 @@ public class JTextBinding extends ComponentBinding {
 		public void changedUpdate(DocumentEvent e) {
 			Object oldValue = value;
 			value = ((JTextComponent) getComponent()).getText();
-			firePropertyChange(oldValue,value);
+			firePropertyChange(oldValue, value);
 		}
 
 		public void insertUpdate(DocumentEvent e) {
 			Object oldValue = value;
 			value = ((JTextComponent) getComponent()).getText();
-			firePropertyChange(oldValue,value);
+			firePropertyChange(oldValue, value);
 		}
 
 		public void removeUpdate(DocumentEvent e) {
 			Object oldValue = value;
 			value = ((JTextComponent) getComponent()).getText();
-			firePropertyChange(oldValue,value);
+			firePropertyChange(oldValue, value);
 		}
 
 	}

@@ -3,15 +3,19 @@ package org.harper.frm.gui.swing.manager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.harper.frm.core.IAdaptor;
+import org.harper.frm.core.tools.bean.BeanAccess;
 import org.harper.frm.gui.MiscUtils;
-
+import org.springframework.util.CollectionUtils;
 
 public class BindingManager implements PropertyChangeListener {
 
@@ -75,14 +79,29 @@ public class BindingManager implements PropertyChangeListener {
 			 * controls.
 			 */
 			if (evt.getSource().equals(bean)) {
-				Vector<IBinding> bindingList = bindingMap.get(evt
-						.getPropertyName());
-				if (bindingList == null)
+				List<IBinding> bindingList = new ArrayList<IBinding>();
+				for (Entry<String, Vector<IBinding>> entry : bindingMap
+						.entrySet()) {
+					if (entry.getKey().startsWith(evt.getPropertyName()))
+						bindingList.addAll(entry.getValue());
+				}
+				if (CollectionUtils.isEmpty(bindingList))
 					return;
 				for (Iterator bi = bindingList.iterator(); bi.hasNext();) {
 					IBinding binding = (IBinding) bi.next();
-					if (!MiscUtils.equal(binding.getValue(), evt.getNewValue()))
-						binding.setValue(evt.getNewValue());
+					if (!MiscUtils.equal(binding.getValue(), evt.getNewValue())) {
+						if (binding.getAttribute()
+								.equals(evt.getPropertyName()))
+							binding.setValue(evt.getNewValue());
+						else {
+							String child = binding.getAttribute();
+							String parent = evt.getPropertyName();
+							String attr = child.substring(parent.length() + 1);
+							binding.setValue(null == evt.getNewValue() ? null
+									: BeanAccess.getInstance().get(attr,
+											evt.getNewValue()));
+						}
+					}
 				}
 			}
 		} finally {

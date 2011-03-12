@@ -1,10 +1,10 @@
 package org.harper.bookstore.ui.tbinterface;
 
 import org.harper.bookstore.domain.taobao.TradeQueryStatus;
-import org.harper.bookstore.job.JobMonitor;
-import org.harper.bookstore.job.tb.ImportTaobaoOrderJob;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.manager.BindingManager;
+import org.harper.frm.job.JobMonitor;
+import org.harper.frm.job.tb.ImportTaobaoOrderJob;
 
 public class TOPImportController extends Controller {
 
