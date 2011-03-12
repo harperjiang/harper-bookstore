@@ -30,9 +30,8 @@ public class MemoryTodoRepo implements TodoRepo {
 	}
 
 	@Override
-	public List<TodoItem> findValidTodoItems(Privilege filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public List findValidTodoItems(Privilege filter) {
+		return getCommonRepo().get(TodoItem.class);
 	}
 
 }

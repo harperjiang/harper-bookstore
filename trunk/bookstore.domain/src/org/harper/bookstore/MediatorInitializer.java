@@ -1,5 +1,6 @@
 package org.harper.bookstore;
 
+import org.harper.bookstore.domain.store.StockAlert;
 import org.harper.bookstore.domain.store.StoreEntry;
 import org.harper.bookstore.job.MonitorStockJob;
 import org.harper.frm.job.mediator.MediatorJobListener;
@@ -20,12 +21,19 @@ public class MediatorInitializer {
 				.getSession()
 				.getEventManager()
 				.addListener(new MediatorSessionEventListener(StoreEntry.class));
+		SessionManager
+				.getInstance()
+				.getSession()
+				.getEventManager()
+				.addListener(new MediatorSessionEventListener(StockAlert.class));
 	}
 
 	protected static void initReceiver() {
 		MediatorJobListener stockMonitorListener = new MediatorJobListener(
 				new MonitorStockJob());
 		MediatorManager.getInstance().addListener(StoreEntry.class.getName(),
+				stockMonitorListener);
+		MediatorManager.getInstance().addListener(StockAlert.class.getName(),
 				stockMonitorListener);
 	}
 }
