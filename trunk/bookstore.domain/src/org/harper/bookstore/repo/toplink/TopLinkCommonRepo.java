@@ -8,7 +8,6 @@ import oracle.toplink.sessions.UnitOfWork;
 import org.apache.commons.lang.StringUtils;
 import org.harper.bookstore.repo.CommonRepo;
 import org.harper.bookstore.service.TransactionContext;
-import org.harper.frm.toplink.SessionManager;
 
 public class TopLinkCommonRepo extends TopLinkRepo implements CommonRepo {
 
@@ -102,5 +101,11 @@ public class TopLinkCommonRepo extends TopLinkRepo implements CommonRepo {
 		UnitOfWork uow = (UnitOfWork) TransactionContext.getSession();
 		for (Object element : cols)
 			uow.deepMergeClone(element);
+	}
+
+	@Override
+	public Object remove(Object object) {
+		return ((UnitOfWork) TransactionContext.getSession())
+				.deleteObject(object);
 	}
 }

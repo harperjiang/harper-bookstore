@@ -14,6 +14,7 @@ import oracle.toplink.queryframework.SQLCall;
 import oracle.toplink.sessions.Session;
 
 import org.harper.bookstore.domain.profile.Book;
+import org.harper.bookstore.domain.store.StockAlert;
 import org.harper.bookstore.domain.store.StockTaking;
 import org.harper.bookstore.domain.store.StockTaking.Status;
 import org.harper.bookstore.domain.store.StoreEntry;
@@ -110,6 +111,18 @@ public class TopLinkStoreRepo extends TopLinkRepo implements StoreRepo {
 		raq.setSelectionCriteria(exp);
 		raq.addOrdering(builder.get("createDate").descending());
 		return (List) TransactionContext.getSession().executeQuery(raq);
+	}
+
+	@Override
+	public List<StockAlert> getStockAlerts(StoreSite site, Book book) {
+		ExpressionBuilder builder = new ExpressionBuilder();
+		Expression exp = builder;
+		if (null != site)
+			exp = exp.and(builder.getField("site").equal(site.getOid()));
+		if (null != book)
+			exp = exp.and(builder.getField("book_oid").equal(book.getOid()));
+		return (List) TransactionContext.getSession().readAllObjects(
+				StockAlert.class, exp);
 	}
 
 }

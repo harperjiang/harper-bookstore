@@ -34,10 +34,16 @@ public class StoreSite extends Entity {
 	}
 
 	public void setEntries(List<StoreEntry> entries) {
-		this.entries = entries;
+		getEntries().clear();
 		if (null != entries)
 			for (StoreEntry entry : entries)
-				entry.setSite(this);
+				addEntry(entry);
+	}
+
+	public void addEntry(StoreEntry newEntry) {
+		getEntries().add(newEntry);
+		newEntry.setSite(this);
+		fireNewItem(newEntry);
 	}
 
 	public int getPrivilege() {
@@ -79,7 +85,7 @@ public class StoreSite extends Entity {
 			entry.setBook(book);
 			entry.setSite(this);
 			entry.setUnitPrice(unitPrice);
-			getEntries().add(entry);
+			addEntry(entry);
 		}
 		entry.add(count, unitPrice);
 		return entry;
