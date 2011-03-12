@@ -6,6 +6,7 @@ import org.harper.bookstore.repo.OrderRepo;
 import org.harper.bookstore.repo.ProfileRepo;
 import org.harper.bookstore.repo.RepoFactory;
 import org.harper.bookstore.repo.StoreRepo;
+import org.harper.bookstore.repo.TodoRepo;
 import org.harper.bookstore.repo.toplink.TopLinkCommonRepo;
 import org.harper.bookstore.repo.toplink.TopLinkLibraryRepo;
 import org.harper.bookstore.repo.toplink.TopLinkOrderRepo;
@@ -41,6 +42,12 @@ public class TopBufferRepoFactory implements RepoFactory {
 	@Override
 	public LibraryRepo getLibraryRepo() {
 		return new TopLinkLibraryRepo();
+	}
+
+	@Override
+	public TodoRepo getTodoRepo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

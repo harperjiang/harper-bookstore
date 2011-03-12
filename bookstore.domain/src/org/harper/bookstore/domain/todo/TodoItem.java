@@ -23,6 +23,8 @@ public class TodoItem extends Entity {
 	private Date resolveDate;
 
 	private String subject;
+	
+	private String key;
 
 	private String content;
 
@@ -88,6 +90,14 @@ public class TodoItem extends Entity {
 
 	public void setSolution(String solution) {
 		this.solution = solution;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 }

@@ -14,6 +14,11 @@ public class MediatorJobListener implements PropertyChangeListener {
 	public void setJob(MediatorJob job) {
 		this.job = job;
 	}
+	
+	public MediatorJobListener(MediatorJob job) {
+		super();
+		setJob(job);
+	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {

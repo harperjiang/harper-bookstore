@@ -4,15 +4,10 @@ import java.beans.PropertyChangeEvent;
 
 import org.harper.frm.job.Job;
 
-public abstract class MediatorJob implements Job {
-	
-	private PropertyChangeEvent triggerEvent;
+public interface MediatorJob extends Job {
 
-	public PropertyChangeEvent getTriggerEvent() {
-		return triggerEvent;
-	}
+	public PropertyChangeEvent getTriggerEvent();
 
-	public void setTriggerEvent(PropertyChangeEvent triggerEvent) {
-		this.triggerEvent = triggerEvent;
-	}
+	public void setTriggerEvent(PropertyChangeEvent triggerEvent);
+
 }

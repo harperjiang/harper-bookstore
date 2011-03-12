@@ -16,6 +16,8 @@ public interface RepoFactory {
 	
 	public LibraryRepo getLibraryRepo();
 	
+	public TodoRepo getTodoRepo();
+	
 	public static RepoFactory INSTANCE = new TopLinkRepoFactory();
 	
 //	public static RepoFactory INSTANCE = new MemoryRepoFactory();

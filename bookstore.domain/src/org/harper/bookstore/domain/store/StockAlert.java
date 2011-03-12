@@ -13,36 +13,38 @@ public class StockAlert extends Entity {
 
 	private int errorThreshold;
 
-	protected StoreSite getSite() {
+	public StoreSite getSite() {
 		return site;
 	}
 
-	protected void setSite(StoreSite site) {
+	public void setSite(StoreSite site) {
 		this.site = site;
 	}
 
-	protected Book getBook() {
+	public Book getBook() {
 		return book;
 	}
 
-	protected void setBook(Book book) {
+	public void setBook(Book book) {
 		this.book = book;
 	}
 
-	protected int getWarnThreshold() {
+	public int getWarnThreshold() {
 		return warnThreshold;
 	}
 
-	protected void setWarnThreshold(int warnThreshold) {
+	public void setWarnThreshold(int warnThreshold) {
 		this.warnThreshold = warnThreshold;
 	}
 
-	protected int getErrorThreshold() {
+	public int getErrorThreshold() {
 		return errorThreshold;
 	}
 
-	protected void setErrorThreshold(int errorThreshold) {
+	public void setErrorThreshold(int errorThreshold) {
 		this.errorThreshold = errorThreshold;
 	}
+
+	
 
 }

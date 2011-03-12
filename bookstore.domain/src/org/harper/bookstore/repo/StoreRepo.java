@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.harper.bookstore.domain.profile.Book;
+import org.harper.bookstore.domain.store.StockAlert;
 import org.harper.bookstore.domain.store.StockTaking;
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.domain.store.Transfer;
@@ -24,4 +25,6 @@ public interface StoreRepo {
 
 	public List<StockTaking> searchStockTaking(Date from, Date to,
 			StoreSite site, StockTaking.Status status);
+
+	public List<StockAlert> getStockAlerts(StoreSite site, Book book);
 }

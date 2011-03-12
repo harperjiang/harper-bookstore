@@ -6,6 +6,7 @@ import org.harper.bookstore.repo.OrderRepo;
 import org.harper.bookstore.repo.ProfileRepo;
 import org.harper.bookstore.repo.RepoFactory;
 import org.harper.bookstore.repo.StoreRepo;
+import org.harper.bookstore.repo.TodoRepo;
 
 public class MemoryRepoFactory implements RepoFactory {
 
@@ -36,6 +37,12 @@ public class MemoryRepoFactory implements RepoFactory {
 
 	@Override
 	public LibraryRepo getLibraryRepo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TodoRepo getTodoRepo() {
 		// TODO Auto-generated method stub
 		return null;
 	}

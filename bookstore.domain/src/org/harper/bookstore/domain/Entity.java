@@ -1,5 +1,6 @@
 package org.harper.bookstore.domain;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -21,7 +22,6 @@ public abstract class Entity implements IAdaptor {
 	public Entity() {
 		super();
 		support = new PropertyChangeSupport(this);
-		addPropertyChangeListener(MediatorManager.probe);
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -91,6 +91,16 @@ public abstract class Entity implements IAdaptor {
 
 	protected PropertyChangeSupport getSupport() {
 		return support;
+	}
+	
+	protected void fireNewItem(Object item) {
+		PropertyChangeEvent event = new PropertyChangeEvent(item,MediatorManager.PROPERTY_NEW,null,item);
+		getSupport().firePropertyChange(event);
+	}
+	
+	protected void fireDeleteItem(Object item) {
+		PropertyChangeEvent event = new PropertyChangeEvent(item,MediatorManager.PROPERTY_DELETE,null,item);
+		getSupport().firePropertyChange(event);
 	}
 
 }

@@ -14,6 +14,7 @@ import oracle.toplink.sessions.DatabaseLogin;
 import org.harper.bookstore.domain.deliver.ExpressCompany;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.profile.BookSet;
+import org.harper.frm.job.mediator.MediatorDescriptorEventListener;
 import org.harper.frm.toplink.EnumConverter;
 
 /**
@@ -955,6 +956,7 @@ public ClassDescriptor buildStoreEntryDescriptor() {
 	
 	
 	// Event Manager.
+	descriptor.getDescriptorEventManager().addListener(MediatorDescriptorEventListener.INSTANCE);
 	
 	// Mappings.
 	DirectToFieldMapping countMapping = new DirectToFieldMapping();
@@ -1502,6 +1504,7 @@ public ClassDescriptor buildTodoItemDescriptor() {
 	descriptor.addDirectMapping("oid", "todo_item.oid");
 	descriptor.addDirectMapping("status", "todo_item.status");
 	descriptor.addDirectMapping("subject", "todo_item.subject");
+	descriptor.addDirectMapping("key","todo_item.biz_key");
 	descriptor.addDirectMapping("content", "todo_item.content");
 	descriptor.addDirectMapping("solution", "todo_item.solution");
 	descriptor.addDirectMapping("privilege", "todo_item.privilege");

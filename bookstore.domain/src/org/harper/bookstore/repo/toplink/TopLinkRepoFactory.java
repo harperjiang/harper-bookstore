@@ -6,6 +6,7 @@ import org.harper.bookstore.repo.OrderRepo;
 import org.harper.bookstore.repo.ProfileRepo;
 import org.harper.bookstore.repo.RepoFactory;
 import org.harper.bookstore.repo.StoreRepo;
+import org.harper.bookstore.repo.TodoRepo;
 
 public class TopLinkRepoFactory implements RepoFactory {
 
@@ -15,17 +16,23 @@ public class TopLinkRepoFactory implements RepoFactory {
 	}
 
 	private StoreRepo storeRepo;
-	
+
+	private CommonRepo commonRepo;
+
+	private TodoRepo todoRepo;
+
 	@Override
 	public StoreRepo getStoreRepo() {
-		if(null == storeRepo)
-			storeRepo =  new TopLinkStoreRepo();
+		if (null == storeRepo)
+			storeRepo = new TopLinkStoreRepo();
 		return storeRepo;
 	}
 
 	@Override
 	public CommonRepo getCommonRepo() {
-		return new TopLinkCommonRepo();
+		if (null == commonRepo)
+			commonRepo = new TopLinkCommonRepo();
+		return commonRepo;
 	}
 
 	@Override
@@ -36,6 +43,13 @@ public class TopLinkRepoFactory implements RepoFactory {
 	@Override
 	public LibraryRepo getLibraryRepo() {
 		return new TopLinkLibraryRepo();
+	}
+
+	@Override
+	public TodoRepo getTodoRepo() {
+		if (null == todoRepo)
+			todoRepo = new TopLinkTodoRepo();
+		return todoRepo;
 	}
 
 }

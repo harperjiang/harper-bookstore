@@ -19,4 +19,6 @@ public interface CommonRepo extends Repo{
 	public void store(Collection<?> cols);
 	
 	public <T> T store(T object);
+	
+	public <T> T remove(T object);
 }
