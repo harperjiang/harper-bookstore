@@ -1638,4 +1638,52 @@ public ClassDescriptor buildStockTakingItemDescriptor() {
 	return descriptor;
 }
 
+public ClassDescriptor buildStockAlertDescriptor() {
+	RelationalDescriptor descriptor = new RelationalDescriptor();
+	descriptor.setJavaClass(org.harper.bookstore.domain.store.StockAlert.class);
+	descriptor.addTableName("store_stock_alert");
+	descriptor.addPrimaryKeyFieldName("store_stock_alert.oid");
+	
+	// Descriptor Properties.
+	descriptor.useSoftCacheWeakIdentityMap();
+	descriptor.setIdentityMapSize(100);
+	descriptor.useRemoteSoftCacheWeakIdentityMap();
+	descriptor.setRemoteIdentityMapSize(100);
+	descriptor.setSequenceNumberFieldName("store_stock_alert.oid");
+	descriptor.setSequenceNumberName("store_stock_alert");
+	descriptor.setAlias("StockAlert");
+	
+	
+	// Query Manager.
+	descriptor.getQueryManager().checkCacheForDoesExist();
+	
+	
+	// Event Manager.
+	
+	// Mappings.
+	descriptor.addDirectMapping("warnThreshold","store_stock_alert.warn_threshold");
+	descriptor.addDirectMapping("errorThreshold","store_stock_alert.error_threshold");
+	
+	DirectToFieldMapping oidMapping = new DirectToFieldMapping();
+	oidMapping.setAttributeName("oid");
+	oidMapping.setFieldName("store_stock_alert.oid");
+	descriptor.addMapping(oidMapping);
+	
+	OneToOneMapping siteMapping = new OneToOneMapping();
+	siteMapping.setAttributeName("site");
+	siteMapping.setReferenceClass(org.harper.bookstore.domain.store.StoreSite.class);
+	siteMapping.dontUseIndirection();
+	siteMapping.addForeignKeyFieldName("store_stock_alert.site", "store_site.oid");
+	descriptor.addMapping(siteMapping);
+	
+	OneToOneMapping bookMapping = new OneToOneMapping();
+	bookMapping.setAttributeName("book");
+	bookMapping.setReferenceClass(org.harper.bookstore.domain.profile.Book.class);
+	bookMapping.dontUseIndirection();
+	bookMapping.addForeignKeyFieldName("store_stock_alert.book_oid", "profile_book.oid");
+	descriptor.addMapping(bookMapping);
+	
+	return descriptor;
+}
+
 }
