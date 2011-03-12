@@ -1,4 +1,4 @@
-package org.harper.bookstore.job.mediator;
+package org.harper.frm.job.mediator;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
