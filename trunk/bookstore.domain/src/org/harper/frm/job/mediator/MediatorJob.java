@@ -1,8 +1,8 @@
-package org.harper.bookstore.job.mediator;
+package org.harper.frm.job.mediator;
 
 import java.beans.PropertyChangeEvent;
 
-import org.harper.bookstore.job.Job;
+import org.harper.frm.job.Job;
 
 public abstract class MediatorJob implements Job {
 	

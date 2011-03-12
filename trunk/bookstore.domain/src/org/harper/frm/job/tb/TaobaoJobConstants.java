@@ -1,4 +1,4 @@
-package org.harper.bookstore.job.tb;
+package org.harper.frm.job.tb;
 
 public interface TaobaoJobConstants {
 

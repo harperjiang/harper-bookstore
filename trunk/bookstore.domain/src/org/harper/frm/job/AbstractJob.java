@@ -1,4 +1,4 @@
-package org.harper.bookstore.job;
+package org.harper.frm.job;
 
 import oracle.toplink.sessions.UnitOfWork;
 
