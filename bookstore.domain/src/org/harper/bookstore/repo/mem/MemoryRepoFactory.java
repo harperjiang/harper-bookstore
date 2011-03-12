@@ -43,8 +43,7 @@ public class MemoryRepoFactory implements RepoFactory {
 
 	@Override
 	public TodoRepo getTodoRepo() {
-		// TODO Auto-generated method stub
-		return null;
+		return new MemoryTodoRepo();
 	}
 
 }

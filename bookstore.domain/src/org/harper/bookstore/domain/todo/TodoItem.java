@@ -23,7 +23,7 @@ public class TodoItem extends Entity {
 	private Date resolveDate;
 
 	private String subject;
-	
+
 	private String key;
 
 	private String content;
