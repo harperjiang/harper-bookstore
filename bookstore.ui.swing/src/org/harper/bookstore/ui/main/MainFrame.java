@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JToolBar;
 
+import org.harper.bookstore.ui.common.UIStandard;
 import org.harper.bookstore.ui.delivery.DOController;
 import org.harper.bookstore.ui.delivery.QueryDOController;
 import org.harper.bookstore.ui.library.BorrowBookController;
@@ -82,9 +83,9 @@ public class MainFrame extends JFrame {
 		reportToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.view_transfer"), //$NON-NLS-1$
 				ViewTransferController.class));
-		reportToolBar.add(new ControllerAction("Stock Taking",
+		reportToolBar.add(new ControllerAction(Messages.getString("MainFrame.stock_taking"), //$NON-NLS-1$
 				StockTakingController.class));
-		reportToolBar.add(new ControllerAction("View Stock Taking",
+		reportToolBar.add(new ControllerAction(Messages.getString("MainFrame.view_stock_taking"), //$NON-NLS-1$
 				QueryStockTakingController.class));
 		reportToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.manage_store"), //$NON-NLS-1$
@@ -138,12 +139,18 @@ public class MainFrame extends JFrame {
 		printToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.set_contact_info"), //$NON-NLS-1$
 				ContactInfoController.class));
-
+		this.setSize(getPreferredSize());
+		UIStandard.standardFrame(this);
 		setVisible(true);
 
 	}
 
 	public static void main(String[] args) {
+		// UIManager.put("InternalFrame", new Font("隶书",Font.PLAIN,24));
+		// for(Entry entry :UIManager.getLookAndFeelDefaults().entrySet()) {
+		// if(String.valueOf(entry.getKey()).contains("font"))
+		// System.out.println(entry.getKey());
+		// }
 		new MainFrame();
 	}
 }
