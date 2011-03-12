@@ -2,7 +2,7 @@ package org.harper.bookstore.ui.common;
 
 import javax.swing.JProgressBar;
 
-import org.harper.bookstore.job.JobMonitor;
+import org.harper.frm.job.JobMonitor;
 
 public class JProgressBarJobMonitor implements JobMonitor {
 

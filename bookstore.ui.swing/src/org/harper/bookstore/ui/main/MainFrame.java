@@ -28,6 +28,7 @@ import org.harper.bookstore.ui.store.TransferPlanController;
 import org.harper.bookstore.ui.store.ViewTransferController;
 import org.harper.bookstore.ui.tbinterface.TOPImportController;
 import org.harper.bookstore.ui.tbinterface.TaobaoCSVImportController;
+import org.harper.bookstore.ui.todo.ViewTodoController;
 
 public class MainFrame extends JFrame {
 
@@ -41,7 +42,7 @@ public class MainFrame extends JFrame {
 		setTitle(Messages.getString("MainFrame.title")); //$NON-NLS-1$
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		setLayout(new GridLayout(7, 1));
+		setLayout(new GridLayout(8, 1));
 		setSize(new Dimension(450, 300));
 		setResizable(false);
 
@@ -83,9 +84,11 @@ public class MainFrame extends JFrame {
 		reportToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.view_transfer"), //$NON-NLS-1$
 				ViewTransferController.class));
-		reportToolBar.add(new ControllerAction(Messages.getString("MainFrame.stock_taking"), //$NON-NLS-1$
+		reportToolBar.add(new ControllerAction(Messages
+				.getString("MainFrame.stock_taking"), //$NON-NLS-1$
 				StockTakingController.class));
-		reportToolBar.add(new ControllerAction(Messages.getString("MainFrame.view_stock_taking"), //$NON-NLS-1$
+		reportToolBar.add(new ControllerAction(Messages
+				.getString("MainFrame.view_stock_taking"), //$NON-NLS-1$
 				QueryStockTakingController.class));
 		reportToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.manage_store"), //$NON-NLS-1$
@@ -101,6 +104,13 @@ public class MainFrame extends JFrame {
 		profileToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.book_set_manage"), //$NON-NLS-1$
 				BookSetManageController.class));
+
+		JToolBar todoToolBar = new JToolBar();
+		todoToolBar.setFloatable(false);
+		add(todoToolBar);
+
+		todoToolBar.add(new ControllerAction(Messages.getString("MainFrame.view_todo"), //$NON-NLS-1$
+				ViewTodoController.class));
 
 		JToolBar libraryToolBar = new JToolBar();
 		libraryToolBar.setFloatable(false);
