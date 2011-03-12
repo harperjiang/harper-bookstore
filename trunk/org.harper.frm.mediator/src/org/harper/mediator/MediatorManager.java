@@ -70,4 +70,8 @@ public class MediatorManager implements Mediator {
 					evt.getSource().getClass().getName(), evt);
 		}
 	};
+
+	public static final String PROPERTY_NEW = "new";
+
+	public static final String PROPERTY_DELETE = "delete";
 }
