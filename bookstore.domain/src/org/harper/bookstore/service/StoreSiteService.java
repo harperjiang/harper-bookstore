@@ -88,9 +88,8 @@ public class StoreSiteService extends Service {
 
 			ListPrice listPrice = getRepoFactory().getOrderRepo().getListPrice(
 					book);
-			if (null != listPrice) {
-				bean.setListPrice(listPrice.getPrice());
-			}
+
+			bean.setListPrice(listPrice.getPrice());
 
 			if (book instanceof BookSet) {
 				return bean;
