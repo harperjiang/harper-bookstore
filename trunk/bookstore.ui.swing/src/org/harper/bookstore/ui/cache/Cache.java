@@ -29,7 +29,7 @@ public class Cache {
 				validSites.add(site);
 			}
 			if (site.isValid() && site.isForOutput()) {
-				validSites.add(site);
+				validSellSites.add(site);
 			}
 		}
 	}
