@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.commons.lang.StringUtils;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.store.StockAlert;
 import org.harper.bookstore.domain.store.StoreSite;
@@ -132,6 +133,14 @@ public class NewStockAlertDialog extends JDialog {
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Validate
+				String msg = null;
+				if (!StringUtils.isEmpty(msg = validateBean())) {
+					JOptionPane
+							.showMessageDialog(NewStockAlertDialog.this, msg,
+									"Validation Failed",
+									JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				okay = true;
 				NewStockAlertDialog.this.dispose();
 			}
@@ -194,4 +203,7 @@ public class NewStockAlertDialog extends JDialog {
 		return bookNameField;
 	}
 
+	protected String validateBean() {
+		return null;
+	}
 }

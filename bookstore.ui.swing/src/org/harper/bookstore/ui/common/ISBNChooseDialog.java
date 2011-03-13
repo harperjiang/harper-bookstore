@@ -52,7 +52,8 @@ public class ISBNChooseDialog extends JDialog {
 		setSize(400, 450);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+		UIStandard.standardDialog(this);
+		
 		bookTable = new JTable();
 		bookTable
 				.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
