@@ -34,7 +34,7 @@ public class MediatorSessionEventListener extends SessionEventAdapter {
 		}
 		Enumeration<Object> dels = uow.getDeletedObjects().keys();
 		while (dels.hasMoreElements()) {
-			Object next = newe.nextElement();
+			Object next = dels.nextElement();
 			if (entityClass.isInstance(next)) {
 				TransactionContext.getMediatorTransaction().addEvent(
 						new Entry(entityClass.getName(),
@@ -45,7 +45,7 @@ public class MediatorSessionEventListener extends SessionEventAdapter {
 		Enumeration<Object> updates = uow.getChanges()
 				.getCloneToObjectChangeSet().keys();
 		while (updates.hasMoreElements()) {
-			Object next = newe.nextElement();
+			Object next = updates.nextElement();
 			if (entityClass.isInstance(next)) {
 				TransactionContext.getMediatorTransaction().addEvent(
 						new Entry(entityClass.getName(),

@@ -23,6 +23,7 @@ import org.harper.bookstore.service.bean.BookReportItemBean;
 import org.harper.bookstore.service.bean.BookReportItemBean2;
 import org.harper.frm.ValidateException;
 import org.harper.frm.core.tools.sort.HeapSorter;
+import org.springframework.util.CollectionUtils;
 
 public class StoreSiteService extends Service {
 
@@ -60,6 +61,24 @@ public class StoreSiteService extends Service {
 			return getRepoFactory().getStoreRepo().getStockAlerts(site, book);
 		} finally {
 			releaseTransaction();
+		}
+	}
+
+	public StockAlert saveAlert(StockAlert alert) {
+		startTransaction();
+		try {
+			List<StockAlert> existed = getAlerts(alert.getSite(),
+					alert.getBook());
+			if (!CollectionUtils.isEmpty(existed) && !existed.contains(alert))
+				throw new IllegalArgumentException("Same Alert already existed");
+			StockAlert result = getRepoFactory().getCommonRepo().store(alert);
+			commitTransaction();
+			return result;
+		} catch (Exception e) {
+			releaseTransaction();
+			if (e instanceof RuntimeException)
+				throw (RuntimeException) e;
+			throw new RuntimeException(e);
 		}
 	}
 
