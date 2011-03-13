@@ -3,6 +3,7 @@ package org.harper.bookstore.ui.main;
 import javax.swing.SwingUtilities;
 
 import org.harper.bookstore.MediatorInitializer;
+import org.harper.bookstore.ui.cache.Cache;
 import org.harper.bookstore.ui.common.ProgressDialog;
 import org.harper.bookstore.ui.common.UIStandard;
 import org.harper.frm.toplink.SessionManager;
@@ -44,7 +45,8 @@ public class Launcher {
 	}
 
 	public static void main(String[] args) throws Exception {
-
+		UIStandard.setDefaultFont();
+		
 		Launcher launcher = new Launcher();
 
 		launcher.start("Initializing...");
@@ -55,14 +57,15 @@ public class Launcher {
 		
 		// TODO Get cache from server side
 		launcher.step("Refreshing local data...");
+		Cache.getInstance().load();
 		
-		launcher.step("Initializing Program Modules...");
+		
+		launcher.step("Initializing Modules...");
 		MediatorInitializer.init();
 		// Start GUI
 		// Hide Dialog
 		launcher.stop();
 
-		UIStandard.setDefaultFont();
 		new MainFrame();
 	}
 }

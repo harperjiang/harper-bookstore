@@ -26,7 +26,7 @@ import org.harper.bookstore.ui.common.ISBNTextField;
 import org.harper.bookstore.ui.common.ISBNTextField.Callback;
 import org.harper.bookstore.ui.common.SiteComboBox;
 import org.harper.bookstore.ui.common.UIStandard;
-import org.harper.frm.gui.swing.comp.textfield.NumTextField;
+import org.harper.frm.gui.swing.comp.textfield.IntTextField;
 import org.harper.frm.gui.swing.manager.BindingManager;
 import org.harper.frm.gui.swing.manager.JTextBinding;
 import org.springframework.util.CollectionUtils;
@@ -52,9 +52,9 @@ public class NewStockAlertDialog extends JDialog {
 
 	private JComboBox siteCombo;
 
-	private NumTextField warnThresholdField;
+	private IntTextField warnThresholdField;
 
-	private NumTextField errorThresholdField;
+	private IntTextField errorThresholdField;
 
 	public NewStockAlertDialog(JFrame parent, StockAlert newbean) {
 		super(parent);
@@ -118,11 +118,11 @@ public class NewStockAlertDialog extends JDialog {
 		centerPanel.add(siteCombo);
 
 		centerPanel.add(new JLabel("Warn Threshold"));
-		warnThresholdField = new NumTextField();
+		warnThresholdField = new IntTextField();
 		centerPanel.add(warnThresholdField);
 
 		centerPanel.add(new JLabel("Error Threshold"));
-		errorThresholdField = new NumTextField();
+		errorThresholdField = new IntTextField();
 		centerPanel.add(errorThresholdField);
 
 		JPanel buttonPanel = new JPanel();
@@ -167,6 +167,10 @@ public class NewStockAlertDialog extends JDialog {
 
 		manager.addBinding(new JTextBinding(bookIsbnField, "book.isbn"));
 		manager.addBinding(new JTextBinding(bookNameField, "book.name"));
+		manager.addBinding(warnThresholdField.new NumTextBinding(
+				"warnThreshold"));
+		manager.addBinding(errorThresholdField.new NumTextBinding(
+				"errorThreshold"));
 
 		manager.loadAll();
 	}
@@ -187,11 +191,11 @@ public class NewStockAlertDialog extends JDialog {
 		return bookField;
 	}
 
-	public NumTextField getWarnThresholdField() {
+	public IntTextField getWarnThresholdField() {
 		return warnThresholdField;
 	}
 
-	public NumTextField getErrorThresholdField() {
+	public IntTextField getErrorThresholdField() {
 		return errorThresholdField;
 	}
 
@@ -204,6 +208,16 @@ public class NewStockAlertDialog extends JDialog {
 	}
 
 	protected String validateBean() {
+		if (bean.getWarnThreshold() <= 0)
+			return "Warn Threshold should be greater than 0";
+		if (bean.getErrorThreshold() <= 0)
+			return "Error Threshold should be greater than 0";
+		if (bean.getWarnThreshold() < bean.getErrorThreshold())
+			return "Warning Threshold should be greater than Error Threshold";
 		return null;
+	}
+
+	public StockAlert getBean() {
+		return bean;
 	}
 }
