@@ -11,6 +11,7 @@ import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.order.ListPrice;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.profile.BookSet;
+import org.harper.bookstore.domain.store.StockAlert;
 import org.harper.bookstore.domain.store.StockTaking;
 import org.harper.bookstore.domain.store.StoreEntry;
 import org.harper.bookstore.domain.store.StoreSite;
@@ -49,6 +50,15 @@ public class StoreSiteService extends Service {
 			getRepoFactory().getCommonRepo().store(sites);
 			commitTransaction();
 		} catch (Exception e) {
+			releaseTransaction();
+		}
+	}
+
+	public List<StockAlert> getAlerts(StoreSite site, Book book) {
+		startTransaction();
+		try {
+			return getRepoFactory().getStoreRepo().getStockAlerts(site, book);
+		} finally {
 			releaseTransaction();
 		}
 	}
