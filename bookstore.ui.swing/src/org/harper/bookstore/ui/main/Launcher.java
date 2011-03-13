@@ -1,7 +1,8 @@
 package org.harper.bookstore.ui.main;
 
+import javax.swing.SwingUtilities;
+
 import org.harper.bookstore.MediatorInitializer;
-import org.harper.bookstore.ui.cache.Cache;
 import org.harper.bookstore.ui.common.ProgressDialog;
 import org.harper.bookstore.ui.common.UIStandard;
 import org.harper.frm.toplink.SessionManager;
@@ -15,60 +16,53 @@ public class Launcher {
 	}
 
 	public void start(final String text) {
-		dialog.setText(text);
-		dialog.setVisible(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				dialog.setText(text);
+				dialog.setVisible(true);
+			}
+		});
 	}
 
-	public void step(final String text, Runnable run) {
-		if (dialog.isVisible()) {
-			dialog.setText(text);
-		}
-		Thread newThread = new Thread(run);
-		newThread.start();
-		try {
-			newThread.join();
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+	public void step(final String text) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				if (dialog.isVisible()) {
+					dialog.setText(text);
+				}
+			}
+		});
 	}
 
 	public void stop() {
-
-		if (dialog.isActive())
-			dialog.dispose();
-
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				if (dialog.isActive())
+					dialog.dispose();
+			}
+		});
 	}
 
 	public static void main(String[] args) throws Exception {
-		UIStandard.setDefaultFont();
 
 		Launcher launcher = new Launcher();
 
 		launcher.start("Initializing...");
 
 		// Init DB connection
-		launcher.step("Connecting to Database...", new Runnable() {
-			public void run() {
-				SessionManager.getInstance().getSession();
-			}
-		});
-
+		launcher.step("Connect to Database...");
+		SessionManager.getInstance().getSession();
+		
 		// TODO Get cache from server side
-		launcher.step("Refreshing local data...", new Runnable() {
-			public void run() {
-				Cache.getInstance().load();
-			}
-		});
-
-		launcher.step("Initializing Program Modules...", new Runnable() {
-			public void run() {
-				MediatorInitializer.init();
-			}
-		});
+		launcher.step("Refreshing local data...");
+		
+		launcher.step("Initializing Program Modules...");
+		MediatorInitializer.init();
 		// Start GUI
 		// Hide Dialog
 		launcher.stop();
 
+		UIStandard.setDefaultFont();
 		new MainFrame();
 	}
 }

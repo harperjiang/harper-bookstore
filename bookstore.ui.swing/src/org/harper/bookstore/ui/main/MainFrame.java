@@ -23,6 +23,7 @@ import org.harper.bookstore.ui.setting.ContactInfoController;
 import org.harper.bookstore.ui.store.ManageStoreController;
 import org.harper.bookstore.ui.store.QueryStockTakingController;
 import org.harper.bookstore.ui.store.SiteInfoController;
+import org.harper.bookstore.ui.store.StockAlertController;
 import org.harper.bookstore.ui.store.StockTakingController;
 import org.harper.bookstore.ui.store.TransferPlanController;
 import org.harper.bookstore.ui.store.ViewTransferController;
@@ -75,19 +76,20 @@ public class MainFrame extends JFrame {
 		JToolBar reportToolBar = new JToolBar();
 		reportToolBar.setFloatable(false);
 		add(reportToolBar);
-		
+
 		reportToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.store_info"), //$NON-NLS-1$
 				SiteInfoController.class));
 		reportToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.manage_store"), //$NON-NLS-1$
 				ManageStoreController.class));
-		
+		reportToolBar.add(new ControllerAction("Set Stock Alert",
+				StockAlertController.class));
 
 		JToolBar storeToolBar = new JToolBar();
 		storeToolBar.setFloatable(false);
 		add(storeToolBar);
-		
+
 		storeToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.store_transfer"), //$NON-NLS-1$
 				TransferPlanController.class));
@@ -100,7 +102,7 @@ public class MainFrame extends JFrame {
 		storeToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.view_stock_taking"), //$NON-NLS-1$
 				QueryStockTakingController.class));
-		
+
 		JToolBar profileToolBar = new JToolBar();
 		profileToolBar.setFloatable(false);
 		add(profileToolBar);
@@ -116,7 +118,8 @@ public class MainFrame extends JFrame {
 		todoToolBar.setFloatable(false);
 		add(todoToolBar);
 
-		todoToolBar.add(new ControllerAction(Messages.getString("MainFrame.view_todo"), //$NON-NLS-1$
+		todoToolBar.add(new ControllerAction(Messages
+				.getString("MainFrame.view_todo"), //$NON-NLS-1$
 				ViewTodoController.class));
 
 		JToolBar libraryToolBar = new JToolBar();
