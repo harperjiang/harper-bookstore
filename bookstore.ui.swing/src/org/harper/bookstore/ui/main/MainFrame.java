@@ -42,7 +42,7 @@ public class MainFrame extends JFrame {
 		setTitle(Messages.getString("MainFrame.title")); //$NON-NLS-1$
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		setLayout(new GridLayout(8, 1));
+		setLayout(new GridLayout(9, 1));
 		setSize(new Dimension(450, 300));
 		setResizable(false);
 
@@ -75,25 +75,32 @@ public class MainFrame extends JFrame {
 		JToolBar reportToolBar = new JToolBar();
 		reportToolBar.setFloatable(false);
 		add(reportToolBar);
+		
 		reportToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.store_info"), //$NON-NLS-1$
 				SiteInfoController.class));
 		reportToolBar.add(new ControllerAction(Messages
-				.getString("MainFrame.store_transfer"), //$NON-NLS-1$
-				TransferPlanController.class));
-		reportToolBar.add(new ControllerAction(Messages
-				.getString("MainFrame.view_transfer"), //$NON-NLS-1$
-				ViewTransferController.class));
-		reportToolBar.add(new ControllerAction(Messages
-				.getString("MainFrame.stock_taking"), //$NON-NLS-1$
-				StockTakingController.class));
-		reportToolBar.add(new ControllerAction(Messages
-				.getString("MainFrame.view_stock_taking"), //$NON-NLS-1$
-				QueryStockTakingController.class));
-		reportToolBar.add(new ControllerAction(Messages
 				.getString("MainFrame.manage_store"), //$NON-NLS-1$
 				ManageStoreController.class));
+		
 
+		JToolBar storeToolBar = new JToolBar();
+		storeToolBar.setFloatable(false);
+		add(storeToolBar);
+		
+		storeToolBar.add(new ControllerAction(Messages
+				.getString("MainFrame.store_transfer"), //$NON-NLS-1$
+				TransferPlanController.class));
+		storeToolBar.add(new ControllerAction(Messages
+				.getString("MainFrame.view_transfer"), //$NON-NLS-1$
+				ViewTransferController.class));
+		storeToolBar.add(new ControllerAction(Messages
+				.getString("MainFrame.stock_taking"), //$NON-NLS-1$
+				StockTakingController.class));
+		storeToolBar.add(new ControllerAction(Messages
+				.getString("MainFrame.view_stock_taking"), //$NON-NLS-1$
+				QueryStockTakingController.class));
+		
 		JToolBar profileToolBar = new JToolBar();
 		profileToolBar.setFloatable(false);
 		add(profileToolBar);

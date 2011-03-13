@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
 
+import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.harper.frm.core.IAdaptor;
 import org.harper.frm.core.tools.bean.BeanAccess;
@@ -113,6 +114,8 @@ public class BindingManager implements PropertyChangeListener {
 
 		try {
 			return PropertyUtils.getProperty(getBean(), attribute);
+		} catch (NestedNullException e) {
+			return null;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
