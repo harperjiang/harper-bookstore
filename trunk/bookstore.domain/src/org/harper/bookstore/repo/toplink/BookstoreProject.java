@@ -58,6 +58,7 @@ public BookstoreProject() {
 	addDescriptor(buildDeliveryItemDescriptor());
 	addDescriptor(buildTopLinkCommonRepo$NumGenDescriptor());
 	addDescriptor(buildTodoItemDescriptor());
+	addDescriptor(buildStockAlertDescriptor());
 	addDescriptor(buildStockTakingDescriptor());
 	addDescriptor(buildStockTakingItemDescriptor());
 	
