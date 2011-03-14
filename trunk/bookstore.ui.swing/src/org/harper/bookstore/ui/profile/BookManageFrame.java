@@ -27,9 +27,10 @@ import org.harper.bookstore.ui.common.ISBNTextField;
 import org.harper.bookstore.ui.common.ISBNTextField.Callback;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.NumTextField;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 import org.springframework.util.CollectionUtils;
 
-public class BookManageFrame extends JFrame {
+public class BookManageFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -43,10 +44,8 @@ public class BookManageFrame extends JFrame {
 	BookManagerController controller;
 
 	public BookManageFrame() {
-		super();
-		setTitle("Book Manage");
+		super("Book Manage");
 		setSize(700, 600);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setLayout(new BorderLayout());
 
@@ -64,7 +63,8 @@ public class BookManageFrame extends JFrame {
 		newButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NewBookDialog dialog = new NewBookDialog(BookManageFrame.this);
+				NewBookDialog dialog = new NewBookDialog(BookManageFrame.this
+						.getManagerWindow());
 				if (dialog.isOkay()) {
 					Book added = dialog.getAdded();
 					getController().add(added);
@@ -135,8 +135,9 @@ public class BookManageFrame extends JFrame {
 				int selected = bookTable.getSelectedRow();
 				BookBean book = controller.getModel().getBooks().get(selected);
 				if (book.getBook() instanceof BookSet) {
-					new BookSetManageController(new BookSetBean((BookSet) book
-							.getBook()));
+					getManagerWindow().addEditor(
+							new BookSetManageController(new BookSetBean(
+									(BookSet) book.getBook())).getComponent());
 				}
 
 			}
@@ -146,8 +147,6 @@ public class BookManageFrame extends JFrame {
 		scrollPane.setViewportView(bookTable);
 
 		mainPanel.add(scrollPane, BorderLayout.CENTER);
-
-		setVisible(true);
 	}
 
 	public BookManagerController getController() {

@@ -7,18 +7,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 
+import org.harper.bookstore.cache.Cache;
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.ui.common.LabeledTextArea;
 import org.harper.frm.gui.swing.comp.textfield.NumTextField;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class SOFrame extends JFrame {
+public class SOFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -44,10 +45,8 @@ public class SOFrame extends JFrame {
 	private LabeledTextArea remarkArea;
 
 	public SOFrame(SOController controller) {
-		super();
-		setTitle("Supply Order");
+		super("Supply Order");
 		setSize(800, 600);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setLayout(new BorderLayout());
 
@@ -57,11 +56,9 @@ public class SOFrame extends JFrame {
 		createBody();
 
 		this.controller = controller;
-		for (StoreSite site : getController().getAvailableSite()) {
+		for (StoreSite site : Cache.getInstance().getValidSites()) {
 			headerPanel.getSiteCombo().addItem(site);
 		}
-
-		setVisible(true);
 	}
 
 	protected void createToolBar() {

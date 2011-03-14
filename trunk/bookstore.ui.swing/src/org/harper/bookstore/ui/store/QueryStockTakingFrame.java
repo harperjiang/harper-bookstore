@@ -4,12 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -24,8 +25,9 @@ import org.harper.bookstore.ui.common.EnumListCellRenderer;
 import org.harper.bookstore.ui.common.SiteListRenderer;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class QueryStockTakingFrame extends JFrame {
+public class QueryStockTakingFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -45,16 +47,14 @@ public class QueryStockTakingFrame extends JFrame {
 	private JTable resultTable;
 
 	public QueryStockTakingFrame() {
-		super();
+		super("Query Stock Taking");
 		setSize(800, 600);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setTitle("Query Stock Taking");
 
 		setLayout(new BorderLayout());
 
 		JPanel headerPanel = new JPanel();
 		headerPanel.setLayout(new GridLayout(3, 4, 10, 10));
-		headerPanel.setBorder(new EmptyBorder(10,10,10,10));
+		headerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		add(headerPanel, BorderLayout.NORTH);
 
 		JLabel fromDateLabel = new JLabel("From Date");
@@ -117,14 +117,25 @@ public class QueryStockTakingFrame extends JFrame {
 		ctm.initialize(QueryStockTakingTableData.class);
 
 		resultTable.setModel(ctm);
+		resultTable.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					int selected = resultTable.getSelectedRow();
+					if (-1 != selected) {
+						StockTaking st = (StockTaking) getController()
+								.getBean().getResult().get(selected);
+						getManagerWindow().addEditor(
+								new StockTakingController(st).getComponent());
+					}
+				}
+			}
+		});
 
 		resultTable.setDefaultRenderer(Date.class, new DateRenderer());
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(resultTable);
 		add(scrollPane, BorderLayout.CENTER);
-
-		setVisible(true);
 	}
 
 	public DateTextField getFromDateField() {

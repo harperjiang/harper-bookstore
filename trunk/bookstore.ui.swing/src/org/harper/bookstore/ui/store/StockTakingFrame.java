@@ -36,8 +36,9 @@ import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.table.data.TableData;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
 import org.harper.frm.gui.swing.comp.textfield.NumTextField;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class StockTakingFrame extends JFrame {
+public class StockTakingFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -57,10 +58,9 @@ public class StockTakingFrame extends JFrame {
 	private ItemController<StockTakingItem> itemController;
 
 	public StockTakingFrame(StockTakingController controller) {
-		super();
+		super("Stock Taking");
 		setSize(800, 600);
-		setTitle("Stock Taking");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
 		// setResizable(false);
 
 		setLayout(new BorderLayout());
@@ -106,7 +106,7 @@ public class StockTakingFrame extends JFrame {
 					public void execute() {
 						getController().save();
 						ChooseDateDialog dd = new ChooseDateDialog(
-								StockTakingFrame.this, "Confirm Date",
+								StockTakingFrame.this.getManagerWindow(), "Confirm Date",
 								"Input Confirm Date", new Date());
 						if (dd.isOkay())
 							getController().confirm(dd.getBean().getDate());
@@ -225,8 +225,6 @@ public class StockTakingFrame extends JFrame {
 		for (StoreSite site : getController().getSites()) {
 			siteCombo.addItem(site);
 		}
-
-		setVisible(true);
 	}
 
 	public StockTakingController getController() {

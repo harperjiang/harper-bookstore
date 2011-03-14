@@ -30,8 +30,9 @@ import org.harper.bookstore.ui.common.ISBNTextField.Callback;
 import org.harper.bookstore.ui.common.LabeledTextField;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.NumTextField;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class BookSetManageFrame extends JFrame {
+public class BookSetManageFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -49,10 +50,8 @@ public class BookSetManageFrame extends JFrame {
 	BookSetManageController controller;
 
 	public BookSetManageFrame() {
-		super();
-		setTitle("Book Set Manage");
+		super("Book Set Manage");
 		setSize(400, 600);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setLayout(new BorderLayout());
 
@@ -146,9 +145,6 @@ public class BookSetManageFrame extends JFrame {
 		scrollPane.setViewportView(bookTable);
 
 		mainPanel.add(scrollPane, BorderLayout.CENTER);
-
-		setVisible(true);
-
 	}
 
 	public static long getSerialversionuid() {

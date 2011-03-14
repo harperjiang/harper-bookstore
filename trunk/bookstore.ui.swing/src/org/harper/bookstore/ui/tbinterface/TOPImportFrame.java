@@ -16,8 +16,9 @@ import javax.swing.JProgressBar;
 import org.harper.bookstore.ui.common.ActionThread;
 import org.harper.bookstore.ui.common.JProgressBarJobMonitor;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class TOPImportFrame extends JFrame {
+public class TOPImportFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -33,11 +34,9 @@ public class TOPImportFrame extends JFrame {
 	private JProgressBar progressBar;
 
 	public TOPImportFrame() {
-		super();
-		setTitle("TOP Import");
+		super("TOP Import");
 		setSize(450, 125);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setLayout(new FlowLayout());
 
@@ -101,8 +100,6 @@ public class TOPImportFrame extends JFrame {
 		progressBar.setPreferredSize(new Dimension(430, 20));
 		progressBar.setVisible(false);
 		add(progressBar);
-
-		setVisible(true);
 	}
 
 	public TOPImportController getController() {

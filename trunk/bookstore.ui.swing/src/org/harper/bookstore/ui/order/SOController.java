@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
@@ -105,7 +106,7 @@ public class SOController extends Controller {
 				}
 			}
 		});
-		
+
 		manager.loadAll();
 	}
 
@@ -131,6 +132,11 @@ public class SOController extends Controller {
 	public void cancel() {
 		setOrder(new OrderService().operateOrder(order,
 				SupplyOrder.Status.CANCEL));
+	}
+
+	@Override
+	public JComponent getComponent() {
+		return getOrderFrame();
 	}
 
 	public static void main(String[] args) {

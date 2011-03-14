@@ -15,8 +15,9 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 import org.harper.bookstore.ui.common.SiteListRenderer;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class TransferPlanFrame extends JFrame {
+public class TransferPlanFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -34,10 +35,9 @@ public class TransferPlanFrame extends JFrame {
 	private TransferPlanController controller;
 
 	public TransferPlanFrame() {
-		setTitle("Transfer Plan");
+		super("Transfer Plan");
 		setLayout(new BorderLayout());
 		setSize(800, 600);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JToolBar toolBar = new JToolBar();
 		toolBar.add(new AbstractAction("Save") {
@@ -123,8 +123,6 @@ public class TransferPlanFrame extends JFrame {
 
 		transferTable = new TransferItemTable();
 		centerPanel.add(transferTable, BorderLayout.CENTER);
-
-		setVisible(true);
 	}
 
 	public JComboBox getFromSiteCombo() {

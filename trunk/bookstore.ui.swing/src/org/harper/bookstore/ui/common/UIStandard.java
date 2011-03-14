@@ -14,6 +14,9 @@ public class UIStandard {
 		Font defaultFont = new Font("宋体", Font.PLAIN, 12);
 		UIManager.put("Button.font", defaultFont);
 		UIManager.put("Label.font", defaultFont);
+		UIManager.put("MenuBar.font", defaultFont);
+		UIManager.put("Menu.font", defaultFont);
+		UIManager.put("MenuItem.font", defaultFont);
 	}
 
 	public static void standardFrame(JFrame frame) {

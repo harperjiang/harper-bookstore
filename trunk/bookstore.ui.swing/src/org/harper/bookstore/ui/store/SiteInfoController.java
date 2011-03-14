@@ -3,6 +3,8 @@ package org.harper.bookstore.ui.store;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.swing.JComponent;
+
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.service.StoreSiteService;
@@ -38,9 +40,7 @@ public class SiteInfoController extends Controller {
 				getFrame().getTotalCountTextField(), "totalCount"));
 		manager.addBinding(new TableBinding(getFrame().getBookReportTable(),
 				"items"));
-		manager
-				.addBinding(new TableBinding(getFrame().multiBookTable,
-						"item2s"));
+		manager.addBinding(new TableBinding(getFrame().multiBookTable, "item2s"));
 		manager.addBinding(getFrame().getListPriceField().new NumTextBinding(
 				"listPrice"));
 	}
@@ -84,5 +84,10 @@ public class SiteInfoController extends Controller {
 
 	public static void main(String[] args) {
 		new SiteInfoController();
+	}
+
+	@Override
+	public JComponent getComponent() {
+		return getFrame();
 	}
 }

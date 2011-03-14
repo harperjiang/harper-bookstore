@@ -2,6 +2,8 @@ package org.harper.bookstore.ui.store;
 
 import java.util.List;
 
+import javax.swing.JComponent;
+
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.service.StoreSiteService;
 import org.harper.bookstore.ui.Controller;
@@ -49,5 +51,14 @@ public class QueryStockTakingController extends Controller {
 	public void search() {
 		bean.setResult(new StoreSiteService().searchStockTakings(
 				bean.getFrom(), bean.getTo(), bean.getStatus(), bean.getSite()));
+	}
+	
+	public QueryStockTakingBean getBean() {
+		return bean;
+	}
+
+	@Override
+	public JComponent getComponent() {
+		return frame;
 	}
 }

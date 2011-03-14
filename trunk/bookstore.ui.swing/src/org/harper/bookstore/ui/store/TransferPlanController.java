@@ -2,6 +2,8 @@ package org.harper.bookstore.ui.store;
 
 import java.util.List;
 
+import javax.swing.JComponent;
+
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.domain.store.Transfer;
 import org.harper.bookstore.service.StoreSiteService;
@@ -91,6 +93,11 @@ public class TransferPlanController extends Controller {
 	public void setBean(Transfer bean) {
 		this.bean = bean;
 		manager.setBean(bean);
+	}
+
+	@Override
+	public JComponent getComponent() {
+		return frame;
 	}
 
 	public static void main(String[] args) {

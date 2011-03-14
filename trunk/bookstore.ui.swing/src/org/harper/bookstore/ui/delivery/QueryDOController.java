@@ -1,5 +1,7 @@
 package org.harper.bookstore.ui.delivery;
 
+import javax.swing.JComponent;
+
 import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
@@ -48,6 +50,11 @@ public class QueryDOController extends Controller {
 
 	public QueryDOBean getBean() {
 		return bean;
+	}
+	
+	@Override
+	public JComponent getComponent() {
+		return frame;
 	}
 
 	public static void main(String[] args) {

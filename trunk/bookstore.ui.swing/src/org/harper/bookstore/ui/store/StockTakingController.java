@@ -3,6 +3,8 @@ package org.harper.bookstore.ui.store;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JComponent;
+
 import org.harper.bookstore.domain.store.StockTaking;
 import org.harper.bookstore.domain.store.StockTakingItem;
 import org.harper.bookstore.domain.store.StoreEntry;
@@ -77,6 +79,11 @@ public class StockTakingController extends Controller {
 				StockTaking.Status.CONFIRM.ordinal());
 
 		manager.setBean(taking);
+	}
+
+	@Override
+	public JComponent getComponent() {
+		return frame;
 	}
 
 	public static void main(String[] args) {

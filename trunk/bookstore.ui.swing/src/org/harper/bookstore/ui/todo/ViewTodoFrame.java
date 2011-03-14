@@ -1,6 +1,7 @@
 package org.harper.bookstore.ui.todo;
 
-import javax.swing.JFrame;
+import java.awt.BorderLayout;
+
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
@@ -12,8 +13,9 @@ import javax.swing.tree.TreeSelectionModel;
 import org.harper.bookstore.domain.todo.TodoItem;
 import org.harper.bookstore.domain.todo.TodoItem.Privilege;
 import org.harper.frm.gui.swing.comp.tree.TwoLevelTreeModel;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowView;
 
-public class ViewTodoFrame extends JFrame {
+public class ViewTodoFrame extends JPowerWindowView {
 
 	/**
 	 * 
@@ -35,12 +37,11 @@ public class ViewTodoFrame extends JFrame {
 	private JTextArea contentArea;
 
 	public ViewTodoFrame() {
-		setTitle("View Todo");
+		setName(Messages.getString("ViewTodoFrame.name")); //$NON-NLS-1$
 		setSize(250, 600);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+		setLayout(new BorderLayout());
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		add(splitPane);
+		add(splitPane,BorderLayout.CENTER);
 
 		todoTree = new JTree();
 

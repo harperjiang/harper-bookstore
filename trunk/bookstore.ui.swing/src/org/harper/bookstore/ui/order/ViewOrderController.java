@@ -1,9 +1,7 @@
 package org.harper.bookstore.ui.order;
 
-import java.util.Calendar;
-import java.util.Date;
+import javax.swing.JComponent;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.ui.Controller;
@@ -76,5 +74,10 @@ public class ViewOrderController extends Controller {
 
 	public ViewOrderBean getBean() {
 		return bean;
+	}
+
+	@Override
+	public JComponent getComponent() {
+		return getFrame();
 	}
 }

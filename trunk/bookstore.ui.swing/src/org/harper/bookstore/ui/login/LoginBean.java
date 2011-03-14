@@ -8,7 +8,7 @@ public class LoginBean extends AbstractBean {
 
 	private String password;
 
-	private int errorCode = -1;
+	private String errorMsg;
 
 	public String getUserName() {
 		return userName;
@@ -30,12 +30,12 @@ public class LoginBean extends AbstractBean {
 		firePropertyChange("password", oldPass, password);
 	}
 
-	public int getErrorCode() {
-		return errorCode;
+	public String getErrorMsg() {
+		return errorMsg;
 	}
 
-	public void setErrorCode(int errorCode) {
-		this.errorCode = errorCode;
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
 	}
 
 }

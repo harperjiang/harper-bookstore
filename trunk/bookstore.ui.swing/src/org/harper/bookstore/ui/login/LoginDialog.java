@@ -16,6 +16,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.commons.lang.StringUtils;
 import org.harper.bookstore.ui.common.UIStandard;
 
 public class LoginDialog extends JDialog {
@@ -35,10 +36,12 @@ public class LoginDialog extends JDialog {
 
 	JButton loginButton;
 
+	boolean pressed;
+
 	public LoginDialog() {
 		super();
 		setTitle(Messages.getString("LoginDialog.title")); //$NON-NLS-1$
-		setSize(300, 150);
+		setSize(300, 180);
 		setModal(true);
 		UIStandard.standardDialog(this);
 		setLayout(new BorderLayout());
@@ -70,7 +73,6 @@ public class LoginDialog extends JDialog {
 		commandPanel.setPreferredSize(new Dimension(300, 50));
 		commandPanel.setLayout(new FlowLayout());
 
-
 		loginButton = new JButton(Messages.getString("LoginDialog.btn_login")); //$NON-NLS-1$
 		commandPanel.add(loginButton);
 		loginButton.addActionListener(new ActionListener() {
@@ -84,7 +86,7 @@ public class LoginDialog extends JDialog {
 				}
 			}
 		});
-		
+
 		progress = new JProgressBar();
 		progress.setIndeterminate(true);
 		progress.setVisible(false);
@@ -95,20 +97,26 @@ public class LoginDialog extends JDialog {
 	}
 
 	protected void loginStart() {
+		pressed = true;
 		userField.setEditable(false);
 		passwordField.setEditable(false);
 		loginButton.setEnabled(false);
 		progress.setVisible(true);
 	}
 
-	protected void loginComplete(int error) {
+	protected void loginComplete() {
 		userField.setEditable(true);
 		passwordField.setEditable(true);
 		loginButton.setEnabled(true);
 		progress.setVisible(false);
 
-		if (0 == error)
+		if (StringUtils.isEmpty(getController().getBean().getErrorMsg()))
 			this.dispose();
+		else
+			JOptionPane.showMessageDialog(LoginDialog.this, getController()
+					.getBean().getErrorMsg(), "Failed to Login",
+					JOptionPane.ERROR_MESSAGE);
+
 	}
 
 	public JTextField getUserField() {
@@ -128,6 +136,7 @@ public class LoginDialog extends JDialog {
 	}
 
 	public boolean isSuccess() {
-		return 0 == getController().getBean().getErrorCode();
+		return pressed
+				&& StringUtils.isEmpty(getController().getBean().getErrorMsg());
 	}
 }

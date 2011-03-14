@@ -22,8 +22,9 @@ import org.harper.bookstore.ui.common.DateRenderer;
 import org.harper.bookstore.ui.common.SiteTableRenderer;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.table.data.AbstractTableData;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class ViewTransferFrame extends JFrame {
+public class ViewTransferFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -35,10 +36,8 @@ public class ViewTransferFrame extends JFrame {
 	private JTable transferTable;
 
 	public ViewTransferFrame() {
-		super();
-		setTitle("View Transfer");
+		super("View Transfer");
 		setLayout(new BorderLayout());
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(800, 600);
 
 		setLayout(new BorderLayout());
@@ -63,8 +62,7 @@ public class ViewTransferFrame extends JFrame {
 
 		transferTable.setDefaultRenderer(String.class,
 				new DefaultTableCellRenderer());
-		transferTable.setDefaultRenderer(Date.class,
-				new DateRenderer());
+		transferTable.setDefaultRenderer(Date.class, new DateRenderer());
 		transferTable.setDefaultRenderer(StoreSite.class,
 				new SiteTableRenderer());
 		transferTable.setDefaultRenderer(Transfer.Status.class,
@@ -78,9 +76,11 @@ public class ViewTransferFrame extends JFrame {
 				if (e.getClickCount() == 2) {
 					int selected = transferTable.getSelectedRow();
 					if (-1 != selected) {
-						Transfer trans = (Transfer)((AbstractTableData) ((CommonTableModel) transferTable
+						Transfer trans = (Transfer) ((AbstractTableData) ((CommonTableModel) transferTable
 								.getModel()).getData().get(selected)).getBean();
-						new TransferPlanController(trans);
+						getManagerWindow().addEditor(
+								new TransferPlanController(trans)
+										.getComponent());
 					}
 				}
 			}
@@ -89,8 +89,6 @@ public class ViewTransferFrame extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(transferTable);
 		add(scrollPane, BorderLayout.CENTER);
-
-		setVisible(true);
 	}
 
 	public ViewTransferController getController() {

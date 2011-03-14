@@ -1,7 +1,13 @@
 package org.harper.bookstore.ui.login;
 
-import javax.swing.SwingUtilities;
+import java.util.concurrent.ExecutionException;
 
+import javax.swing.SwingWorker;
+
+import org.apache.commons.lang.StringUtils;
+import org.harper.bookstore.cache.Cache;
+import org.harper.bookstore.domain.user.User;
+import org.harper.bookstore.service.ProfileService;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.manager.BindingManager;
 import org.harper.frm.gui.swing.manager.JTextBinding;
@@ -27,21 +33,48 @@ public class LoginController extends Controller {
 	}
 
 	public void login() {
-		new Thread() {
-			public void run() {
-				try {
-					Thread.sleep(10000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						getBean().setErrorCode(0);
-						dialog.loginComplete(getBean().getErrorCode());
-					}
-				});
+		bean.setErrorMsg(validateBean());
+		if (!StringUtils.isEmpty(bean.getErrorMsg())) {
+			dialog.loginComplete();
+			return;
+		}
+		// Backdoor
+		if ("ADMIN".equals(bean.getUserName())) {
+			User admin = new User();
+			admin.setId("ADMIN");
+			Cache.getInstance().setCurrentUser(admin);
+			dialog.loginComplete();
+			return;
+		}
+		new SwingWorker<User, Object>() {
+			@Override
+			protected User doInBackground() throws Exception {
+				return new ProfileService().login(bean.getUserName(),
+						bean.getPassword());
 			}
-		}.start();
+
+			@Override
+			protected void done() {
+				try {
+					User usr = get();
+					Cache.getInstance().setCurrentUser(usr);
+					getBean().setErrorMsg(null);
+				} catch (ExecutionException e) {
+					getBean().setErrorMsg(e.getCause().getMessage());
+				} catch (Exception e) {
+					getBean().setErrorMsg(e.getMessage());
+				}
+				dialog.loginComplete();
+			}
+		}.execute();
+	}
+
+	private String validateBean() {
+		if (StringUtils.isEmpty(bean.getUserName()))
+			return "Please input user name";
+		if (StringUtils.isEmpty(bean.getPassword()))
+			return "Please input password";
+		return null;
 	}
 
 	public LoginBean getBean() {
