@@ -8,9 +8,11 @@ import oracle.toplink.queryframework.ReadAllQuery;
 import oracle.toplink.sessions.UnitOfWork;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.profile.Customer;
 import org.harper.bookstore.domain.profile.Supplier;
+import org.harper.bookstore.domain.user.User;
 import org.harper.bookstore.repo.ProfileRepo;
 import org.harper.bookstore.service.TransactionContext;
 import org.harper.frm.toplink.SessionManager;
@@ -19,18 +21,20 @@ public class TopLinkProfileRepo extends TopLinkRepo implements ProfileRepo {
 
 	@Override
 	public Book findBook(String isbn) {
-		return (Book) TransactionContext.getSession().readObject(
-				Book.class,
+		return (Book) TransactionContext.getSession().readObject(Book.class,
 				new ExpressionBuilder().get("isbn").equal(isbn.trim()));
 	}
 
 	@Override
 	public Customer getCustomer(String source, String customerId) {
 		ExpressionBuilder builder = new ExpressionBuilder();
-		return (Customer) SessionManager.getInstance().getSession().readObject(
-				Customer.class,
-				builder.get("source").equal(source).and(
-						builder.get("id").equal(customerId)));
+		return (Customer) SessionManager
+				.getInstance()
+				.getSession()
+				.readObject(
+						Customer.class,
+						builder.get("source").equal(source)
+								.and(builder.get("id").equal(customerId)));
 	}
 
 	@Override
@@ -38,8 +42,8 @@ public class TopLinkProfileRepo extends TopLinkRepo implements ProfileRepo {
 		ExpressionBuilder builder = new ExpressionBuilder();
 		return (Supplier) TransactionContext.getSession().readObject(
 				Supplier.class,
-				builder.get("source").equal(source).and(
-						builder.get("id").equal(customerId)));
+				builder.get("source").equal(source)
+						.and(builder.get("id").equal(customerId)));
 	}
 
 	@Override
@@ -58,9 +62,11 @@ public class TopLinkProfileRepo extends TopLinkRepo implements ProfileRepo {
 	@Override
 	public List<Book> findBooks(String isbnOrName) {
 		ExpressionBuilder builder = new ExpressionBuilder();
-		Expression exp = builder.get("isbn").like(isbnOrName + "%").or(
-				builder.get("name").toLowerCase().like(
-						"%" + isbnOrName.toLowerCase() + "%"));
+		Expression exp = builder
+				.get("isbn")
+				.like(isbnOrName + "%")
+				.or(builder.get("name").toLowerCase()
+						.like("%" + isbnOrName.toLowerCase() + "%"));
 		ReadAllQuery raq = new ReadAllQuery(Book.class, exp);
 		raq.addOrdering(builder.get("isbn"));
 		return (List<Book>) TransactionContext.getSession().executeQuery(raq);
@@ -87,6 +93,13 @@ public class TopLinkProfileRepo extends TopLinkRepo implements ProfileRepo {
 		}
 		ReadAllQuery raq = new ReadAllQuery(Book.class, exp);
 		return (List<Book>) TransactionContext.getSession().executeQuery(raq);
+	}
+
+	@Override
+	public User getUser(String id) {
+		Validate.isTrue(!StringUtils.isEmpty(id));
+		return (User) TransactionContext.getSession().readObject(User.class,
+				new ExpressionBuilder().get("id").equal(id));
 	}
 
 }

@@ -61,6 +61,7 @@ public BookstoreProject() {
 	addDescriptor(buildStockAlertDescriptor());
 	addDescriptor(buildStockTakingDescriptor());
 	addDescriptor(buildStockTakingItemDescriptor());
+	addDescriptor(buildUserDescriptor());
 	
 }
 
@@ -1690,4 +1691,35 @@ public ClassDescriptor buildStockAlertDescriptor() {
 	return descriptor;
 }
 
+public ClassDescriptor buildUserDescriptor() {
+	RelationalDescriptor descriptor = new RelationalDescriptor();
+	descriptor.setJavaClass(org.harper.bookstore.domain.user.User.class);
+	descriptor.addTableName("profile_user");
+	descriptor.addPrimaryKeyFieldName("profile_user.oid");
+	
+	// Descriptor Properties.
+	descriptor.useSoftCacheWeakIdentityMap();
+	descriptor.setIdentityMapSize(100);
+	descriptor.useRemoteSoftCacheWeakIdentityMap();
+	descriptor.setRemoteIdentityMapSize(100);
+	descriptor.setSequenceNumberFieldName("profile_user.oid");
+	descriptor.setSequenceNumberName("profile_user");
+	descriptor.setAlias("User");
+	
+	
+	// Query Manager.
+	descriptor.getQueryManager().checkCacheForDoesExist();
+	
+	
+	// Event Manager.
+	
+	// Mappings.
+	descriptor.addDirectMapping("id","profile_user.id");
+	descriptor.addDirectMapping("oid","profile_user.oid");
+	descriptor.addDirectMapping("encryptedPass","profile_user.ency_pass");
+	descriptor.addDirectMapping("lastLoginDate","profile_user.last_login_date");
+
+	
+	return descriptor;
+}
 }
