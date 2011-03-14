@@ -1,22 +1,13 @@
 package org.harper.bookstore.ui.common;
 
-import javax.swing.SwingUtilities;
 
 public abstract class ActionThread implements Runnable {
 	public void run() {
 		try {
 			execute();
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					success();
-				}
-			});
+			success();
 		} catch (final Exception ex) {
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					exception(ex);
-				}
-			});
+			exception(ex);
 		}
 	}
 

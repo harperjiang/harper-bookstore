@@ -23,17 +23,18 @@ public class UIStandard {
 	}
 
 	public static void standardDialog(JDialog frame) {
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int x, y;
-		if (null != frame.getParent()) {
+		if (null != frame.getParent() && frame.getParent().isVisible()) {
 			screenSize = frame.getParent().getSize();
 			x = frame.getParent().getX()
 					+ ((int) (screenSize.getWidth() - frame.getWidth()) / 2);
 			y = frame.getParent().getY()
 					+ ((int) (screenSize.getHeight() - frame.getHeight()) / 2);
 		} else {
-			x = ((int) (screenSize.getWidth() - frame.getWidth()) / 2);
-			y = ((int) (screenSize.getHeight() - frame.getHeight()) / 2);
+			x = (int) ((screenSize.getWidth() - frame.getWidth()) / 2);
+			y = (int) ((screenSize.getHeight() - frame.getHeight()) / 2);
 		}
 		frame.setLocation(x, y);
 	}

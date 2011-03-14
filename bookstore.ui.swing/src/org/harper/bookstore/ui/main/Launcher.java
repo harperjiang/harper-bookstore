@@ -8,6 +8,7 @@ import org.harper.bookstore.MediatorInitializer;
 import org.harper.bookstore.cache.Cache;
 import org.harper.bookstore.ui.common.ProgressDialog;
 import org.harper.bookstore.ui.common.UIStandard;
+import org.harper.bookstore.ui.login.LoginDialog;
 import org.harper.frm.toplink.SessionManager;
 
 public class Launcher {
@@ -69,10 +70,15 @@ public class Launcher {
 
 		launcher.step("Initializing Modules...");
 		MediatorInitializer.init();
-		// Start GUI
+
 		// Hide Dialog
 		launcher.stop();
 
-		new MainFrame();
+		// Start GUI
+		LoginDialog login = new LoginDialog();
+		login.setVisible(true);
+		if (login.isSuccess()) {
+			new MainWindow().setVisible(true);
+		}
 	}
 }
