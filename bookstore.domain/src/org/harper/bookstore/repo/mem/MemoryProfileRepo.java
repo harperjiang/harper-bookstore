@@ -7,6 +7,7 @@ import java.util.Map;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.profile.Customer;
 import org.harper.bookstore.domain.profile.Supplier;
+import org.harper.bookstore.domain.user.User;
 import org.harper.bookstore.repo.ProfileRepo;
 
 public class MemoryProfileRepo implements ProfileRepo {
@@ -56,6 +57,12 @@ public class MemoryProfileRepo implements ProfileRepo {
 
 	@Override
 	public List<Book> powerFindBooks(String isbnOrName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public User getUser(String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
