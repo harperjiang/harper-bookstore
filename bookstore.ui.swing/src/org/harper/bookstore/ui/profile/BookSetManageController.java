@@ -2,6 +2,8 @@ package org.harper.bookstore.ui.profile;
 
 import java.math.BigDecimal;
 
+import javax.swing.JComponent;
+
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.service.ProfileService;
 import org.harper.bookstore.ui.Controller;
@@ -58,7 +60,10 @@ public class BookSetManageController extends Controller {
 	public void remove(int index) {
 		((CommonTableModel) frame.getBookTable().getModel()).removeRow(index);
 	}
-
+@Override
+public JComponent getComponent() {
+	return frame;
+}
 	public static void main(String[] args) {
 		new BookSetManageController();
 	}

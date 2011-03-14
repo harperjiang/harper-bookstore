@@ -1,10 +1,13 @@
 package org.harper.bookstore.ui.main;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.Map.Entry;
 
 import javax.swing.JFrame;
 import javax.swing.JToolBar;
+import javax.swing.UIManager;
 
 import org.harper.bookstore.ui.common.UIStandard;
 import org.harper.bookstore.ui.delivery.DOController;
@@ -166,11 +169,11 @@ public class MainFrame extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		// UIManager.put("InternalFrame", new Font("隶书",Font.PLAIN,24));
-		// for(Entry entry :UIManager.getLookAndFeelDefaults().entrySet()) {
-		// if(String.valueOf(entry.getKey()).contains("font"))
-		// System.out.println(entry.getKey());
-		// }
+		 UIManager.put("InternalFrame", new Font("隶书",Font.PLAIN,24));
+		 for(Entry entry :UIManager.getLookAndFeelDefaults().entrySet()) {
+		 if(String.valueOf(entry.getKey()).contains("font"))
+		 System.out.println(entry.getKey());
+		 }
 		new MainFrame();
 	}
 }

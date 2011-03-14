@@ -3,6 +3,8 @@ package org.harper.bookstore.ui.order;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComponent;
+
 import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.domain.order.PurchaseOrder;
@@ -115,4 +117,8 @@ public class ViewPurchaseOrderController extends Controller {
 		return bean;
 	}
 
+	@Override
+	public JComponent getComponent() {
+		return getFrame();
+	}
 }

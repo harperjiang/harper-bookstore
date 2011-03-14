@@ -23,14 +23,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.ui.common.ISBNTextField;
-import org.harper.bookstore.ui.common.ISBNTextField2;
 import org.harper.bookstore.ui.common.ISBNTextField.Callback;
+import org.harper.bookstore.ui.common.ISBNTextField2;
 import org.harper.bookstore.ui.common.ISBNTextField2.Callback2;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.NumTextField;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 import org.springframework.util.CollectionUtils;
 
-public class SiteInfoFrame extends JFrame {
+public class SiteInfoFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -58,10 +59,8 @@ public class SiteInfoFrame extends JFrame {
 	JTable multiBookTable;
 
 	public SiteInfoFrame() {
-		super();
-		setTitle("Site Info");
+		super("Site Info");
 		setSize(800, 600);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setLayout(new BorderLayout());
 
@@ -242,8 +241,6 @@ public class SiteInfoFrame extends JFrame {
 				new DefaultTableCellRenderer());
 
 		multiPanel.add(multiBookScrollPane, BorderLayout.CENTER);
-
-		setVisible(true);
 	}
 
 	public JTextField getIsbnTextField() {

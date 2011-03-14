@@ -3,6 +3,8 @@ package org.harper.bookstore.ui.delivery;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JComponent;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.deliver.DeliveryItem;
@@ -113,6 +115,11 @@ public class DOController extends Controller {
 
 	public DeliveryOrderBean getBean() {
 		return bean;
+	}
+	
+	@Override
+	public JComponent getComponent() {
+		return frame;
 	}
 
 	public static void main(String[] args) {

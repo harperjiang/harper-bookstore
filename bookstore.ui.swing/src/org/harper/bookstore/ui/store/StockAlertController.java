@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 import org.harper.bookstore.domain.store.StockAlert;
@@ -125,4 +126,8 @@ public class StockAlertController extends Controller {
 		return bean;
 	}
 
+	@Override
+	public JComponent getComponent() {
+		return getFrame();
+	}
 }

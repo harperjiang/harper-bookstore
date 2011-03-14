@@ -19,11 +19,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.harper.bookstore.ui.common.CheckBoxTableRenderer;
 import org.harper.bookstore.ui.order.DeliveryPanel;
-import org.harper.bookstore.ui.order.Messages;
-import org.harper.bookstore.ui.order.POFrame;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class ViewDOFrame extends JFrame {
+public class ViewDOFrame extends JPowerWindowEditor {
 
 	private DeliveryPanel panel;
 
@@ -37,10 +36,8 @@ public class ViewDOFrame extends JFrame {
 	private static final long serialVersionUID = -4793108766253003738L;
 
 	public ViewDOFrame() {
-		super();
+		super("View Delivery Order");
 
-		setTitle("View Delivery Order");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(800, 600);
 
 		setLayout(new BorderLayout());
@@ -122,8 +119,6 @@ public class ViewDOFrame extends JFrame {
 		panel = new DeliveryPanel();
 		panel.setPreferredSize(new Dimension(800, 300));
 		mainPanel.add("Delivery Info", panel);
-
-		setVisible(true);
 	}
 
 	private ViewDOController controller;

@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,8 +23,9 @@ import org.harper.bookstore.domain.deliver.DeliveryOrder;
 import org.harper.bookstore.ui.common.EnumListCellRenderer;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class QueryDOFrame extends JFrame {
+public class QueryDOFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -49,11 +49,9 @@ public class QueryDOFrame extends JFrame {
 	private JTable queryDoTable;
 
 	public QueryDOFrame() {
-		super();
-		setTitle("Query Delivery Order");
+		super("Query Delivery Order");
 		setSize(800, 600);
 		setLayout(new BorderLayout());
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		createTopPanel();
 
@@ -69,15 +67,14 @@ public class QueryDOFrame extends JFrame {
 				int selected = queryDoTable.getSelectedRow();
 				DeliveryOrder order = controller.getBean().getOrders()
 						.get(selected);
-				new ViewDOController(order);
+				getManagerWindow().addEditor(
+						new ViewDOController(order).getComponent());
 			}
 		});
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(queryDoTable);
 		add(scrollPane, BorderLayout.CENTER);
-
-		setVisible(true);
 	}
 
 	public QueryDOController getController() {
@@ -143,7 +140,6 @@ public class QueryDOFrame extends JFrame {
 								.getBundle("org.harper.bookstore.ui.delivery.DOStatus"),
 						"ALL"));
 		topPanel.add(statusCombo);
-
 
 		JButton searchButton = new JButton("Search");
 		topPanel.add(searchButton);

@@ -3,6 +3,8 @@ package org.harper.bookstore.ui.store;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComponent;
+
 import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.service.StoreSiteService;
 import org.harper.bookstore.ui.Controller;
@@ -47,5 +49,8 @@ public class ManageStoreController extends Controller {
 
 	public StoreSiteInfoBean getBean() {
 		return bean;
+	}@Override
+	public JComponent getComponent() {
+		return frame;
 	}
 }

@@ -1,5 +1,7 @@
 package org.harper.bookstore.ui.store;
 
+import javax.swing.JComponent;
+
 import org.harper.bookstore.service.StoreSiteService;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
@@ -31,6 +33,11 @@ public class ViewTransferController extends Controller {
 		bean.setItems(new StoreSiteService().searchTransfers(bean.getStatus(),
 				bean.getStartDate(), bean.getStopDate(), bean.getFromSite(),
 				bean.getToSite()));
+	}
+
+	@Override
+	public JComponent getComponent() {
+		return frame;
 	}
 
 	public static void main(String[] args) {

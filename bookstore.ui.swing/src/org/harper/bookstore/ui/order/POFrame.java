@@ -25,6 +25,7 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import org.harper.bookstore.cache.Cache;
 import org.harper.bookstore.domain.order.OrderItem;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.store.StoreSite;
@@ -37,8 +38,9 @@ import org.harper.frm.core.logging.LogManager;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.table.data.TableData;
 import org.harper.frm.gui.swing.comp.textfield.NumTextField;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class POFrame extends JFrame {
+public class POFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -80,10 +82,10 @@ public class POFrame extends JFrame {
 	private DeliveryPanel deliveryPanel;
 
 	public POFrame(POController controller) {
-		super();
-		setTitle(Messages.getString("POFrame.title")); //$NON-NLS-1$
+		super(Messages.getString("POFrame.title")); //$NON-NLS-1$
+
 		setSize(800, 700);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		// setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		setLayout(new BorderLayout());
 
@@ -95,15 +97,13 @@ public class POFrame extends JFrame {
 		this.controller = controller;
 
 		StoreSite defSite = null;
-		for (StoreSite site : getController().getAvailableSite()) {
+		for (StoreSite site : Cache.getInstance().getValidSellSites()) {
 			headerPanel.getSiteCombo().addItem(site);
 			if (defSite == null || site.getPrivilege() < defSite.getPrivilege())
 				defSite = site;
 		}
 		if (null != defSite)
 			headerPanel.getSiteCombo().setSelectedItem(defSite);
-
-		setVisible(true);
 	}
 
 	protected void createToolBar() {
@@ -234,8 +234,8 @@ public class POFrame extends JFrame {
 		sendButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					ChooseDateDialog dialog = new ChooseDateDialog(
-							POFrame.this, "Choose Send Date",
+					ChooseDateDialog dialog = new ChooseDateDialog(POFrame.this
+							.getManagerWindow(), "Choose Send Date",
 							"Please choose the date of delivery", new Date());
 					if (!dialog.isOkay())
 						return;
@@ -262,7 +262,7 @@ public class POFrame extends JFrame {
 					PartialSendBean bean = new PartialSendBean(controller
 							.getOrder());
 					PartialSendDialog dialog = new PartialSendDialog(
-							POFrame.this, bean);
+							POFrame.this.getManagerWindow(), bean);
 					if (dialog.isOkay()) {
 						controller.partialSend(bean);
 						JOptionPane.showMessageDialog(POFrame.this,
@@ -351,7 +351,7 @@ public class POFrame extends JFrame {
 				item.setBook(book);
 				item.setUnitPrice(getController().getListPrice(book));
 				item.setCount(1);
-				
+
 				return item;
 			}
 

@@ -14,8 +14,9 @@ import javax.swing.JToolBar;
 
 import org.harper.bookstore.ui.common.CheckBoxTableRenderer;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class ManageStoreFrame extends JFrame {
+public class ManageStoreFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -31,12 +32,10 @@ public class ManageStoreFrame extends JFrame {
 	private JToolBar toolBar;
 
 	public ManageStoreFrame(ManageStoreController controller) {
-		super();
+		super("Query Stock Taking");
 		this.controller = controller;
 
 		this.setSize(500, 400);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setTitle("Manage Store");
 
 		setLayout(new BorderLayout());
 
@@ -48,8 +47,6 @@ public class ManageStoreFrame extends JFrame {
 		scrollPane.setViewportView(storeTable);
 
 		add(scrollPane, BorderLayout.CENTER);
-
-		this.setVisible(true);
 	}
 
 	protected void createStoreTable() {
@@ -71,7 +68,7 @@ public class ManageStoreFrame extends JFrame {
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new NewStoreSiteDialog(ManageStoreFrame.this)
+				new NewStoreSiteDialog(ManageStoreFrame.this.getManagerWindow())
 						.addWindowListener(new WindowAdapter() {
 							@Override
 							public void windowClosed(WindowEvent e) {

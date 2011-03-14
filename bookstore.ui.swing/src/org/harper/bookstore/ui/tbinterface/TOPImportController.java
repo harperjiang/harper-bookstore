@@ -1,5 +1,7 @@
 package org.harper.bookstore.ui.tbinterface;
 
+import javax.swing.JComponent;
+
 import org.harper.bookstore.domain.taobao.TradeQueryStatus;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.manager.BindingManager;
@@ -42,6 +44,15 @@ public class TOPImportController extends Controller {
 		int wait = (Integer) job.call(monitor);
 
 		return sent + wait;
+	}
+
+	@Override
+	public JComponent getComponent() {
+		return getFrame();
+	}
+
+	public TOPImportFrame getFrame() {
+		return frame;
 	}
 
 	public static void main(String[] args) {

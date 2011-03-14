@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,8 +22,9 @@ import org.harper.bookstore.domain.order.PurchaseOrder;
 import org.harper.bookstore.domain.order.SupplyOrder;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class ViewOrderFrame extends JFrame {
+public class ViewOrderFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -46,9 +46,7 @@ public class ViewOrderFrame extends JFrame {
 	JTable orderTable;
 
 	public ViewOrderFrame() {
-		super();
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setTitle("View Orders");
+		super("View Orders");
 		setSize(1000, 700);
 
 		setLayout(new BorderLayout());
@@ -116,32 +114,36 @@ public class ViewOrderFrame extends JFrame {
 			}
 		});
 		headerPanel.add(searchButton);
-		
+
 		orderTable = new JTable();
 		CommonTableModel ctm = new CommonTableModel();
 		ctm.initialize(OrderTableData.class);
 		orderTable.setModel(ctm);
 
 		orderTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-		
-		for (int i = 0; i < ctm.getColumnCount(); i++)
-			orderTable.getColumnModel().getColumn(i).setPreferredWidth(
-					ctm.getColumnWidth(i));
 
-//		TableColumnModel
+		for (int i = 0; i < ctm.getColumnCount(); i++)
+			orderTable.getColumnModel().getColumn(i)
+					.setPreferredWidth(ctm.getColumnWidth(i));
+
+		// TableColumnModel
 		orderTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				if (event.getClickCount() <= 1)
 					return;
 				int selected = orderTable.getSelectedRow();
-				Order order = controller.getBean().getSearchResults().get(
-						selected);
+				Order order = controller.getBean().getSearchResults()
+						.get(selected);
 				if (order instanceof PurchaseOrder) {
-					new POController((PurchaseOrder) order);
+					getManagerWindow().addEditor(
+							new POController((PurchaseOrder) order)
+									.getComponent());
 				}
 				if (order instanceof SupplyOrder) {
-					new SOController((SupplyOrder) order);
+					getManagerWindow().addEditor(
+							new SOController((SupplyOrder) order)
+									.getComponent());
 				}
 			}
 		});
@@ -149,8 +151,6 @@ public class ViewOrderFrame extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(orderTable);
 		mainPanel.add(scrollPane, BorderLayout.CENTER);
-
-		setVisible(true);
 	}
 
 	private ViewOrderController controller;

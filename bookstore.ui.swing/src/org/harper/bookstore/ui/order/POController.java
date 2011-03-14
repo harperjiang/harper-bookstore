@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 
@@ -316,5 +317,10 @@ public class POController extends Controller {
 			order.getDelivery().addItem(ditem);
 		}
 		setOrder(new OrderService().sendOrder(order));
+	}
+	
+	@Override
+	public JComponent getComponent() {
+		return orderFrame;
 	}
 }

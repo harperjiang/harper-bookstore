@@ -7,7 +7,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -15,10 +14,10 @@ import javax.swing.JToolBar;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.harper.bookstore.domain.store.StockAlert;
-import org.harper.bookstore.ui.common.UIStandard;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class StockAlertFrame extends JFrame {
+public class StockAlertFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -32,13 +31,10 @@ public class StockAlertFrame extends JFrame {
 	private JToolBar toolBar;
 
 	public StockAlertFrame() {
-		super();
-
-		setTitle("Stock Alert");
+		super("Stock Alert");
 		setSize(600, 400);
 		setResizable(true);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		UIStandard.standardFrame(this);
+//		UIStandard.standardFrame(this);
 
 		setLayout(new BorderLayout());
 
@@ -67,13 +63,11 @@ public class StockAlertFrame extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(alertTable);
 		add(scrollPane, BorderLayout.CENTER);
-
-		setVisible(true);
 	}
 
 	protected void alertDialog(StockAlert alert) {
 		NewStockAlertDialog dialog = new NewStockAlertDialog(
-				StockAlertFrame.this, alert);
+				StockAlertFrame.this.getManagerWindow(), alert);
 		if (dialog.isOkay()) {
 			StockAlert newAlert = dialog.getBean();
 			// Insert new alert record

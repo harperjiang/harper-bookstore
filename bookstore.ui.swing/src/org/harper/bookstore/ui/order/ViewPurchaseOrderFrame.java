@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -31,8 +30,9 @@ import org.harper.bookstore.ui.common.EnumListCellRenderer;
 import org.harper.bookstore.ui.common.ReturnKeyAdapter;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class ViewPurchaseOrderFrame extends JFrame {
+public class ViewPurchaseOrderFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -58,10 +58,8 @@ public class ViewPurchaseOrderFrame extends JFrame {
 	JComboBox deliveryStatusCombo;
 
 	public ViewPurchaseOrderFrame() {
-		super();
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setTitle(Messages.getString("ViewPurchaseOrderFrame.title")); //$NON-NLS-1$
-		setSize(1000, 700);
+		super(Messages.getString("ViewPurchaseOrderFrame.title"));//$NON-NLS-1$
+		setSize(new Dimension(1000, 700));
 
 		setLayout(new BorderLayout());
 
@@ -257,10 +255,14 @@ public class ViewPurchaseOrderFrame extends JFrame {
 				Order order = controller.getBean().getSearchResults()
 						.get(selected);
 				if (order instanceof PurchaseOrder) {
-					new POController((PurchaseOrder) order);
+					getManagerWindow().addEditor(
+							new POController((PurchaseOrder) order)
+									.getComponent());
 				}
 				if (order instanceof SupplyOrder) {
-					new SOController((SupplyOrder) order);
+					getManagerWindow().addEditor(
+							new SOController((SupplyOrder) order)
+									.getComponent());
 				}
 			}
 		});
@@ -268,8 +270,6 @@ public class ViewPurchaseOrderFrame extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(orderTable);
 		mainPanel.add(scrollPane, BorderLayout.CENTER);
-
-		setVisible(true);
 	}
 
 	private ViewPurchaseOrderController controller;

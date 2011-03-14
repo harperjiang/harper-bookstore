@@ -37,8 +37,9 @@ import org.harper.frm.core.logging.LogManager;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.table.data.TableData;
 import org.harper.frm.gui.swing.comp.textfield.NumTextField;
+import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 
-public class DOFrame extends JFrame {
+public class DOFrame extends JPowerWindowEditor {
 
 	private DeliveryPanel panel;
 
@@ -55,10 +56,7 @@ public class DOFrame extends JFrame {
 	private static final long serialVersionUID = -4793108766253003738L;
 
 	public DOFrame() {
-		super();
-
-		setTitle("Create Delivery Order");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		super("Create Delivery Order");
 		setSize(800, 500);
 
 		setLayout(new BorderLayout());
@@ -204,8 +202,9 @@ public class DOFrame extends JFrame {
 					public void run() {
 						try {
 							ChooseDateDialog dialog = new ChooseDateDialog(
-									DOFrame.this, "Choose Date",
-									"Please choose send date", new Date());
+									DOFrame.this.getManagerWindow(),
+									"Choose Date", "Please choose send date",
+									new Date());
 
 							controller.save(dialog.getBean().getDate(), true);
 							SwingUtilities.invokeLater(new Runnable() {
@@ -231,8 +230,6 @@ public class DOFrame extends JFrame {
 			}
 		});
 		bottomPanel.add(saveAndSendButton);
-
-		setVisible(true);
 	}
 
 	private DOController controller;

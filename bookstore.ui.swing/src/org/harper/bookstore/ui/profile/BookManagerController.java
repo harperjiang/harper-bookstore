@@ -4,6 +4,8 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComponent;
+
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.service.ProfileService;
@@ -82,7 +84,10 @@ public class BookManagerController extends Controller {
 		new BinaryInserter().insert(bean, newBooks);
 		model.setBooks(newBooks);
 	}
-
+@Override
+public JComponent getComponent() {
+return frame;
+}
 	public static void main(String[] args) {
 		new BookManagerController();
 	}
