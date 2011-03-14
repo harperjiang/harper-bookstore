@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.harper.bookstore.domain.store.StoreSite;
+import org.harper.bookstore.domain.user.User;
 import org.harper.bookstore.service.StoreSiteService;
 
 public class Cache {
@@ -13,6 +14,8 @@ public class Cache {
 	private List<StoreSite> validSites;
 
 	private List<StoreSite> validSellSites;
+
+	private User currentUser;
 
 	private Cache() {
 		sites = new ArrayList<StoreSite>();
@@ -53,4 +56,13 @@ public class Cache {
 			instance = new Cache();
 		return instance;
 	}
+
+	public User getCurrentUser() {
+		return currentUser;
+	}
+
+	public void setCurrentUser(User currentUser) {
+		this.currentUser = currentUser;
+	}
+
 }
