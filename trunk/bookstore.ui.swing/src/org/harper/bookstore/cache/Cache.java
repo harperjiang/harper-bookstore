@@ -1,4 +1,4 @@
-package org.harper.bookstore.ui.cache;
+package org.harper.bookstore.cache;
 
 import java.util.ArrayList;
 import java.util.List;

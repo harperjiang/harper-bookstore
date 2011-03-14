@@ -1,9 +1,11 @@
 package org.harper.bookstore.ui.main;
 
+import java.lang.reflect.InvocationTargetException;
+
 import javax.swing.SwingUtilities;
 
 import org.harper.bookstore.MediatorInitializer;
-import org.harper.bookstore.ui.cache.Cache;
+import org.harper.bookstore.cache.Cache;
 import org.harper.bookstore.ui.common.ProgressDialog;
 import org.harper.bookstore.ui.common.UIStandard;
 import org.harper.frm.toplink.SessionManager;
@@ -36,17 +38,23 @@ public class Launcher {
 	}
 
 	public void stop() {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				if (dialog.isActive())
-					dialog.dispose();
-			}
-		});
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				public void run() {
+					if (dialog.isActive())
+						dialog.dispose();
+				}
+			});
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static void main(String[] args) throws Exception {
 		UIStandard.setDefaultFont();
-		
+
 		Launcher launcher = new Launcher();
 
 		launcher.start("Initializing...");
@@ -54,12 +62,11 @@ public class Launcher {
 		// Init DB connection
 		launcher.step("Connect to Database...");
 		SessionManager.getInstance().getSession();
-		
+
 		// TODO Get cache from server side
 		launcher.step("Refreshing local data...");
 		Cache.getInstance().load();
-		
-		
+
 		launcher.step("Initializing Modules...");
 		MediatorInitializer.init();
 		// Start GUI
