@@ -49,7 +49,7 @@ public class QueryDOFrame extends JPowerWindowEditor {
 	private JTable queryDoTable;
 
 	public QueryDOFrame() {
-		super("Query Delivery Order");
+		super(Messages.getString("QueryDOFrame.title")); //$NON-NLS-1$
 		setSize(800, 600);
 		setLayout(new BorderLayout());
 
@@ -90,23 +90,23 @@ public class QueryDOFrame extends JPowerWindowEditor {
 		topPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		topPanel.setLayout(new GridLayout(4, 4, 5, 5));
 
-		JLabel fromDateLabel = new JLabel("From Date");
+		JLabel fromDateLabel = new JLabel(Messages.getString("QueryDOFrame.criteria_fromdate")); //$NON-NLS-1$
 		topPanel.add(fromDateLabel);
 		fromDateLabel.setPreferredSize(new Dimension(120, 25));
 
-		fromDateField = new DateTextField(new SimpleDateFormat("yyyy-MM-dd"));
+		fromDateField = new DateTextField(new SimpleDateFormat("yyyy-MM-dd")); //$NON-NLS-1$
 		topPanel.add(fromDateField);
 		fromDateField.setPreferredSize(new Dimension(150, 25));
 
-		JLabel toDateLabel = new JLabel("To Date");
+		JLabel toDateLabel = new JLabel(Messages.getString("QueryDOFrame.criteria_todate")); //$NON-NLS-1$
 		topPanel.add(toDateLabel);
 		toDateLabel.setPreferredSize(new Dimension(120, 25));
 
-		toDateField = new DateTextField(new SimpleDateFormat("yyyy-MM-dd"));
+		toDateField = new DateTextField(new SimpleDateFormat("yyyy-MM-dd")); //$NON-NLS-1$
 		topPanel.add(toDateField);
 		toDateField.setPreferredSize(new Dimension(150, 25));
 
-		JLabel consigneeNameLabel = new JLabel("Consignee Name");
+		JLabel consigneeNameLabel = new JLabel(Messages.getString("QueryDOFrame.criteria_consignee")); //$NON-NLS-1$
 		topPanel.add(consigneeNameLabel);
 		consigneeNameLabel.setPreferredSize(new Dimension(120, 25));
 
@@ -114,19 +114,19 @@ public class QueryDOFrame extends JPowerWindowEditor {
 		consigneeNameField.setPreferredSize(new Dimension(120, 25));
 		topPanel.add(consigneeNameField);
 
-		JLabel poNumberLabel = new JLabel("PO Number");
+		JLabel poNumberLabel = new JLabel(Messages.getString("QueryDOFrame.criteria_ponum")); //$NON-NLS-1$
 		topPanel.add(poNumberLabel);
 
 		poNumberField = new JTextField();
 		topPanel.add(poNumberField);
 
-		JLabel poCustomerIdLabel = new JLabel("PO Customer ID");
+		JLabel poCustomerIdLabel = new JLabel(Messages.getString("QueryDOFrame.criteria_pocustomer")); //$NON-NLS-1$
 		topPanel.add(poCustomerIdLabel);
 
 		poCustomerIdField = new JTextField();
 		topPanel.add(poCustomerIdField);
 
-		JLabel statusLabel = new JLabel("Status");
+		JLabel statusLabel = new JLabel(Messages.getString("QueryDOFrame.criteria_status")); //$NON-NLS-1$
 		topPanel.add(statusLabel);
 
 		statusCombo = new JComboBox();
@@ -137,11 +137,11 @@ public class QueryDOFrame extends JPowerWindowEditor {
 				.setRenderer(new EnumListCellRenderer(
 						DeliveryOrder.Status.class,
 						ResourceBundle
-								.getBundle("org.harper.bookstore.ui.delivery.DOStatus"),
-						"ALL"));
+								.getBundle("org.harper.bookstore.ui.delivery.DOStatus"), //$NON-NLS-1$
+						"ALL")); //$NON-NLS-1$
 		topPanel.add(statusCombo);
 
-		JButton searchButton = new JButton("Search");
+		JButton searchButton = new JButton(Messages.getString("QueryDOFrame.btn_search")); //$NON-NLS-1$
 		topPanel.add(searchButton);
 		searchButton.addActionListener(new ActionListener() {
 			@Override

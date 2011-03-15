@@ -5,6 +5,11 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.text.JTextComponent;
 
+/**
+ * 
+ * @author Harper
+ * @deprecated Use ReturnKeyListener instead
+ */
 public class ReturnKeyAdapter extends KeyAdapter {
 
 	private ActionThread run;

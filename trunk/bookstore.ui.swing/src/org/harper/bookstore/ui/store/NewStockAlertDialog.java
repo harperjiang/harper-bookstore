@@ -18,10 +18,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.lang.StringUtils;
-import org.harper.bookstore.cache.Cache;
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.store.StockAlert;
-import org.harper.bookstore.domain.store.StoreSite;
 import org.harper.bookstore.ui.common.ISBNTextField;
 import org.harper.bookstore.ui.common.ISBNTextField.Callback;
 import org.harper.bookstore.ui.common.SiteComboBox;
@@ -110,11 +108,7 @@ public class NewStockAlertDialog extends JDialog {
 		centerPanel.add(bookNameField);
 
 		centerPanel.add(new JLabel("Site"));
-		siteCombo = new SiteComboBox();
-		siteCombo.addItem(null);
-		for (StoreSite site : Cache.getInstance().getValidSites()) {
-			siteCombo.addItem(site);
-		}
+		siteCombo = new SiteComboBox(true, false);
 		centerPanel.add(siteCombo);
 
 		centerPanel.add(new JLabel("Warn Threshold"));
