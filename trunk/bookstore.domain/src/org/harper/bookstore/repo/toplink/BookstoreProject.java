@@ -62,6 +62,8 @@ public BookstoreProject() {
 	addDescriptor(buildStockTakingDescriptor());
 	addDescriptor(buildStockTakingItemDescriptor());
 	addDescriptor(buildUserDescriptor());
+	addDescriptor(buildReceiveOrderDescriptor());
+	addDescriptor(buildReceiveOrderItemDescriptor());
 	
 }
 
@@ -1419,7 +1421,8 @@ public ClassDescriptor buildDeliveryOrderDescriptor() {
 	itemsMapping.setAttributeName("items");
 	itemsMapping.setReferenceClass(org.harper.bookstore.domain.deliver.DeliveryItem.class);
 	itemsMapping.privateOwnedRelationship();
-	itemsMapping.useBasicIndirection();
+	itemsMapping.useTransparentCollection();
+	itemsMapping.useCollectionClass(oracle.toplink.indirection.IndirectList.class);
 	itemsMapping.addTargetForeignKeyFieldName("order_delivery_item.header", "order_delivery.oid");
 	descriptor.addMapping(itemsMapping);
 	
@@ -1719,6 +1722,151 @@ public ClassDescriptor buildUserDescriptor() {
 	descriptor.addDirectMapping("encryptedPass","profile_user.ency_pass");
 	descriptor.addDirectMapping("lastLoginDate","profile_user.last_login_date");
 
+	
+	return descriptor;
+}
+
+public ClassDescriptor buildReceiveOrderDescriptor() {
+	RelationalDescriptor descriptor = new RelationalDescriptor();
+	descriptor.setJavaClass(org.harper.bookstore.domain.deliver.ReceiveOrder.class);
+	descriptor.addTableName("order_receive");
+	descriptor.addPrimaryKeyFieldName("order_receive.oid");
+	
+	// Descriptor Properties.
+	descriptor.useSoftCacheWeakIdentityMap();
+	descriptor.setIdentityMapSize(100);
+	descriptor.useRemoteSoftCacheWeakIdentityMap();
+	descriptor.setRemoteIdentityMapSize(100);
+	descriptor.setSequenceNumberFieldName("order_receive.oid");
+	descriptor.setSequenceNumberName("order_receive");
+	descriptor.setAlias("ReceiveOrder");
+	
+	VersionLockingPolicy vp = new VersionLockingPolicy();
+	vp.setIsStoredInCache(false);
+	vp.setWriteLockFieldName("order_receive.version");
+//	descriptor.setOptimisticLockingPolicy(vp);
+	
+	// Query Manager.
+	descriptor.getQueryManager().checkCacheForDoesExist();
+	
+	
+	// Event Manager.
+	
+	// Mappings.
+	descriptor.addDirectMapping("receiveDate","order_receive.receive_date");
+	descriptor.addDirectMapping("remark","order_receive.remark");
+	descriptor.addDirectMapping("type","order_receive.type");
+	descriptor.addDirectMapping("refNumber","order_receive.ref_number");
+	
+	DirectToFieldMapping createDateMapping = new DirectToFieldMapping();
+	createDateMapping.setAttributeName("createDate");
+	createDateMapping.setFieldName("order_receive.create_date");
+	descriptor.addMapping(createDateMapping);
+	
+	DirectToFieldMapping numberMapping = new DirectToFieldMapping();
+	numberMapping.setAttributeName("number");
+	numberMapping.setFieldName("order_receive.number");
+	descriptor.addMapping(numberMapping);
+	
+	DirectToFieldMapping oidMapping = new DirectToFieldMapping();
+	oidMapping.setAttributeName("oid");
+	oidMapping.setFieldName("order_receive.oid");
+	descriptor.addMapping(oidMapping);
+	
+	DirectToFieldMapping companyMapping = new DirectToFieldMapping();
+	companyMapping.setAttributeName("company");
+	companyMapping.setFieldName("order_receive.company");
+	companyMapping.setConverter(new EnumConverter(ExpressCompany.class,true));
+	descriptor.addMapping(companyMapping);
+		
+	DirectToFieldMapping statusMapping = new DirectToFieldMapping();
+	statusMapping.setAttributeName("status");
+	statusMapping.setFieldName("order_receive.status");
+	descriptor.addMapping(statusMapping);
+	
+	OneToOneMapping siteMapping = new OneToOneMapping();
+	siteMapping.setAttributeName("site");
+	siteMapping.setReferenceClass(org.harper.bookstore.domain.store.StoreSite.class);
+	siteMapping.dontUseIndirection();
+	siteMapping.addForeignKeyFieldName("order_receive.site", "store_site.oid");
+	descriptor.addMapping(siteMapping);
+	
+	AggregateObjectMapping contactMapping = new AggregateObjectMapping();
+	contactMapping.setAttributeName("sender");
+	contactMapping.setReferenceClass(org.harper.bookstore.domain.profile.ContactInfo.class);
+	contactMapping.addFieldNameTranslation("order_receive.sender_name", "name");
+	contactMapping.addFieldNameTranslation("order_receive.sender_email", "email");
+//	contactMapping.addFieldNameTranslation("order_receive.address", "address");
+	contactMapping.addFieldNameTranslation("order_receive.sender_phone", "phone_normal");
+	contactMapping.addFieldNameTranslation("order_receive.sender_mobile", "phone_mobile");
+//	contactMapping.addFieldNameTranslation("order_receive.post_code", "post_code");
+	contactMapping.dontAllowNull();
+	descriptor.addMapping(contactMapping);
+	
+	
+	OneToManyMapping itemsMapping = new OneToManyMapping();
+	itemsMapping.setAttributeName("items");
+	itemsMapping.setReferenceClass(org.harper.bookstore.domain.deliver.ReceiveItem.class);
+	itemsMapping.privateOwnedRelationship();
+	itemsMapping.useTransparentCollection();
+	itemsMapping.useCollectionClass(oracle.toplink.indirection.IndirectList.class);
+	itemsMapping.addTargetForeignKeyFieldName("order_receive_item.header", "order_receive.oid");
+	descriptor.addMapping(itemsMapping);
+	
+	return descriptor;
+}
+
+public ClassDescriptor buildReceiveOrderItemDescriptor() {
+	RelationalDescriptor descriptor = new RelationalDescriptor();
+	descriptor.setJavaClass(org.harper.bookstore.domain.deliver.ReceiveItem.class);
+	descriptor.addTableName("order_receive_item");
+	descriptor.addPrimaryKeyFieldName("order_receive_item.oid");
+	
+	// Descriptor Properties.
+	descriptor.useSoftCacheWeakIdentityMap();
+	descriptor.setIdentityMapSize(100);
+	descriptor.useRemoteSoftCacheWeakIdentityMap();
+	descriptor.setRemoteIdentityMapSize(100);
+	descriptor.setSequenceNumberFieldName("order_receive_item.oid");
+	descriptor.setSequenceNumberName("order_receive_item");
+	descriptor.setAlias("ReceiveItem");
+	
+	
+	// Query Manager.
+	descriptor.getQueryManager().checkCacheForDoesExist();
+	
+	
+	// Event Manager.
+	
+	// Mappings.
+//	DirectToFieldMapping displaySequenceMapping = new DirectToFieldMapping();
+//	displaySequenceMapping.setAttributeName("displaySequence");
+//	displaySequenceMapping.setFieldName("order_item.disp_seq");
+//	descriptor.addMapping(displaySequenceMapping);
+	
+	DirectToFieldMapping countMapping = new DirectToFieldMapping();
+	countMapping.setAttributeName("count");
+	countMapping.setFieldName("order_receive_item.count");
+	descriptor.addMapping(countMapping);
+	
+	DirectToFieldMapping oidMapping = new DirectToFieldMapping();
+	oidMapping.setAttributeName("oid");
+	oidMapping.setFieldName("order_receive_item.oid");
+	descriptor.addMapping(oidMapping);
+	
+	OneToOneMapping bookMapping = new OneToOneMapping();
+	bookMapping.setAttributeName("book");
+	bookMapping.setReferenceClass(org.harper.bookstore.domain.profile.Book.class);
+	bookMapping.dontUseIndirection();
+	bookMapping.addForeignKeyFieldName("order_receive_item.book_oid", "profile_book.oid");
+	descriptor.addMapping(bookMapping);
+	
+	OneToOneMapping orderMapping = new OneToOneMapping();
+	orderMapping.setAttributeName("header");
+	orderMapping.setReferenceClass(org.harper.bookstore.domain.deliver.ReceiveOrder.class);
+	orderMapping.dontUseIndirection();
+	orderMapping.addForeignKeyFieldName("order_receive_item.header", "order_receive.oid");
+	descriptor.addMapping(orderMapping);
 	
 	return descriptor;
 }
