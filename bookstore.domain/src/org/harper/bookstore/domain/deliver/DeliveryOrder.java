@@ -1,12 +1,9 @@
 package org.harper.bookstore.domain.deliver;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Vector;
-
-import oracle.toplink.indirection.ValueHolder;
-import oracle.toplink.indirection.ValueHolderInterface;
 
 import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.Entity;
@@ -29,7 +26,7 @@ public class DeliveryOrder extends Entity {
 
 	private Date createDate;
 
-	private ValueHolderInterface items;
+	private List<DeliveryItem> items;
 
 	private ContactInfo contact;
 
@@ -41,7 +38,7 @@ public class DeliveryOrder extends Entity {
 		setStatus(Status.NEW.ordinal());
 		contact = new ContactInfo();
 		createDate = new Date();
-		items = new ValueHolder(new Vector());
+		items = new ArrayList<DeliveryItem>();
 		setValid(true);
 	}
 
@@ -86,6 +83,10 @@ public class DeliveryOrder extends Entity {
 			((PurchaseOrder) item.getOrderItem().getOrder()).makeDelivery();
 		}
 	}
+	
+	public void fallback(List<BookUnit> items) {
+		
+	}
 
 	public ExpressCompany getCompany() {
 		return company;
@@ -112,7 +113,7 @@ public class DeliveryOrder extends Entity {
 	}
 
 	public List<DeliveryItem> getItems() {
-		return (List<DeliveryItem>) items.getValue();
+		return items;
 	}
 
 	public void addItem(DeliveryItem add) {
@@ -131,12 +132,6 @@ public class DeliveryOrder extends Entity {
 		}
 		this.getItems().clear();
 	}
-
-	// public void setItems(List<DeliveryItem> items) {
-	// this.items.setValue(items);
-	// for (DeliveryItem item : items)
-	// item.setHeader(this);
-	// }
 
 	public int getStatus() {
 		return status;

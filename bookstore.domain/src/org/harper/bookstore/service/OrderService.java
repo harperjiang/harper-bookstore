@@ -359,6 +359,8 @@ public class OrderService extends Service {
 			return result;
 		} catch (Exception e) {
 			releaseTransaction();
+			if (e instanceof RuntimeException)
+				throw (RuntimeException) e;
 			throw new RuntimeException(e);
 		}
 	}
