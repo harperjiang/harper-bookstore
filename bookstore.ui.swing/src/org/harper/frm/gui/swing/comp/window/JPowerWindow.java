@@ -49,6 +49,7 @@ public class JPowerWindow extends JFrame {
 
 	public JPowerWindow() {
 		super();
+		
 
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
