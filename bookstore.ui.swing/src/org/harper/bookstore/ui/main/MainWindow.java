@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -14,6 +13,7 @@ import javax.swing.JToolBar;
 import org.harper.bookstore.res.ResourceLoader;
 import org.harper.bookstore.ui.delivery.DOController;
 import org.harper.bookstore.ui.delivery.QueryDOController;
+import org.harper.bookstore.ui.delivery.ROController;
 import org.harper.bookstore.ui.order.POController;
 import org.harper.bookstore.ui.order.SOController;
 import org.harper.bookstore.ui.order.ViewOrderController;
@@ -87,6 +87,10 @@ public class MainWindow extends JPowerWindow {
 		deliveryMenu.add(new NewEditorAction(Messages
 				.getString("MainWindow.menu_delivery_viewdo"), //$NON-NLS-1$
 				QueryDOController.class));
+		deliveryMenu.addSeparator();
+		deliveryMenu
+				.add(new NewEditorAction(
+						Messages.getString("MainWindow.menu_delivery_retcargo"), ROController.class)); //$NON-NLS-1$
 
 		JMenu storeMenu = new JMenu(Messages.getString("MainWindow.menu_store")); //$NON-NLS-1$
 		menuBar.add(storeMenu);
@@ -128,7 +132,7 @@ public class MainWindow extends JPowerWindow {
 		menuBar.add(importMenu);
 		importMenu
 				.add(new NewEditorAction(
-						Messages.getString("MainWindow.menu_import_top"),
+						Messages.getString("MainWindow.menu_import_top"), //$NON-NLS-1$
 						TOPImportController.class,
 						ResourceLoader
 								.getInstance()
@@ -142,11 +146,10 @@ public class MainWindow extends JPowerWindow {
 
 		JMenu viewMenu = new JMenu(Messages.getString("MainWindow.menu_view")); //$NON-NLS-1$
 		menuBar.add(viewMenu);
-
 		viewMenu.add(new NewViewAction(Messages
 				.getString("MainWindow.menu_view_todo"), ViewTodoFrame.class)); //$NON-NLS-1$
 		viewMenu.add(new NewViewAction(Messages
-				.getString("MainWindow.menu_view_pref"), null, ResourceLoader
+				.getString("MainWindow.menu_view_pref"), null, ResourceLoader //$NON-NLS-1$
 				.getInstance().createImageIcon(
 						"/org/harper/bookstore/res/icon/pref_small.png"))); //$NON-NLS-1$
 		// Set Menu Size;

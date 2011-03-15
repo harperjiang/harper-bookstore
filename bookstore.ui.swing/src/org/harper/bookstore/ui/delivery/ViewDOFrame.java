@@ -1,14 +1,14 @@
 package org.harper.bookstore.ui.delivery;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -27,6 +27,8 @@ public class ViewDOFrame extends JPowerWindowEditor {
 	private DeliveryPanel panel;
 
 	private JTextField poNumberField;
+	
+	private JTextField statusField;
 
 	private JTable doItemTable;
 
@@ -36,57 +38,67 @@ public class ViewDOFrame extends JPowerWindowEditor {
 	private static final long serialVersionUID = -4793108766253003738L;
 
 	public ViewDOFrame() {
-		super("View Delivery Order");
+		super(Messages.getString("ViewDOFrame.title")); //$NON-NLS-1$
 
-		setSize(800, 600);
+		setSize(800, 700);
 
 		setLayout(new BorderLayout());
 
 		JToolBar toolBar = new JToolBar();
 		add(toolBar, BorderLayout.NORTH);
 
-		JButton saveButton = new JButton("Save");
+		JButton saveButton = new JButton(
+				Messages.getString("ViewDOFrame.btn_save")); //$NON-NLS-1$
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					controller.save(false);
-					JOptionPane.showMessageDialog(ViewDOFrame.this, "Saved");
+					JOptionPane.showMessageDialog(ViewDOFrame.this,
+							Messages.getString("ViewDOFrame.msg_save_success")); //$NON-NLS-1$
 				} catch (Exception ee) {
 					ee.printStackTrace();
 					JOptionPane.showMessageDialog(ViewDOFrame.this,
-							ee.getMessage(), "Failed to Save",
+							ee.getMessage(),
+							Messages.getString("ViewDOFrame.msg_save_fail"), //$NON-NLS-1$
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		toolBar.add(saveButton);
 
-		JButton deliverButton = new JButton("Deliver");
+		JButton deliverButton = new JButton(
+				Messages.getString("ViewDOFrame.btn_deliver")); //$NON-NLS-1$
 		deliverButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					controller.deliver();
-					JOptionPane.showMessageDialog(ViewDOFrame.this, "Delivered");
+					JOptionPane.showMessageDialog(ViewDOFrame.this, Messages
+							.getString("ViewDOFrame.msg_deliver_success")); //$NON-NLS-1$
 				} catch (Exception ee) {
 					ee.printStackTrace();
 					JOptionPane.showMessageDialog(ViewDOFrame.this,
-							ee.getMessage(), "Failed to Save",
+							ee.getMessage(),
+							Messages.getString("ViewDOFrame.msg_deliver_fail"), //$NON-NLS-1$
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		toolBar.add(deliverButton);
 
-		JButton fallbackButton = new JButton("Fallback");
+		JButton fallbackButton = new JButton(
+				Messages.getString("ViewDOFrame.btn_fallback")); //$NON-NLS-1$
 		fallbackButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					controller.fallback();
-					JOptionPane.showMessageDialog(ViewDOFrame.this, "Fallback");
+					JOptionPane.showMessageDialog(ViewDOFrame.this, Messages
+							.getString("ViewDOFrame.msg_fallback_success")); //$NON-NLS-1$
 				} catch (Exception ee) {
 					ee.printStackTrace();
-					JOptionPane.showMessageDialog(ViewDOFrame.this,
-							ee.getMessage(), "Failed to Save",
+					JOptionPane.showMessageDialog(
+							ViewDOFrame.this,
+							ee.getMessage(),
+							Messages.getString("ViewDOFrame.msg_fallback_fail"), //$NON-NLS-1$
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -96,8 +108,20 @@ public class ViewDOFrame extends JPowerWindowEditor {
 		JPanel mainPanel = new JPanel();
 		add(mainPanel, BorderLayout.CENTER);
 
-		mainPanel.setLayout(new GridLayout(2, 1));
-
+		JPanel topPanel = new JPanel();
+		mainPanel.add(topPanel,BorderLayout.NORTH);
+		
+		topPanel.setLayout(new FlowLayout());
+		JLabel statusLabel = new JLabel(Messages.getString("ViewDOFrame.label_status")); //$NON-NLS-1$
+		topPanel.add(statusLabel);
+		statusField = new JTextField();
+		statusField.setEditable(false);
+		topPanel.add(statusField);
+		
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new GridLayout(2, 1));
+		mainPanel.add(centerPanel,BorderLayout.CENTER);
+		
 		doItemTable = new JTable();
 		CommonTableModel ctm = new CommonTableModel();
 		ctm.initialize(ViewDeliveryItemTableData.class);
@@ -112,13 +136,10 @@ public class ViewDOFrame extends JPowerWindowEditor {
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(doItemTable);
-		scrollPane.setPreferredSize(new Dimension(800, 300));
-
-		mainPanel.add(scrollPane);
+		centerPanel.add(scrollPane);
 
 		panel = new DeliveryPanel();
-		panel.setPreferredSize(new Dimension(800, 300));
-		mainPanel.add("Delivery Info", panel);
+		centerPanel.add(panel);
 	}
 
 	private ViewDOController controller;
@@ -141,6 +162,10 @@ public class ViewDOFrame extends JPowerWindowEditor {
 
 	public JTable getDoItemTable() {
 		return doItemTable;
+	}
+
+	public JTextField getStatusField() {
+		return statusField;
 	}
 
 }

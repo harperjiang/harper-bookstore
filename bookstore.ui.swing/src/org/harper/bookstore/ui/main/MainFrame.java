@@ -173,8 +173,8 @@ public class MainFrame extends JFrame {
 		 UIManager.put("InternalFrame", new Font("隶书",Font.PLAIN,24));
 		 for(Entry entry :UIManager.getLookAndFeelDefaults().entrySet()) {
 		 if(String.valueOf(entry.getKey()).contains("font"))
-		 System.out.println(entry.getKey());
+		 System.out.println("UIManager.put(\""+entry.getKey()+"\", defaultFont);");
 		 }
-		new MainFrame();
+//		new MainFrame();
 	}
 }

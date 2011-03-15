@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.lang.StringUtils;
+import org.harper.bookstore.ui.common.ReturnKeyListener;
 import org.harper.bookstore.ui.common.UIStandard;
 
 public class LoginDialog extends JDialog {
@@ -79,7 +80,6 @@ public class LoginDialog extends JDialog {
 			public void actionPerformed(ActionEvent event) {
 				try {
 					loginStart();
-					getController().login();
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(LoginDialog.this, "Error",
 							ex.getMessage(), JOptionPane.ERROR_MESSAGE);
@@ -94,6 +94,13 @@ public class LoginDialog extends JDialog {
 		commandPanel.add(progress);
 
 		controller = new LoginController(this);
+
+		passwordField.addKeyListener(new ReturnKeyListener(new Runnable() {
+			@Override
+			public void run() {
+				loginStart();
+			}
+		}));
 	}
 
 	protected void loginStart() {
@@ -102,6 +109,7 @@ public class LoginDialog extends JDialog {
 		passwordField.setEditable(false);
 		loginButton.setEnabled(false);
 		progress.setVisible(true);
+		getController().login();
 	}
 
 	protected void loginComplete() {

@@ -57,23 +57,23 @@ public class Launcher {
 		UIStandard.setDefaultFont();
 
 		Launcher launcher = new Launcher();
+		try {
+			launcher.start("Initializing...");
 
-		launcher.start("Initializing...");
+			// Init DB connection
+			launcher.step("Connect to Database...");
+			SessionManager.getInstance().getSession();
 
-		// Init DB connection
-		launcher.step("Connect to Database...");
-		SessionManager.getInstance().getSession();
+			// TODO Get cache from server side
+			launcher.step("Refreshing local data...");
+			Cache.getInstance().load();
 
-		// TODO Get cache from server side
-		launcher.step("Refreshing local data...");
-		Cache.getInstance().load();
-
-		launcher.step("Initializing Modules...");
-		MediatorInitializer.init();
-
-		// Hide Dialog
-		launcher.stop();
-
+			launcher.step("Initializing Modules...");
+			MediatorInitializer.init();
+		} finally {
+			// Hide Dialog
+			launcher.stop();
+		}
 		// Start GUI
 		LoginDialog login = new LoginDialog();
 		login.setVisible(true);

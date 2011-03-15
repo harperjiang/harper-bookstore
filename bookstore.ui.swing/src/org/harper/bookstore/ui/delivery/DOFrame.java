@@ -11,7 +11,6 @@ import java.util.Date;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -56,14 +55,14 @@ public class DOFrame extends JPowerWindowEditor {
 	private static final long serialVersionUID = -4793108766253003738L;
 
 	public DOFrame() {
-		super("Create Delivery Order");
+		super(Messages.getString("DOFrame.title")); //$NON-NLS-1$
 		setSize(800, 500);
 
 		setLayout(new BorderLayout());
 
 		JPanel topPanel = new JPanel();
 
-		JLabel poLabel = new JLabel("PO Number");
+		JLabel poLabel = new JLabel(Messages.getString("DOFrame.label_load_po")); //$NON-NLS-1$
 		topPanel.add(poLabel);
 
 		final JTabbedPane tabbedPane = new JTabbedPane();
@@ -80,9 +79,12 @@ public class DOFrame extends JPowerWindowEditor {
 
 			public void exception(final Exception ex) {
 				LogManager.getInstance().getLogger(DOFrame.class)
-						.error("Exception when saving", ex);
-				JOptionPane.showMessageDialog(DOFrame.this, ex.getMessage(),
-						"Failed to load", JOptionPane.ERROR_MESSAGE);
+						.error("Exception when saving", ex); //$NON-NLS-1$
+				JOptionPane
+						.showMessageDialog(
+								DOFrame.this.getManagerWindow(),
+								ex.getMessage(),
+								Messages.getString("DOFrame.msg_load_fail"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
 			}
 		};
 
@@ -91,7 +93,8 @@ public class DOFrame extends JPowerWindowEditor {
 		topPanel.add(poNumberField);
 		poNumberField.addKeyListener(new ReturnKeyAdapter(loadAction));
 
-		JButton loadPoButton = new JButton("Load");
+		JButton loadPoButton = new JButton(
+				Messages.getString("DOFrame.btn_load")); //$NON-NLS-1$
 		loadPoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				new Thread(loadAction).start();
@@ -99,7 +102,8 @@ public class DOFrame extends JPowerWindowEditor {
 		});
 		topPanel.add(loadPoButton);
 
-		missedCheck = new JCheckBox("Send Missed");
+		missedCheck = new JCheckBox(
+				Messages.getString("DOFrame.check_sendmiss")); //$NON-NLS-1$
 		topPanel.add(missedCheck);
 
 		add(topPanel, BorderLayout.NORTH);
@@ -148,21 +152,24 @@ public class DOFrame extends JPowerWindowEditor {
 
 		};
 
-		tabbedPane.add("Item Info", doItemController.getView());
+		tabbedPane
+				.add(Messages.getString("DOFrame.tab_item_info"), doItemController.getView()); //$NON-NLS-1$
 
 		JPanel secondPanel = new JPanel();
 		secondPanel.setLayout(new GridLayout(2, 1));
 		panel = new DeliveryPanel();
 		secondPanel.add(panel);
-		tabbedPane.addTab("Delivery Info", secondPanel);
+		tabbedPane.addTab(
+				Messages.getString("DOFrame.tab_deliver_info"), secondPanel); //$NON-NLS-1$
 
-		remarkArea = new LabeledTextArea("Remark");
+		remarkArea = new LabeledTextArea(
+				Messages.getString("DOFrame.tab_remark")); //$NON-NLS-1$
 		secondPanel.add(remarkArea);
 
 		JPanel bottomPanel = new JPanel();
 		add(bottomPanel, BorderLayout.SOUTH);
 
-		JButton saveButton = new JButton("Save");
+		JButton saveButton = new JButton(Messages.getString("DOFrame.btn_save")); //$NON-NLS-1$
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -172,18 +179,22 @@ public class DOFrame extends JPowerWindowEditor {
 							controller.save(false);
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
-									JOptionPane.showMessageDialog(DOFrame.this,
-											"Delivery Order Saved");
+									JOptionPane
+											.showMessageDialog(
+													DOFrame.this,
+													Messages.getString("DOFrame.msg_save_success")); //$NON-NLS-1$
 								}
 							});
 						} catch (final Exception ex) {
 							ex.printStackTrace();
 							LogManager.getInstance().getLogger(DOFrame.class)
-									.error("Error on saving", ex);
+									.error("Error on saving", ex); //$NON-NLS-1$
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
-									JOptionPane.showMessageDialog(DOFrame.this,
-											ex.getMessage(), "Failed to save",
+									JOptionPane.showMessageDialog(
+											DOFrame.this,
+											ex.getMessage(),
+											Messages.getString("DOFrame.msg_save_error"), //$NON-NLS-1$
 											JOptionPane.ERROR_MESSAGE);
 								}
 							});
@@ -194,7 +205,8 @@ public class DOFrame extends JPowerWindowEditor {
 		});
 		bottomPanel.add(saveButton);
 
-		JButton saveAndSendButton = new JButton("Save and Send");
+		JButton saveAndSendButton = new JButton(
+				Messages.getString("DOFrame.btn_save_send")); //$NON-NLS-1$
 		saveAndSendButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -203,24 +215,28 @@ public class DOFrame extends JPowerWindowEditor {
 						try {
 							ChooseDateDialog dialog = new ChooseDateDialog(
 									DOFrame.this.getManagerWindow(),
-									"Choose Date", "Please choose send date",
+									Messages.getString("DOFrame.dialog_title_choose_send_date"), Messages.getString("DOFrame.dialog_text_choose_send_date"), //$NON-NLS-1$ //$NON-NLS-2$
 									new Date());
 
 							controller.save(dialog.getBean().getDate(), true);
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
-									JOptionPane.showMessageDialog(DOFrame.this,
-											"Delivery Order Saved and Sent");
+									JOptionPane
+											.showMessageDialog(
+													DOFrame.this,
+													Messages.getString("DOFrame.msg_save_send_success")); //$NON-NLS-1$
 								}
 							});
 						} catch (final Exception ex) {
 							ex.printStackTrace();
 							LogManager.getInstance().getLogger(DOFrame.class)
-									.error("Error on saving", ex);
+									.error("Error on saving", ex); //$NON-NLS-1$
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
-									JOptionPane.showMessageDialog(DOFrame.this,
-											ex.getMessage(), "Failed to save",
+									JOptionPane.showMessageDialog(
+											DOFrame.this,
+											ex.getMessage(),
+											Messages.getString("DOFrame.msg_save_send_fail"), //$NON-NLS-1$
 											JOptionPane.ERROR_MESSAGE);
 								}
 							});

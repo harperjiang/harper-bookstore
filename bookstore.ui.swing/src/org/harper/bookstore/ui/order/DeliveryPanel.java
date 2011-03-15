@@ -40,7 +40,7 @@ public class DeliveryPanel extends JPanel {
 		GridBagLayout layout = new GridBagLayout();
 		setLayout(layout);
 
-		JLabel companyLabel = new JLabel("Company");
+		JLabel companyLabel = new JLabel(Messages.getString("DeliveryPanel.express_company")); //$NON-NLS-1$
 		add(companyLabel);
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(10, 5, 10, 2);
@@ -78,7 +78,7 @@ public class DeliveryPanel extends JPanel {
 		c.weightx = 1;
 		layout.setConstraints(padLabel, c);
 
-		JLabel nameLabel = new JLabel("Name");
+		JLabel nameLabel = new JLabel(Messages.getString("DeliveryPanel.name")); //$NON-NLS-1$
 		add(nameLabel);
 		c = new GridBagConstraints();
 		c.insets = new Insets(2, 5, 5, 2);
@@ -97,7 +97,7 @@ public class DeliveryPanel extends JPanel {
 		c.gridy = 1;
 		layout.setConstraints(nameField, c);
 
-		JLabel mobileLabel = new JLabel("Mobile");
+		JLabel mobileLabel = new JLabel(Messages.getString("DeliveryPanel.mobile")); //$NON-NLS-1$
 		add(mobileLabel);
 		c = new GridBagConstraints();
 		c.insets = new Insets(2, 5, 5, 2);
@@ -116,7 +116,7 @@ public class DeliveryPanel extends JPanel {
 		c.anchor = GridBagConstraints.NORTHWEST;
 		layout.setConstraints(mobileField, c);
 
-		JLabel phoneLabel = new JLabel("Phone");
+		JLabel phoneLabel = new JLabel(Messages.getString("DeliveryPanel.phone")); //$NON-NLS-1$
 		add(phoneLabel);
 		c = new GridBagConstraints();
 		c.insets = new Insets(2, 5, 5, 2);
@@ -134,7 +134,7 @@ public class DeliveryPanel extends JPanel {
 		c.anchor = GridBagConstraints.NORTHWEST;
 		layout.setConstraints(phoneField, c);
 
-		JLabel emailLabel = new JLabel("Email");
+		JLabel emailLabel = new JLabel(Messages.getString("DeliveryPanel.email")); //$NON-NLS-1$
 		add(emailLabel);
 		c = new GridBagConstraints();
 		c.insets = new Insets(2, 5, 5, 2);
@@ -152,7 +152,7 @@ public class DeliveryPanel extends JPanel {
 		c.anchor = GridBagConstraints.NORTHWEST;
 		layout.setConstraints(emailField, c);
 
-		JLabel addressLabel = new JLabel("Address");
+		JLabel addressLabel = new JLabel(Messages.getString("DeliveryPanel.address")); //$NON-NLS-1$
 		add(addressLabel);
 		c = new GridBagConstraints();
 		c.insets = new Insets(2, 5, 5, 2);
