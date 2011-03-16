@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -49,7 +50,6 @@ public class JPowerWindow extends JFrame {
 
 	public JPowerWindow() {
 		super();
-		
 
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -99,6 +99,11 @@ public class JPowerWindow extends JFrame {
 
 	public void addEditor(JPowerWindowEditor editor) {
 		editor.setManagerWindow(this);
+		if (null != editorPane.getSelectedFrame()) {
+			JInternalFrame currentTop = editorPane.getSelectedFrame();
+			editor.setLocation(currentTop.getLocation().x + 30,
+					currentTop.getLocation().y + 30);
+		}
 		editorPane.add(editor);
 		editor.show();
 	}
@@ -156,6 +161,8 @@ public class JPowerWindow extends JFrame {
 				if (obj instanceof JPowerWindowEditor)
 					addEditor((JPowerWindowEditor) obj);
 			} catch (Exception e1) {
+				if (e1 instanceof RuntimeException)
+					throw (RuntimeException) e1;
 				throw new RuntimeException(e1);
 			}
 		}

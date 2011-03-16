@@ -47,7 +47,8 @@ public class ViewDOController extends Controller {
 				frame.getPanel().getCompanyCombo(), "delivery.company"));
 		manager.addBinding(new JTextBinding(frame.getPanel()
 				.getOrderNumberField(), "delivery.number"));
-		manager.addBinding(new JTextBinding(frame.getStatusField(),"delivery.statusStr"));
+		manager.addBinding(new JTextBinding(frame.getStatusField(),
+				"delivery.statusStr"));
 		manager.addBinding(new JTextBinding(frame.getPanel().getNameField(),
 				"delivery.contact.name"));
 		manager.addBinding(new JTextBinding(frame.getPanel().getAddressArea(),
@@ -61,7 +62,7 @@ public class ViewDOController extends Controller {
 
 		manager.addBinding(new TableBinding(frame.getDoItemTable(),
 				"delivery.items"));
-		
+
 		manager.loadAll();
 	}
 
@@ -103,14 +104,22 @@ public class ViewDOController extends Controller {
 				DeliveryOrder.Status.DELIVERED.ordinal());
 	}
 
-	public void fallback() {
-		new OrderService().operateDelivery(bean.getDelivery(),
-				DeliveryOrder.Status.RETURNED.ordinal());
-	}
+	// public void fallback() {
+	// new OrderService().operateDelivery(bean.getDelivery(),
+	// DeliveryOrder.Status.RETURNED.ordinal());
+	// }
 
 	@Override
 	public JComponent getComponent() {
 		return frame;
+	}
+
+	public ViewDOFrame getFrame() {
+		return frame;
+	}
+
+	public DeliveryOrderBean getBean() {
+		return bean;
 	}
 
 	public static void main(String[] args) {

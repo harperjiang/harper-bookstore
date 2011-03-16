@@ -13,6 +13,7 @@ import javax.swing.JToolBar;
 import org.harper.bookstore.res.ResourceLoader;
 import org.harper.bookstore.ui.delivery.DOController;
 import org.harper.bookstore.ui.delivery.QueryDOController;
+import org.harper.bookstore.ui.delivery.QueryROController;
 import org.harper.bookstore.ui.delivery.ROController;
 import org.harper.bookstore.ui.order.POController;
 import org.harper.bookstore.ui.order.SOController;
@@ -21,6 +22,7 @@ import org.harper.bookstore.ui.order.ViewPurchaseOrderController;
 import org.harper.bookstore.ui.print.PrintExpressOrderController;
 import org.harper.bookstore.ui.profile.BookManagerController;
 import org.harper.bookstore.ui.profile.BookSetManageController;
+import org.harper.bookstore.ui.report.SellAndProfitReportController;
 import org.harper.bookstore.ui.store.ManageStoreController;
 import org.harper.bookstore.ui.store.QueryStockTakingController;
 import org.harper.bookstore.ui.store.SiteInfoController;
@@ -91,6 +93,9 @@ public class MainWindow extends JPowerWindow {
 		deliveryMenu
 				.add(new NewEditorAction(
 						Messages.getString("MainWindow.menu_delivery_retcargo"), ROController.class)); //$NON-NLS-1$
+		deliveryMenu
+				.add(new NewEditorAction(
+						Messages.getString("MainWindow.menu_delivery_query_ro"), QueryROController.class)); //$NON-NLS-1$
 
 		JMenu storeMenu = new JMenu(Messages.getString("MainWindow.menu_store")); //$NON-NLS-1$
 		menuBar.add(storeMenu);
@@ -138,6 +143,11 @@ public class MainWindow extends JPowerWindow {
 								.getInstance()
 								.createImageIcon(
 										"/org/harper/bookstore/res/icon/import_top_small.png"))); //$NON-NLS-1$
+
+		JMenu reportMenu = new JMenu("报表");
+		menuBar.add(reportMenu);
+		reportMenu.add(new NewEditorAction("销售/利润日报表",
+				SellAndProfitReportController.class));
 
 		JMenu utilMenu = new JMenu(Messages.getString("MainWindow.menu_util")); //$NON-NLS-1$
 		menuBar.add(utilMenu);

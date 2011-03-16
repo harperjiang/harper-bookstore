@@ -8,9 +8,9 @@ public class ReceiveItemTableData extends AbstractEditableTableData {
 	public ReceiveItemTableData() {
 		super();
 		descBeans.add(new ColumnDescBean(String.class, "ISBN",
-				"orderItem.book.isbn"));
+				"book.isbn"));
 		descBeans.add(new ColumnDescBean(String.class, "Name",
-				"orderItem.book.name"));
+				"book.name"));
 		descBeans.add(new ColumnDescBean(Integer.TYPE, "Count", "count"));
 	}
 

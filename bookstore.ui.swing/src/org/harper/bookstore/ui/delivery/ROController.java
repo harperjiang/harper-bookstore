@@ -5,8 +5,9 @@ import java.util.Date;
 import javax.swing.JComponent;
 
 import org.harper.bookstore.cache.Cache;
+import org.harper.bookstore.domain.deliver.ExpressCompany;
 import org.harper.bookstore.domain.deliver.ReceiveOrder;
-import org.harper.bookstore.domain.deliver.ReceiveOrder.ReceiveType;
+import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.ui.Controller;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
 import org.harper.frm.gui.swing.manager.BindingManager;
@@ -29,6 +30,8 @@ public class ROController extends Controller {
 		frame.setController(this);
 		bean = null == b ? new ReceiveOrder() {
 			{
+				setCompany((ExpressCompany) frame.getPanel().getCompanyCombo()
+						.getSelectedItem());
 				setCreateDate(new Date());
 				setSite(Cache.getInstance().getValidSites().get(0));
 				setType(ReceiveType.RETURN);
@@ -66,5 +69,24 @@ public class ROController extends Controller {
 	@Override
 	public JComponent getComponent() {
 		return frame;
+	}
+
+	public ReceiveOrder save() {
+		return new OrderService().saveReceiveOrder(bean);
+	}
+
+	public ReceiveOrder confirm() {
+		OrderService os = new OrderService();
+		return os.operateReceive(os.saveReceiveOrder(bean),
+				ReceiveOrder.Status.CONFIRM.ordinal());
+	}
+
+	public ReceiveOrder getBean() {
+		return bean;
+	}
+
+	public void setBean(ReceiveOrder newBean) {
+		this.bean = newBean;
+		this.manager.setBean(newBean);
 	}
 }
