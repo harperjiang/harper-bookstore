@@ -10,8 +10,10 @@ import javax.swing.UIManager;
 
 public class UIStandard {
 
+	public static Font DEFAULT_FONT = new Font("微软雅黑", Font.PLAIN, 12);
+
 	public static void setDefaultFont() {
-		Font defaultFont = new Font("微软雅黑", Font.PLAIN, 12);
+		Font defaultFont = DEFAULT_FONT;
 		UIManager.put("List.font", defaultFont);
 		UIManager.put("TableHeader.font", defaultFont);
 		UIManager.put("Panel.font", defaultFont);

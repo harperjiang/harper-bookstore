@@ -137,7 +137,7 @@ public class QueryDOFrame extends JPowerWindowEditor {
 				.setRenderer(new EnumListCellRenderer(
 						DeliveryOrder.Status.class,
 						ResourceBundle
-								.getBundle("org.harper.bookstore.ui.delivery.DOStatus"), //$NON-NLS-1$
+								.getBundle("org.harper.bookstore.domain.deliver.DOStatus"), //$NON-NLS-1$
 						"ALL")); //$NON-NLS-1$
 		topPanel.add(statusCombo);
 

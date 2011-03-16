@@ -17,6 +17,9 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import org.harper.bookstore.domain.deliver.DeliveryItem;
+import org.harper.bookstore.domain.deliver.DeliveryOrder;
+import org.harper.bookstore.domain.deliver.ReceiveItem;
 import org.harper.bookstore.ui.common.CheckBoxTableRenderer;
 import org.harper.bookstore.ui.order.DeliveryPanel;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
@@ -27,7 +30,7 @@ public class ViewDOFrame extends JPowerWindowEditor {
 	private DeliveryPanel panel;
 
 	private JTextField poNumberField;
-	
+
 	private JTextField statusField;
 
 	private JTable doItemTable;
@@ -89,17 +92,29 @@ public class ViewDOFrame extends JPowerWindowEditor {
 				Messages.getString("ViewDOFrame.btn_fallback")); //$NON-NLS-1$
 		fallbackButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ROController roc = new ROController();
+				DeliveryOrder delivery = getController().getBean()
+						.getDelivery();
+				roc.getBean().setDelivery(delivery);
+				for (DeliveryItem item : delivery.getItems()) {
+					ReceiveItem ri = new ReceiveItem();
+					ri.setBook(item.getBook());
+					ri.setCount(0);
+					roc.getBean().addItems(ri);
+					ri.setUnitCost(item.getUnitCost());
+				}
+				getManagerWindow().addEditor(roc.getComponent());
 				try {
-					controller.fallback();
-					JOptionPane.showMessageDialog(ViewDOFrame.this, Messages
-							.getString("ViewDOFrame.msg_fallback_success")); //$NON-NLS-1$
+					// controller.fallback();
+					// JOptionPane.showMessageDialog(ViewDOFrame.this, Messages
+					//							.getString("ViewDOFrame.msg_fallback_success")); //$NON-NLS-1$
 				} catch (Exception ee) {
 					ee.printStackTrace();
-					JOptionPane.showMessageDialog(
-							ViewDOFrame.this,
-							ee.getMessage(),
-							Messages.getString("ViewDOFrame.msg_fallback_fail"), //$NON-NLS-1$
-							JOptionPane.ERROR_MESSAGE);
+					// JOptionPane.showMessageDialog(
+					// ViewDOFrame.this,
+					// ee.getMessage(),
+					//							Messages.getString("ViewDOFrame.msg_fallback_fail"), //$NON-NLS-1$
+					// JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -109,19 +124,20 @@ public class ViewDOFrame extends JPowerWindowEditor {
 		add(mainPanel, BorderLayout.CENTER);
 
 		JPanel topPanel = new JPanel();
-		mainPanel.add(topPanel,BorderLayout.NORTH);
-		
+		mainPanel.add(topPanel, BorderLayout.NORTH);
+
 		topPanel.setLayout(new FlowLayout());
-		JLabel statusLabel = new JLabel(Messages.getString("ViewDOFrame.label_status")); //$NON-NLS-1$
+		JLabel statusLabel = new JLabel(
+				Messages.getString("ViewDOFrame.label_status")); //$NON-NLS-1$
 		topPanel.add(statusLabel);
 		statusField = new JTextField();
 		statusField.setEditable(false);
 		topPanel.add(statusField);
-		
+
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new GridLayout(2, 1));
-		mainPanel.add(centerPanel,BorderLayout.CENTER);
-		
+		mainPanel.add(centerPanel, BorderLayout.CENTER);
+
 		doItemTable = new JTable();
 		CommonTableModel ctm = new CommonTableModel();
 		ctm.initialize(ViewDeliveryItemTableData.class);
