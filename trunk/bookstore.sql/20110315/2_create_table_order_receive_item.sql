@@ -8,12 +8,12 @@ CREATE  TABLE IF NOT EXISTS `order_receive_item` (
   INDEX `ori_fk_book` (`book_oid` ASC) ,
   CONSTRAINT `ori_fk_header`
     FOREIGN KEY (`header` )
-    REFERENCES `bookstore`.`order_receive` (`oid` )
+    REFERENCES `order_receive` (`oid` )
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `ori_fk_book`
     FOREIGN KEY (`book_oid` )
-    REFERENCES `bookstore`.`profile_book` (`oid` )
+    REFERENCES `profile_book` (`oid` )
     ON DELETE RESTRICT
     ON UPDATE RESTRICT)
 ENGINE = InnoDB;
