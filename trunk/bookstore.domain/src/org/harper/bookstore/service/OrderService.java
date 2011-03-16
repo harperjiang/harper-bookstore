@@ -10,6 +10,8 @@ import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.deliver.DeliveryItem;
 import org.harper.bookstore.domain.deliver.DeliveryOrder;
 import org.harper.bookstore.domain.deliver.ExpressCompany;
+import org.harper.bookstore.domain.deliver.ReceiveItem;
+import org.harper.bookstore.domain.deliver.ReceiveOrder;
 import org.harper.bookstore.domain.order.ListPrice;
 import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.domain.order.OrderItem;
@@ -347,7 +349,6 @@ public class OrderService extends Service {
 				order.deliver();
 				break;
 			case RETURNED:
-				order.fallback();
 				break;
 			case EXCEPTION:
 				break;
@@ -373,6 +374,72 @@ public class OrderService extends Service {
 			return getRepoFactory().getOrderRepo().searchDeliveryOrder(
 					fromDate, toDate, poNumber, consigneeName, poCustomerId,
 					status);
+		} finally {
+			releaseTransaction();
+		}
+	}
+
+	public ReceiveOrder saveReceiveOrder(ReceiveOrder order) {
+		startTransaction();
+		try {
+			Validate.isTrue(order.getStatus() == ReceiveOrder.Status.DRAFT,
+					"Only Draft Order could be Amended");
+
+			Validate.isTrue(order.getCompany() == ExpressCompany.NIL
+					|| !StringUtils.isEmpty(order.getNumber()),
+					"Order Number should not be empty");
+
+			for (int i = 0; i < order.getItems().size(); i++) {
+				ReceiveItem item = order.getItems().get(i);
+				item.setHeader(order);
+				// Remove the items that has 0 or negative count;
+				if (0 >= item.getCount()) {
+					order.getItems().remove(i);
+					i--;
+					continue;
+				}
+			}
+			ReceiveOrder result = getRepoFactory().getCommonRepo().store(order);
+			commitTransaction();
+			return result;
+		} catch (Exception e) {
+			releaseTransaction();
+			if(e instanceof RuntimeException)
+				throw (RuntimeException)e;
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	public ReceiveOrder operateReceive(ReceiveOrder order, int status) {
+		startTransaction();
+		try {
+			switch (ReceiveOrder.Status.values()[status]) {
+			case CONFIRM:
+				order.confirm();
+				break;
+			default:
+				break;
+			}
+			ReceiveOrder result = getRepoFactory().getCommonRepo().store(order);
+			commitTransaction();
+			return result;
+		} catch (Exception e) {
+			releaseTransaction();
+			if (e instanceof RuntimeException)
+				throw (RuntimeException) e;
+			throw new RuntimeException(e);
+		}
+	}
+
+	public List<ReceiveOrder> searchReceiveOrder(Date fromCreateDate,
+			Date toCreateDate, Date fromReceiveDate, Date toReceiveDate,
+			String number, String senderName, ReceiveOrder.Status status) {
+		startTransaction();
+		try {
+			return getRepoFactory().getOrderRepo().searchReceiveOrder(
+					fromCreateDate, toCreateDate, fromReceiveDate,
+					toReceiveDate, number, senderName, status);
 		} finally {
 			releaseTransaction();
 		}

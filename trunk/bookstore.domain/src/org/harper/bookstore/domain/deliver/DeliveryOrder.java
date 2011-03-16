@@ -68,25 +68,26 @@ public class DeliveryOrder extends Entity {
 		}
 	}
 
-	public void fallback() {
-		Validate.isTrue(getStatus() == Status.DELIVERED.ordinal(),
-				"Can only fallback delivered order");
-		setStatus(Status.RETURNED.ordinal());
-
-		// Modify Storage
-		for (DeliveryItem item : getItems()) {
-			StoreSite site = item.getOrderItem().getOrder().getSite();
-			site.putInto(item.getOrderItem().getBook(), item.getCount(),
-					item.getUnitCost());
-			item.getOrderItem().setSentCount(
-					item.getOrderItem().getSentCount() - item.getCount());
-			((PurchaseOrder) item.getOrderItem().getOrder()).makeDelivery();
-		}
-	}
-	
-	public void fallback(List<BookUnit> items) {
-		
-	}
+//	public void fallback() {
+//		Validate.isTrue(getStatus() == Status.DELIVERED.ordinal(),
+//				"Can only fallback delivered order");
+//		setStatus(Status.RETURNED.ordinal());
+//
+//		// Modify Storage
+//		for (DeliveryItem item : getItems()) {
+//			StoreSite site = item.getOrderItem().getOrder().getSite();
+//			site.putInto(item.getOrderItem().getBook(), item.getCount(),
+//					item.getUnitCost());
+//			item.getOrderItem().setSentCount(
+//					item.getOrderItem().getSentCount() - item.getCount());
+//			// 退货不重复计算订单状态
+//			((PurchaseOrder) item.getOrderItem().getOrder()).makeDelivery();
+//		}
+//	}
+//	
+//	public void fallback(List<BookUnit> items) {
+//		
+//	}
 
 	public ExpressCompany getCompany() {
 		return company;

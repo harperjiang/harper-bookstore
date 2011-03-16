@@ -11,6 +11,7 @@ import oracle.toplink.queryframework.ReportQuery;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.deliver.DeliveryOrder;
+import org.harper.bookstore.domain.deliver.ReceiveOrder;
 import org.harper.bookstore.domain.order.DisplayItem;
 import org.harper.bookstore.domain.order.ListPrice;
 import org.harper.bookstore.domain.order.Order;
@@ -188,5 +189,44 @@ public class TopLinkOrderRepo extends TopLinkRepo implements OrderRepo {
 
 		return (List<DeliveryOrder>) TransactionContext.getSession()
 				.executeQuery(raq);
+	}
+
+	@Override
+	public List<ReceiveOrder> searchReceiveOrder(Date fromCreateDate,
+			Date toCreateDate, Date fromReceiveDate, Date toReceiveDate,
+			String number, String senderName, ReceiveOrder.Status status) {
+		ExpressionBuilder builder = new ExpressionBuilder();
+		Expression exp = builder;
+		if (null != fromCreateDate) {
+			exp = exp.and(builder.get("createDate").greaterThanEqual(
+					fromCreateDate));
+		}
+		if (null != toCreateDate) {
+			exp = exp
+					.and(builder.get("createDate").lessThanEqual(toCreateDate));
+		}
+
+		if (null != fromReceiveDate) {
+			exp = exp.and(builder.get("receiveDate").greaterThanEqual(
+					fromReceiveDate));
+		}
+		if (null != toReceiveDate) {
+			exp = exp.and(builder.get("receiveDate").lessThanEqual(
+					toReceiveDate));
+		}
+		if (!StringUtils.isEmpty(number)) {
+			exp = exp.and(builder.get("number").containsSubstringIgnoringCase(
+					number));
+		}
+		if (!StringUtils.isEmpty(senderName)) {
+			exp = exp.and(builder.get("sender").get("name")
+					.containsSubstringIgnoringCase("senderName"));
+		}
+		if (null != status)
+			exp = exp.and(builder.get("status").equal(status.ordinal()));
+
+		ReadAllQuery raq = new ReadAllQuery(ReceiveOrder.class, exp);
+		raq.addOrdering(builder.get("createDate").descending());
+		return (List) TransactionContext.getSession().executeQuery(raq);
 	}
 }

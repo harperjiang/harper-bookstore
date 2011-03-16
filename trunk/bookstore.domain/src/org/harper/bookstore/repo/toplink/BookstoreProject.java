@@ -1452,6 +1452,11 @@ public ClassDescriptor buildDeliveryItemDescriptor() {
 	// Event Manager.
 	
 	// Mappings.
+	DirectToFieldMapping returnedMapping = new DirectToFieldMapping();
+	returnedMapping.setAttributeName("returned");
+	returnedMapping.setFieldName("order_delivery_item.returned");
+	descriptor.addMapping(returnedMapping);
+	
 	DirectToFieldMapping countMapping = new DirectToFieldMapping();
 	countMapping.setAttributeName("count");
 	countMapping.setFieldName("order_delivery_item.book_count");
@@ -1803,6 +1808,12 @@ public ClassDescriptor buildReceiveOrderDescriptor() {
 	contactMapping.dontAllowNull();
 	descriptor.addMapping(contactMapping);
 	
+	OneToOneMapping deliveryMapping = new OneToOneMapping();
+	deliveryMapping.setReferenceClass(org.harper.bookstore.domain.deliver.DeliveryOrder.class);
+	deliveryMapping.setAttributeName("delivery");
+	deliveryMapping.dontUseIndirection();
+	deliveryMapping.addForeignKeyFieldName("order_receive.delivery", "order_delivery.oid");
+	descriptor.addMapping(deliveryMapping);
 	
 	OneToManyMapping itemsMapping = new OneToManyMapping();
 	itemsMapping.setAttributeName("items");
@@ -1839,10 +1850,10 @@ public ClassDescriptor buildReceiveOrderItemDescriptor() {
 	// Event Manager.
 	
 	// Mappings.
-//	DirectToFieldMapping displaySequenceMapping = new DirectToFieldMapping();
-//	displaySequenceMapping.setAttributeName("displaySequence");
-//	displaySequenceMapping.setFieldName("order_item.disp_seq");
-//	descriptor.addMapping(displaySequenceMapping);
+	DirectToFieldMapping unitCostMapping = new DirectToFieldMapping();
+	unitCostMapping.setAttributeName("unitCost");
+	unitCostMapping.setFieldName("order_receive_item.unit_cost");
+	descriptor.addMapping(unitCostMapping);
 	
 	DirectToFieldMapping countMapping = new DirectToFieldMapping();
 	countMapping.setAttributeName("count");

@@ -17,6 +17,8 @@ public class DeliveryItem extends Entity implements Item {
 
 	private int count;
 
+	private int returned;
+
 	private BigDecimal unitCost;
 
 	public DeliveryOrder getHeader() {
@@ -60,6 +62,14 @@ public class DeliveryItem extends Entity implements Item {
 
 	public void setUnitCost(BigDecimal unitCost) {
 		this.unitCost = unitCost;
+	}
+
+	public int getReturned() {
+		return returned;
+	}
+
+	public void setReturned(int returned) {
+		this.returned = returned;
 	}
 
 }
