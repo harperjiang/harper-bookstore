@@ -1,11 +1,16 @@
 package org.harper.bookstore.domain.deliver;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang.Validate;
 import org.harper.bookstore.domain.Entity;
+import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.domain.profile.ContactInfo;
 import org.harper.bookstore.domain.store.StoreSite;
 
@@ -16,12 +21,18 @@ public class ReceiveOrder extends Entity {
 
 		public String desc() {
 			ResourceBundle rb = ResourceBundle
-					.getBundle("/org/harper/bookstore/domain/deliver/ReceiveType");
+					.getBundle("org/harper/bookstore/domain/deliver/ReceiveType");
 			return rb.getString(name());
 		}
 	}
 
+	public static enum Status {
+		DRAFT, CONFIRM;
+	}
+
 	private ExpressCompany company;
+
+	private DeliveryOrder delivery;
 
 	private String number;
 
@@ -50,6 +61,42 @@ public class ReceiveOrder extends Entity {
 		items = new ArrayList<ReceiveItem>();
 	}
 
+	public void confirm() {
+		Validate.isTrue(Status.DRAFT == getStatus());
+		setStatus(Status.CONFIRM);
+		setReceiveDate(new Date());
+		if (ReceiveType.RETURN.equals(getType())) {
+			Validate.notNull(getDelivery());
+
+			Map<Book, DeliveryItem> bookToItem = new HashMap<Book, DeliveryItem>();
+			for (DeliveryItem di : getDelivery().getItems()) {
+				bookToItem.put(di.getBook(), di);
+			}
+			// TODO
+			for (ReceiveItem ri : getItems()) {
+				if (!bookToItem.containsKey(ri.getBook())) {
+					throw new IllegalArgumentException(MessageFormat.format(
+							"No such book:{0}", ri.getBook().getName()));
+				}
+				DeliveryItem di = bookToItem.get(ri.getBook());
+				di.setReturned(di.getReturned() + ri.getCount());
+				Validate.isTrue(di.getCount() >= di.getReturned(),
+						"Too many return");
+				// Return to Site
+				getSite()
+						.putInto(ri.getBook(), ri.getCount(), ri.getUnitCost());
+			}
+		}
+	}
+
+	public DeliveryOrder getDelivery() {
+		return delivery;
+	}
+
+	public void setDelivery(DeliveryOrder delivery) {
+		this.delivery = delivery;
+	}
+
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -58,12 +105,12 @@ public class ReceiveOrder extends Entity {
 		this.createDate = createDate;
 	}
 
-	public int getStatus() {
-		return status;
+	public Status getStatus() {
+		return Status.values()[status];
 	}
 
-	public void setStatus(int status) {
-		this.status = status;
+	public void setStatus(Status status) {
+		this.status = status.ordinal();
 	}
 
 	public ExpressCompany getCompany() {
@@ -116,8 +163,8 @@ public class ReceiveOrder extends Entity {
 		item.setHeader(null);
 	}
 
-	public String getType() {
-		return ReceiveType.valueOf(type).desc();
+	public ReceiveType getType() {
+		return ReceiveType.valueOf(type);
 	}
 
 	public void setType(ReceiveType type) {

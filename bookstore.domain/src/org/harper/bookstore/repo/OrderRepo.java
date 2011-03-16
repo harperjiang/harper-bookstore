@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.harper.bookstore.domain.deliver.DeliveryOrder;
+import org.harper.bookstore.domain.deliver.ReceiveOrder;
 import org.harper.bookstore.domain.order.ListPrice;
 import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.domain.order.PurchaseOrder;
@@ -27,4 +28,8 @@ public interface OrderRepo extends Repo {
 	public List<DeliveryOrder> searchDeliveryOrder(Date fromDate, Date toDate,
 			String poNumber, String consigneeName, String poCustomerId,
 			DeliveryOrder.Status status);
+
+	public List<ReceiveOrder> searchReceiveOrder(Date fromCreateDate,
+			Date toCreateDate, Date fromReceiveDate, Date toReceiveDate,
+			String number, String senderName, ReceiveOrder.Status status);
 }
