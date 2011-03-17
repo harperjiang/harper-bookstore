@@ -6,19 +6,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.harper.bookstore.service.bean.report.SellAndProfitResultBean.SellAndProfitData;
+import org.harper.bookstore.service.bean.report.SAPReportResultBean.SAPData;
 import org.harper.frm.gui.swing.freechart.CategoryData;
 import org.harper.frm.gui.swing.manager.AbstractBean;
 
-public class SellAndProfitReportBean extends AbstractBean {
+public class SAPReportBean extends AbstractBean {
 
-	public static class SellAndProfitCategoryData implements CategoryData {
+	public static class SAPCategoryData implements CategoryData {
 
-		private SellAndProfitData data;
+		private SAPData data;
 
 		private boolean sell;
 
-		public SellAndProfitCategoryData(SellAndProfitData data, boolean sell) {
+		public SAPCategoryData(SAPData data, boolean sell) {
 			this.data = data;
 			this.sell = sell;
 		}
@@ -35,7 +35,8 @@ public class SellAndProfitReportBean extends AbstractBean {
 
 		@Override
 		public BigDecimal getY() {
-			return sell ? data.getSelling() : data.getProfit();
+			return sell ? data.getSelling().subtract(data.getProfit()) : data
+					.getProfit();
 		}
 	}
 
@@ -43,9 +44,9 @@ public class SellAndProfitReportBean extends AbstractBean {
 
 	private Date toDate;
 
-	private List<SellAndProfitCategoryData> datas;
+	private List<SAPCategoryData> datas;
 
-	private List<SellAndProfitData> originDatas;
+	private List<SAPData> originDatas;
 
 	public Date getFromDate() {
 		return fromDate;
@@ -63,29 +64,29 @@ public class SellAndProfitReportBean extends AbstractBean {
 		this.toDate = toDate;
 	}
 
-	public List<SellAndProfitCategoryData> getDatas() {
+	public List<SAPCategoryData> getDatas() {
 		return datas;
 	}
 
-	public void setDatas(List<SellAndProfitCategoryData> datas) {
-		List<SellAndProfitCategoryData> old = getDatas();
+	public void setDatas(List<SAPCategoryData> datas) {
+		List<SAPCategoryData> old = getDatas();
 		this.datas = datas;
 		firePropertyChange("datas", old, datas);
 	}
 
-	public List<SellAndProfitData> getOriginDatas() {
+	public List<SAPData> getOriginDatas() {
 		return originDatas;
 	}
 
-	public void setOriginDatas(List<SellAndProfitData> originDatas) {
-		List<SellAndProfitData> old = getOriginDatas();
+	public void setOriginDatas(List<SAPData> originDatas) {
+		List<SAPData> old = getOriginDatas();
 		this.originDatas = originDatas;
 		firePropertyChange("originDatas", old, originDatas);
 
-		List<SellAndProfitCategoryData> result = new ArrayList<SellAndProfitCategoryData>();
-		for (SellAndProfitData sapd : originDatas) {
-			result.add(new SellAndProfitCategoryData(sapd, true));
-			result.add(new SellAndProfitCategoryData(sapd, false));
+		List<SAPCategoryData> result = new ArrayList<SAPCategoryData>();
+		for (SAPData sapd : originDatas) {
+			result.add(new SAPCategoryData(sapd, true));
+			result.add(new SAPCategoryData(sapd, false));
 		}
 		setDatas(result);
 	}

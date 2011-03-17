@@ -22,7 +22,8 @@ import org.harper.bookstore.ui.order.ViewPurchaseOrderController;
 import org.harper.bookstore.ui.print.PrintExpressOrderController;
 import org.harper.bookstore.ui.profile.BookManagerController;
 import org.harper.bookstore.ui.profile.BookSetManageController;
-import org.harper.bookstore.ui.report.SellAndProfitReportController;
+import org.harper.bookstore.ui.report.ProfitRateReportController;
+import org.harper.bookstore.ui.report.SAPReportController;
 import org.harper.bookstore.ui.store.ManageStoreController;
 import org.harper.bookstore.ui.store.QueryStockTakingController;
 import org.harper.bookstore.ui.store.SiteInfoController;
@@ -144,10 +145,15 @@ public class MainWindow extends JPowerWindow {
 								.createImageIcon(
 										"/org/harper/bookstore/res/icon/import_top_small.png"))); //$NON-NLS-1$
 
-		JMenu reportMenu = new JMenu(Messages.getString("MainWindow.menu_report")); //$NON-NLS-1$
+		JMenu reportMenu = new JMenu(
+				Messages.getString("MainWindow.menu_report")); //$NON-NLS-1$
 		menuBar.add(reportMenu);
-		reportMenu.add(new NewEditorAction(Messages.getString("MainWindow.menu_report_sap"), //$NON-NLS-1$
-				SellAndProfitReportController.class));
+		reportMenu.add(new NewEditorAction(Messages
+				.getString("MainWindow.menu_report_sap"), //$NON-NLS-1$
+				SAPReportController.class));
+		reportMenu
+				.add(new NewEditorAction(
+						Messages.getString("MainWindow.menu_report_profit"), ProfitRateReportController.class)); //$NON-NLS-1$
 
 		JMenu utilMenu = new JMenu(Messages.getString("MainWindow.menu_util")); //$NON-NLS-1$
 		menuBar.add(utilMenu);
