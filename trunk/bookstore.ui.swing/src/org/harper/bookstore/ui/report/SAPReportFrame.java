@@ -17,7 +17,8 @@ import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
-import org.harper.bookstore.service.bean.report.SellAndProfitResultBean;
+import org.harper.bookstore.service.bean.report.SAPReportResultBean;
+import org.harper.bookstore.ui.common.PercentageTableCellRenderer;
 import org.harper.bookstore.ui.common.UIStandard;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
@@ -33,7 +34,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer3D;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-public class SellAndProfitReportFrame extends JPowerWindowEditor {
+public class SAPReportFrame extends JPowerWindowEditor {
 
 	/**
 	 * 
@@ -48,10 +49,10 @@ public class SellAndProfitReportFrame extends JPowerWindowEditor {
 
 	private JTable dataTable;
 
-	private SellAndProfitReportController controller;
+	private SAPReportController controller;
 
-	public SellAndProfitReportFrame() {
-		super(Messages.getString("SellAndProfitReportFrame.title")); //$NON-NLS-1$
+	public SAPReportFrame() {
+		super(Messages.getString("SAPReportFrame.title")); //$NON-NLS-1$
 		setSize(800, 600);
 		// setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLayout(new BorderLayout());
@@ -60,39 +61,38 @@ public class SellAndProfitReportFrame extends JPowerWindowEditor {
 		add(topPanel, BorderLayout.NORTH);
 
 		topPanel.add(new JLabel(Messages
-				.getString("SellAndProfitReportFrame.label_start_time"))); //$NON-NLS-1$
+				.getString("SAPReportFrame.label_start_time"))); //$NON-NLS-1$
 		fromDateField = new DateTextField(new SimpleDateFormat("yyyy-MM-dd")); //$NON-NLS-1$
 		topPanel.add(fromDateField);
 		topPanel.add(new JLabel(Messages
-				.getString("SellAndProfitReportFrame.label_stop_time"))); //$NON-NLS-1$
+				.getString("SAPReportFrame.label_stop_time"))); //$NON-NLS-1$
 		toDateField = new DateTextField(new SimpleDateFormat("yyyy-MM-dd")); //$NON-NLS-1$
 		topPanel.add(toDateField);
 
 		JButton searchButton = new JButton(
-				Messages.getString("SellAndProfitReportFrame.btn_search")); //$NON-NLS-1$
+				Messages.getString("SAPReportFrame.btn_search")); //$NON-NLS-1$
 		topPanel.add(searchButton);
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new SwingWorker<SellAndProfitResultBean, Object>() {
+				new SwingWorker<SAPReportResultBean, Object>() {
 					@Override
-					protected SellAndProfitResultBean doInBackground()
+					protected SAPReportResultBean doInBackground()
 							throws Exception {
 						return getController().load();
 					}
 
 					protected void done() {
 						try {
-							SellAndProfitResultBean bean = get();
+							SAPReportResultBean bean = get();
 							getController().getBean().setOriginDatas(
 									bean.getDatas());
 						} catch (Exception e) {
 							// TODO Log
 							e.printStackTrace();
 							JOptionPane.showMessageDialog(
-									SellAndProfitReportFrame.this
-											.getManagerWindow(),
+									SAPReportFrame.this.getManagerWindow(),
 									e.getMessage(),
-									Messages.getString("SellAndProfitReportFrame.msg_search_title"), //$NON-NLS-1$
+									Messages.getString("SAPReportFrame.msg_search_title"), //$NON-NLS-1$
 
 									JOptionPane.ERROR_MESSAGE);
 						}
@@ -118,8 +118,10 @@ public class SellAndProfitReportFrame extends JPowerWindowEditor {
 
 		dataTable = new JTable();
 		CommonTableModel ctm = new CommonTableModel();
-		ctm.initialize(SellAndProfitReportTableData.class);
+		ctm.initialize(SAPReportTableData.class);
 		dataTable.setModel(ctm);
+		dataTable.getColumnModel().getColumn(3)
+				.setCellRenderer(new PercentageTableCellRenderer());
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(dataTable);
 		centerPanel.add(scrollPane);
@@ -131,8 +133,8 @@ public class SellAndProfitReportFrame extends JPowerWindowEditor {
 
 		JFreeChart chart = ChartFactory
 				.createStackedBarChart3D(
-						Messages.getString("SellAndProfitReportFrame.chart_title"), Messages.getString("SellAndProfitReportFrame.chart_axis_x"), //$NON-NLS-1$ //$NON-NLS-2$
-						Messages.getString("SellAndProfitReportFrame.chart_axis_y"), ds, PlotOrientation.VERTICAL, true, true, false); //$NON-NLS-1$
+						Messages.getString("SAPReportFrame.chart_title"), Messages.getString("SAPReportFrame.chart_axis_x"), //$NON-NLS-1$ //$NON-NLS-2$
+						Messages.getString("SAPReportFrame.chart_axis_y"), ds, PlotOrientation.VERTICAL, true, true, false); //$NON-NLS-1$
 
 		// NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
 
@@ -185,11 +187,11 @@ public class SellAndProfitReportFrame extends JPowerWindowEditor {
 		return chart;
 	}
 
-	public SellAndProfitReportController getController() {
+	public SAPReportController getController() {
 		return controller;
 	}
 
-	protected void setController(SellAndProfitReportController controller) {
+	protected void setController(SAPReportController controller) {
 		this.controller = controller;
 	}
 
@@ -210,6 +212,6 @@ public class SellAndProfitReportFrame extends JPowerWindowEditor {
 	}
 
 	public static void main(String[] args) {
-		new SellAndProfitReportFrame();
+		new SAPReportFrame();
 	}
 }

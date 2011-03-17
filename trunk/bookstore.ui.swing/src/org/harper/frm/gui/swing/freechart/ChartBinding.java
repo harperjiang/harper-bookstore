@@ -4,23 +4,23 @@ import java.util.Collection;
 
 import org.apache.commons.lang.Validate;
 import org.harper.frm.gui.swing.manager.ComponentBinding;
-import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
+import org.jfree.data.general.DefaultPieDataset;
 
-public class CategoryChartBinding extends ComponentBinding {
+public class ChartBinding extends ComponentBinding {
 
-	private DefaultCategoryDataset dataSet;
+	private Dataset dataSet;
 
-	public CategoryChartBinding(Dataset dataset, String attribute) {
+	public ChartBinding(Dataset dataset, String attribute) {
 		super();
 		setAttribute(attribute);
 		setDataSet(dataset);
 	}
 
-	public CategoryDataset getDataSet() {
+	public Dataset getDataSet() {
 		return dataSet;
 	}
 
@@ -32,8 +32,7 @@ public class CategoryChartBinding extends ComponentBinding {
 	};
 
 	public void setDataSet(Dataset dataSet) {
-		Validate.isTrue(dataSet instanceof DefaultCategoryDataset);
-		this.dataSet = (DefaultCategoryDataset) dataSet;
+		this.dataSet = dataSet;
 		dataSet.addChangeListener(changeListener);
 	}
 
@@ -43,9 +42,18 @@ public class CategoryChartBinding extends ComponentBinding {
 		dataSet.removeChangeListener(changeListener);
 		// Translate data, data should be a collection of CategoryData
 		if (null != value) {
-			Collection<CategoryData> datas = (Collection<CategoryData>) value;
-			for (CategoryData data : datas)
-				dataSet.setValue(data.getY(), data.getCategory(), data.getX());
+			if (getDataSet() instanceof DefaultCategoryDataset) {
+				DefaultCategoryDataset dcd = (DefaultCategoryDataset) getDataSet();
+				Collection<CategoryData> datas = (Collection<CategoryData>) value;
+				for (CategoryData data : datas)
+					dcd.setValue(data.getY(), data.getCategory(), data.getX());
+			}
+			if (getDataSet() instanceof DefaultPieDataset) {
+				DefaultPieDataset dpd = (DefaultPieDataset) getDataSet();
+				Collection<PieData> pieDatas = (Collection<PieData>) getValue();
+				for (PieData pieData : pieDatas)
+					dpd.setValue(pieData.getKey(), pieData.getValue());
+			}
 		}
 		dataSet.addChangeListener(changeListener);
 	}
