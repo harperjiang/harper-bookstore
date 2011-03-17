@@ -1,18 +1,19 @@
 package org.harper.bookstore.service.bean.report;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.harper.bookstore.domain.profile.Book;
 
 public class ProductProfitResultBean {
 
-	private ProductProfitItemBean items[];
+	private List<ProductProfitItemBean> items;
 
-	public ProductProfitItemBean[] getItems() {
+	public List<ProductProfitItemBean> getItems() {
 		return items;
 	}
 
-	public void setItems(ProductProfitItemBean[] items) {
+	public void setItems(List<ProductProfitItemBean> items) {
 		this.items = items;
 	}
 
@@ -23,6 +24,12 @@ public class ProductProfitResultBean {
 		private int count;
 
 		private BigDecimal profitRate;
+
+		public ProductProfitItemBean(Book b, int c, BigDecimal rate) {
+			this.book = b;
+			this.count = c;
+			this.profitRate = rate;
+		}
 
 		public Book getBook() {
 			return book;
