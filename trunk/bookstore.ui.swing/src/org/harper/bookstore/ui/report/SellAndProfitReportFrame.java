@@ -3,19 +3,23 @@ package org.harper.bookstore.ui.report;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GradientPaint;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SwingWorker;
+import javax.swing.border.EmptyBorder;
 
+import org.harper.bookstore.service.bean.report.SellAndProfitResultBean;
 import org.harper.bookstore.ui.common.UIStandard;
-import org.harper.bookstore.ui.report.SellAndProfitReportBean.SellAndProfitCategoryData;
+import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
 import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
 import org.jfree.chart.ChartFactory;
@@ -42,10 +46,12 @@ public class SellAndProfitReportFrame extends JPowerWindowEditor {
 
 	private JFreeChart chart;
 
+	private JTable dataTable;
+
 	private SellAndProfitReportController controller;
 
 	public SellAndProfitReportFrame() {
-		super("销售与利润报表");
+		super(Messages.getString("SellAndProfitReportFrame.title")); //$NON-NLS-1$
 		setSize(800, 600);
 		// setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLayout(new BorderLayout());
@@ -53,34 +59,41 @@ public class SellAndProfitReportFrame extends JPowerWindowEditor {
 		JPanel topPanel = new JPanel();
 		add(topPanel, BorderLayout.NORTH);
 
-		topPanel.add(new JLabel("开始时间"));
-		fromDateField = new DateTextField(new SimpleDateFormat("yyyy-MM-dd"));
+		topPanel.add(new JLabel(Messages
+				.getString("SellAndProfitReportFrame.label_start_time"))); //$NON-NLS-1$
+		fromDateField = new DateTextField(new SimpleDateFormat("yyyy-MM-dd")); //$NON-NLS-1$
 		topPanel.add(fromDateField);
-		topPanel.add(new JLabel("结束时间"));
-		toDateField = new DateTextField(new SimpleDateFormat("yyyy-MM-dd"));
+		topPanel.add(new JLabel(Messages
+				.getString("SellAndProfitReportFrame.label_stop_time"))); //$NON-NLS-1$
+		toDateField = new DateTextField(new SimpleDateFormat("yyyy-MM-dd")); //$NON-NLS-1$
 		topPanel.add(toDateField);
 
-		JButton searchButton = new JButton("查看报表");
+		JButton searchButton = new JButton(
+				Messages.getString("SellAndProfitReportFrame.btn_search")); //$NON-NLS-1$
 		topPanel.add(searchButton);
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new SwingWorker<List<SellAndProfitCategoryData>, Object>() {
+				new SwingWorker<SellAndProfitResultBean, Object>() {
 					@Override
-					protected List<SellAndProfitCategoryData> doInBackground()
+					protected SellAndProfitResultBean doInBackground()
 							throws Exception {
 						return getController().load();
 					}
 
 					protected void done() {
 						try {
-							List<SellAndProfitCategoryData> datas = get();
-							getController().getBean().setDatas(datas);
+							SellAndProfitResultBean bean = get();
+							getController().getBean().setOriginDatas(
+									bean.getDatas());
 						} catch (Exception e) {
 							// TODO Log
+							e.printStackTrace();
 							JOptionPane.showMessageDialog(
 									SellAndProfitReportFrame.this
-											.getManagerWindow(), "Error", e
-											.getMessage(),
+											.getManagerWindow(),
+									e.getMessage(),
+									Messages.getString("SellAndProfitReportFrame.msg_search_title"), //$NON-NLS-1$
+
 									JOptionPane.ERROR_MESSAGE);
 						}
 					};
@@ -89,25 +102,37 @@ public class SellAndProfitReportFrame extends JPowerWindowEditor {
 			}
 		});
 
-		System.out.println(System.currentTimeMillis());
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new GridLayout(2, 1, 5, 5));
+		centerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		add(centerPanel, BorderLayout.CENTER);
+
 		chart = createChart();
 		ChartPanel chartPanel = new ChartPanel(chart);
 		chartPanel.setDoubleBuffered(true);
 		chartPanel.setDomainZoomable(true);
 		chartPanel.setFillZoomRectangle(true);
 		chartPanel.setMouseWheelEnabled(true);
-		add(chartPanel, BorderLayout.CENTER);
-		System.out.println(System.currentTimeMillis());
-		setVisible(true);
-		System.out.println(System.currentTimeMillis());
+
+		centerPanel.add(chartPanel);
+
+		dataTable = new JTable();
+		CommonTableModel ctm = new CommonTableModel();
+		ctm.initialize(SellAndProfitReportTableData.class);
+		dataTable.setModel(ctm);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(dataTable);
+		centerPanel.add(scrollPane);
 	}
 
 	private JFreeChart createChart() {
 		DefaultCategoryDataset ds = new DefaultCategoryDataset();
 		// create the chart...
 
-		JFreeChart chart = ChartFactory.createStackedBarChart3D("销售与利润", "日期",
-				"销售额/利润", ds, PlotOrientation.VERTICAL, true, true, false);
+		JFreeChart chart = ChartFactory
+				.createStackedBarChart3D(
+						Messages.getString("SellAndProfitReportFrame.chart_title"), Messages.getString("SellAndProfitReportFrame.chart_axis_x"), //$NON-NLS-1$ //$NON-NLS-2$
+						Messages.getString("SellAndProfitReportFrame.chart_axis_y"), ds, PlotOrientation.VERTICAL, true, true, false); //$NON-NLS-1$
 
 		// NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
 
@@ -178,6 +203,10 @@ public class SellAndProfitReportFrame extends JPowerWindowEditor {
 
 	public JFreeChart getChart() {
 		return chart;
+	}
+
+	public JTable getDataTable() {
+		return dataTable;
 	}
 
 	public static void main(String[] args) {

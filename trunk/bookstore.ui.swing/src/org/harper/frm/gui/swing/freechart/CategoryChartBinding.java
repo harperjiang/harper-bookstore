@@ -2,9 +2,11 @@ package org.harper.frm.gui.swing.freechart;
 
 import java.util.Collection;
 
+import org.apache.commons.lang.Validate;
 import org.harper.frm.gui.swing.manager.ComponentBinding;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DatasetChangeEvent;
 import org.jfree.data.general.DatasetChangeListener;
 
@@ -12,7 +14,7 @@ public class CategoryChartBinding extends ComponentBinding {
 
 	private DefaultCategoryDataset dataSet;
 
-	public CategoryChartBinding(DefaultCategoryDataset dataset, String attribute) {
+	public CategoryChartBinding(Dataset dataset, String attribute) {
 		super();
 		setAttribute(attribute);
 		setDataSet(dataset);
@@ -29,8 +31,9 @@ public class CategoryChartBinding extends ComponentBinding {
 		}
 	};
 
-	public void setDataSet(DefaultCategoryDataset dataSet) {
-		this.dataSet = dataSet;
+	public void setDataSet(Dataset dataSet) {
+		Validate.isTrue(dataSet instanceof DefaultCategoryDataset);
+		this.dataSet = (DefaultCategoryDataset) dataSet;
 		dataSet.addChangeListener(changeListener);
 	}
 

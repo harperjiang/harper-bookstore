@@ -2,6 +2,7 @@ package org.harper.bookstore.ui.report;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +45,8 @@ public class SellAndProfitReportBean extends AbstractBean {
 
 	private List<SellAndProfitCategoryData> datas;
 
+	private List<SellAndProfitData> originDatas;
+
 	public Date getFromDate() {
 		return fromDate;
 	}
@@ -68,6 +71,23 @@ public class SellAndProfitReportBean extends AbstractBean {
 		List<SellAndProfitCategoryData> old = getDatas();
 		this.datas = datas;
 		firePropertyChange("datas", old, datas);
+	}
+
+	public List<SellAndProfitData> getOriginDatas() {
+		return originDatas;
+	}
+
+	public void setOriginDatas(List<SellAndProfitData> originDatas) {
+		List<SellAndProfitData> old = getOriginDatas();
+		this.originDatas = originDatas;
+		firePropertyChange("originDatas", old, originDatas);
+
+		List<SellAndProfitCategoryData> result = new ArrayList<SellAndProfitCategoryData>();
+		for (SellAndProfitData sapd : originDatas) {
+			result.add(new SellAndProfitCategoryData(sapd, true));
+			result.add(new SellAndProfitCategoryData(sapd, false));
+		}
+		setDatas(result);
 	}
 
 }

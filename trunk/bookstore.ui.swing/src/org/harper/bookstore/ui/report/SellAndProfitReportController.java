@@ -7,13 +7,12 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import org.harper.bookstore.service.bean.report.SellAndProfitResultBean;
-import org.harper.bookstore.service.bean.report.SellAndProfitResultBean.SellAndProfitData;
 import org.harper.bookstore.ui.Controller;
 import org.harper.bookstore.ui.report.SellAndProfitReportBean.SellAndProfitCategoryData;
 import org.harper.bookstore.util.Utilities;
+import org.harper.frm.gui.swing.comp.table.TableBinding;
 import org.harper.frm.gui.swing.freechart.CategoryChartBinding;
 import org.harper.frm.gui.swing.manager.BindingManager;
-import org.jfree.data.category.DefaultCategoryDataset;
 
 public class SellAndProfitReportController extends Controller {
 
@@ -41,14 +40,13 @@ public class SellAndProfitReportController extends Controller {
 		manager.addBinding(frame.getFromDateField().new DateTextBinding(
 				"fromDate"));
 		manager.addBinding(frame.getToDateField().new DateTextBinding("toDate"));
-		manager.addBinding(new CategoryChartBinding(
-				(DefaultCategoryDataset) frame.getChart().getCategoryPlot()
-						.getDataset(), "datas"));
+		manager.addBinding(new CategoryChartBinding(frame.getChart()
+				.getCategoryPlot().getDataset(), "datas"));
+		manager.addBinding(new TableBinding(frame.getDataTable(), "originDatas"));
 		manager.loadAll();
 	}
 
-	public List<SellAndProfitCategoryData> load() {
-		List<SellAndProfitCategoryData> datas = new ArrayList<SellAndProfitCategoryData>();
+	public SellAndProfitResultBean load() {
 		// TODO Invoke Server
 
 		// MOCK, mock data
@@ -88,12 +86,7 @@ public class SellAndProfitReportController extends Controller {
 			}
 		};
 
-		for (SellAndProfitData sapd : result.getDatas()) {
-			datas.add(new SellAndProfitCategoryData(sapd, true));
-			datas.add(new SellAndProfitCategoryData(sapd, false));
-		}
-
-		return datas;
+		return result;
 	}
 
 	public SellAndProfitReportBean getBean() {
