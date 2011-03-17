@@ -4,9 +4,19 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-public class SellAndProfitResultBean extends ReportBean {
+public class SAPReportResultBean extends ReportBean {
 
-	public static class SellAndProfitData {
+	private List<SAPData> datas;
+
+	public List<SAPData> getDatas() {
+		return datas;
+	}
+
+	public void setDatas(List<SAPData> datas) {
+		this.datas = datas;
+	}
+
+	public static class SAPData {
 
 		private BigDecimal selling;
 
@@ -14,7 +24,7 @@ public class SellAndProfitResultBean extends ReportBean {
 
 		private Date time;
 
-		public SellAndProfitData(Date t, BigDecimal s, BigDecimal p) {
+		public SAPData(Date t, BigDecimal s, BigDecimal p) {
 			this.time = t;
 			this.selling = s;
 			this.profit = p;
@@ -43,16 +53,10 @@ public class SellAndProfitResultBean extends ReportBean {
 		public void setTime(Date time) {
 			this.time = time;
 		}
+
+		public BigDecimal getProfitRate() {
+			return getProfit()
+					.divide(getSelling(), 4, BigDecimal.ROUND_HALF_UP);
+		}
 	}
-
-	private List<SellAndProfitData> datas;
-
-	public List<SellAndProfitData> getDatas() {
-		return datas;
-	}
-
-	public void setDatas(List<SellAndProfitData> datas) {
-		this.datas = datas;
-	}
-
 }
