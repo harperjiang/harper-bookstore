@@ -32,6 +32,8 @@ public abstract class ReportFrame extends JPowerWindowEditor {
 
 	private JFreeChart chart;
 
+	private JPanel summaryPanel;
+
 	private JTable dataTable;
 
 	public ReportFrame(String title) {
@@ -70,11 +72,19 @@ public abstract class ReportFrame extends JPowerWindowEditor {
 		chartPanel.setMouseWheelEnabled(true);
 
 		centerPanel.add(chartPanel);
+		
+		summaryPanel = new JPanel();
+		
+		JPanel bottomPanel = new JPanel();
+		bottomPanel.setLayout(new BorderLayout());
+		bottomPanel.add(summaryPanel,BorderLayout.NORTH);
 
 		dataTable = createTable();
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(dataTable);
-		centerPanel.add(scrollPane);
+		bottomPanel.add(scrollPane,BorderLayout.CENTER);
+		
+		centerPanel.add(bottomPanel);
 	}
 
 	protected abstract JFreeChart createChart();
@@ -100,4 +110,9 @@ public abstract class ReportFrame extends JPowerWindowEditor {
 	public JTable getDataTable() {
 		return dataTable;
 	}
+
+	public JPanel getSummaryPanel() {
+		return summaryPanel;
+	}
+
 }

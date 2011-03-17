@@ -2,10 +2,13 @@ package org.harper.bookstore.ui.report;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GradientPaint;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
@@ -20,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import org.harper.bookstore.service.bean.report.SAPReportResultBean;
 import org.harper.bookstore.ui.common.PercentageTableCellRenderer;
 import org.harper.bookstore.ui.common.UIStandard;
+import org.harper.bookstore.util.Utilities;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
 import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
@@ -48,6 +52,10 @@ public class SAPReportFrame extends JPowerWindowEditor {
 	private JFreeChart chart;
 
 	private JTable dataTable;
+
+	private JPanel summaryPanel;
+
+	private JLabel summaryLabel;
 
 	private SAPReportController controller;
 
@@ -84,8 +92,7 @@ public class SAPReportFrame extends JPowerWindowEditor {
 					protected void done() {
 						try {
 							SAPReportResultBean bean = get();
-							getController().getBean().setOriginDatas(
-									bean.getDatas());
+							getController().getBean().setResult(bean);
 						} catch (Exception e) {
 							// TODO Log
 							e.printStackTrace();
@@ -116,6 +123,18 @@ public class SAPReportFrame extends JPowerWindowEditor {
 
 		centerPanel.add(chartPanel);
 
+		summaryPanel = new JPanel();
+		summaryPanel.setLayout(new FlowLayout());
+		summaryLabel = new JLabel();
+		summaryLabel.setPreferredSize(new Dimension(420, 20));
+		summaryPanel.add(summaryLabel);
+
+		JPanel bottomPanel = new JPanel();
+		bottomPanel.setLayout(new BorderLayout());
+		bottomPanel.add(summaryPanel, BorderLayout.NORTH);
+
+		centerPanel.add(bottomPanel);
+
 		dataTable = new JTable();
 		CommonTableModel ctm = new CommonTableModel();
 		ctm.initialize(SAPReportTableData.class);
@@ -124,7 +143,7 @@ public class SAPReportFrame extends JPowerWindowEditor {
 				.setCellRenderer(new PercentageTableCellRenderer());
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(dataTable);
-		centerPanel.add(scrollPane);
+		bottomPanel.add(scrollPane, BorderLayout.CENTER);
 	}
 
 	private JFreeChart createChart() {
@@ -209,6 +228,14 @@ public class SAPReportFrame extends JPowerWindowEditor {
 
 	public JTable getDataTable() {
 		return dataTable;
+	}
+
+	public JPanel getSummaryPanel() {
+		return summaryPanel;
+	}
+
+	public JLabel getSummaryLabel() {
+		return summaryLabel;
 	}
 
 	public static void main(String[] args) {
