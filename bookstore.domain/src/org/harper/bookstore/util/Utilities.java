@@ -1,5 +1,6 @@
 package org.harper.bookstore.util;
 
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
@@ -33,4 +34,15 @@ public class Utilities {
 			throw new RuntimeException(e);
 		}
 	}
+
+	public static String percentage(Number value) {
+		BigDecimal bd = value instanceof BigDecimal ? (BigDecimal) value
+				: new BigDecimal(value.doubleValue());
+		bd = bd.multiply(HUNDRED).setScale(2, BigDecimal.ROUND_HALF_UP);
+		String result = bd.toPlainString() + "%";
+		return result;
+	}
+
+	protected static BigDecimal HUNDRED = new BigDecimal("100");
+
 }
