@@ -144,9 +144,9 @@ public class MainWindow extends JPowerWindow {
 								.createImageIcon(
 										"/org/harper/bookstore/res/icon/import_top_small.png"))); //$NON-NLS-1$
 
-		JMenu reportMenu = new JMenu("报表");
+		JMenu reportMenu = new JMenu(Messages.getString("MainWindow.menu_report")); //$NON-NLS-1$
 		menuBar.add(reportMenu);
-		reportMenu.add(new NewEditorAction("销售/利润日报表",
+		reportMenu.add(new NewEditorAction(Messages.getString("MainWindow.menu_report_sap"), //$NON-NLS-1$
 				SellAndProfitReportController.class));
 
 		JMenu utilMenu = new JMenu(Messages.getString("MainWindow.menu_util")); //$NON-NLS-1$
