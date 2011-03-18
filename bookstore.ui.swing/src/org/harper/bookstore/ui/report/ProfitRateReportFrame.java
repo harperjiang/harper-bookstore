@@ -82,8 +82,8 @@ public class ProfitRateReportFrame extends ReportFrame {
 		CommonTableModel ctm = new CommonTableModel();
 		ctm.initialize(ProfitRateTableData.class);
 		table.setModel(ctm);
-		table.setDefaultRenderer(BigDecimal.class,
-				new PercentageTableCellRenderer());
+		table.getColumnModel().getColumn(3)
+				.setCellRenderer(new PercentageTableCellRenderer());
 		table.setDefaultRenderer(Integer.TYPE, new DefaultTableCellRenderer());
 		return table;
 	}

@@ -11,6 +11,8 @@ public class ProfitRateTableData extends AbstractTableData {
 		super();
 		descBeans.add(new ColumnDescBean(String.class, "Range", "rangeDesc"));
 		descBeans.add(new ColumnDescBean(Integer.TYPE, "Count", "count"));
+		descBeans
+				.add(new ColumnDescBean(BigDecimal.class, "Selling", "selling"));
 		descBeans.add(new ColumnDescBean(BigDecimal.class, "Percentage",
 				"percentage"));
 	}
