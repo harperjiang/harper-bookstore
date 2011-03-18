@@ -91,12 +91,13 @@ public class ReportService extends Service {
 
 			BigDecimal[] level = new BigDecimal[] { BigDecimal.ZERO,
 					new BigDecimal("0.2"), new BigDecimal("0.4"),
-					new BigDecimal(0.8), BigDecimal.ONE };
+					new BigDecimal("0.6"), new BigDecimal(0.8), BigDecimal.ONE };
 			ProfitRateItemBean items[] = new ProfitRateItemBean[5];
 			for (int i = 0; i < items.length; i++)
 				items[i] = new ProfitRateItemBean(0, level[i], level[i + 1]);
 			for (PurchaseOrder po : pos) {
-				BigDecimal selling = po.getTotalAmt().subtract(
+				BigDecimal selling = null == po.getFeeAmount() ? po
+						.getTotalAmt() : po.getTotalAmt().subtract(
 						po.getFeeAmount());
 				BigDecimal profit = BigDecimal.ZERO;
 				for (OrderItem item : po.getItems()) {
@@ -118,10 +119,10 @@ public class ReportService extends Service {
 					}
 				}
 			}
-			
+
 			for (int i = 0; i < items.length; i++)
 				result.addItem(items[i]);
-			
+
 			return result;
 		} finally {
 			releaseTransaction();
