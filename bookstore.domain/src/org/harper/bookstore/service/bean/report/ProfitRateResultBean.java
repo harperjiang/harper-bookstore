@@ -48,6 +48,8 @@ public class ProfitRateResultBean extends ReportBean {
 	public static class ProfitRateItemBean {
 
 		private int count;
+		
+		private BigDecimal selling;
 
 		private BigDecimal percentage;
 
@@ -59,6 +61,7 @@ public class ProfitRateResultBean extends ReportBean {
 			this.count = c;
 			this.floor = f;
 			this.ceiling = ce;
+			this.selling = BigDecimal.ZERO;
 		}
 
 		public int getCount() {
@@ -91,6 +94,14 @@ public class ProfitRateResultBean extends ReportBean {
 
 		public void setCeiling(BigDecimal ceiling) {
 			this.ceiling = ceiling;
+		}
+
+		public BigDecimal getSelling() {
+			return selling;
+		}
+
+		public void setSelling(BigDecimal selling) {
+			this.selling = selling;
 		}
 
 		public String getRangeDesc() {
