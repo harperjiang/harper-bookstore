@@ -15,6 +15,8 @@ import org.harper.bookstore.domain.store.StoreEntry;
 import org.harper.bookstore.repo.OrderRepo;
 import org.harper.bookstore.repo.RepoFactory;
 import org.harper.bookstore.service.bean.PurchaseReportItem;
+import org.harper.bookstore.service.bean.report.ProfitRateResultBean;
+import org.harper.bookstore.service.bean.report.ProfitRateResultBean.ProfitRateItemBean;
 import org.harper.bookstore.service.bean.report.SAPReportResultBean;
 import org.harper.bookstore.service.bean.report.SAPReportResultBean.SAPData;
 import org.harper.frm.core.tools.sort.HeapSorter;
@@ -67,6 +69,59 @@ public class ReportService extends Service {
 			new HeapSorter(true).sort(dataList, new String[] { "time" },
 					new boolean[] { true });
 			result.setDatas(dataList);
+			return result;
+		} finally {
+			releaseTransaction();
+		}
+	}
+
+	public ProfitRateResultBean getProfitRate(Date start, Date stop) {
+		startTransaction();
+		try {
+			ProfitRateResultBean result = new ProfitRateResultBean();
+
+			List<PurchaseOrder> pos = (List) getOrderRepo().searchOrder(
+					null,
+					"PO",
+					start,
+					stop,
+					new int[] { PurchaseOrder.Status.DRAFT.ordinal(),
+							PurchaseOrder.Status.CONFIRM.ordinal() }, null,
+					null, null);
+
+			BigDecimal[] level = new BigDecimal[] { BigDecimal.ZERO,
+					new BigDecimal("0.2"), new BigDecimal("0.4"),
+					new BigDecimal(0.8), BigDecimal.ONE };
+			ProfitRateItemBean items[] = new ProfitRateItemBean[5];
+			for (int i = 0; i < items.length; i++)
+				items[i] = new ProfitRateItemBean(0, level[i], level[i + 1]);
+			for (PurchaseOrder po : pos) {
+				BigDecimal selling = po.getTotalAmt().subtract(
+						po.getFeeAmount());
+				BigDecimal profit = BigDecimal.ZERO;
+				for (OrderItem item : po.getItems()) {
+					StoreEntry entry = po.getSite().getEntry(item.getBook());
+					if (null != entry) {
+						profit = profit.add(item.getUnitPrice().subtract(
+								entry.getUnitPrice()));
+					}
+				}
+
+				BigDecimal rate = profit.divide(selling, 4,
+						BigDecimal.ROUND_HALF_UP);
+				for (int i = 0; i < level.length - 1; i++) {
+					if (level[i].compareTo(rate) <= 0
+							&& level[i + 1].compareTo(rate) >= 0) {
+						items[i].setCount(items[i].getCount() + 1);
+						items[i].setSelling(items[i].getSelling().add(selling));
+						break;
+					}
+				}
+			}
+			
+			for (int i = 0; i < items.length; i++)
+				result.addItem(items[i]);
+			
 			return result;
 		} finally {
 			releaseTransaction();
