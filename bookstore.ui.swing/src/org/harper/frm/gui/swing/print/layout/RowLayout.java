@@ -11,7 +11,7 @@ import org.harper.frm.gui.swing.print.comp.Container;
 
 public class RowLayout implements Layout {
 
-	private int span = 15;
+	private int span = 2;
 
 	public int getSpan() {
 		return span;
@@ -24,6 +24,7 @@ public class RowLayout implements Layout {
 	@Override
 	public Dimension getPreferredSize(Container container, Graphics2D g2d) {
 		Dimension dim = container.getPosition().getSize();
+		dim.height = 0;
 		for (Component child : container.getChildren()) {
 			Dimension prefSize = child.getPreferredSize(g2d);
 			dim.height += prefSize.height + span;

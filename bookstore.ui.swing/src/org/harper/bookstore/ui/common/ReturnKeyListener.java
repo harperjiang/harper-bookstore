@@ -13,8 +13,6 @@ public class ReturnKeyListener extends KeyAdapter {
 
 	private Callback callback;
 
-	private StringBuilder buffer;
-
 	private boolean clear;
 
 	public ReturnKeyListener(Callback call) {
@@ -24,19 +22,15 @@ public class ReturnKeyListener extends KeyAdapter {
 	public ReturnKeyListener(Callback call, boolean clear) {
 		this.callback = call;
 		this.clear = clear;
-		this.buffer = new StringBuilder();
 	}
 
 	public void keyTyped(KeyEvent e) {
 		if ('\n' == e.getKeyChar()) {
-			if (null != callback) {
-				callback.call(buffer.toString());
-				buffer = new StringBuilder();
+			if (null != callback && e.getComponent() instanceof JTextComponent) {
+				callback.call(((JTextComponent) e.getComponent()).getText());
 			}
 			if (clear && e.getComponent() instanceof JTextComponent)
 				((JTextComponent) e.getComponent()).setText(null);
-		} else {
-			buffer.append(e.getKeyChar());
 		}
 	}
 }

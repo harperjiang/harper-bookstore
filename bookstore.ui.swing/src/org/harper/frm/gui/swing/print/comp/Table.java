@@ -74,6 +74,8 @@ public class Table extends Container {
 	public void add(TableCell child) {
 		cells.add(child);
 		super.add(child);
+		if (null != child)
+			child.setFont(getFont());
 	}
 
 	@Override
@@ -92,7 +94,7 @@ public class Table extends Container {
 		for (int i = 0; i < columnWidth.length; i++) {
 			if (i > 0)
 				graphic.drawLine(xpos, 0, xpos, imagearea.height);
-			xpos += columnWidth[i] * imagearea.width + 2 * cellPadding;
+			xpos += columnWidth[i] * imagearea.width;
 		}
 		// Draw horizontal line
 		int ypos = 0;
@@ -103,13 +105,12 @@ public class Table extends Container {
 				graphic.drawLine(0, ypos, imagearea.width, ypos);
 				height = 0;
 			}
-			height = (int) Math.max(height, cells.get(i).getPosition().height
-					+ 2 * cellPadding);
+			height = (int) Math.max(height, cells.get(i).getPosition().height);
 		}
-//		if (0 != height) {
-//			ypos += height;
-//			graphic.drawLine(0, ypos, imagearea.width, ypos);
-//		}
+		// if (0 != height) {
+		// ypos += height;
+		// graphic.drawLine(0, ypos, imagearea.width, ypos);
+		// }
 		graphic.translate(-imagearea.x, -imagearea.y);
 	}
 
@@ -124,47 +125,55 @@ public class Table extends Container {
 		@Override
 		public Dimension getPreferredSize(Container container, Graphics2D g2d) {
 			Table table = (Table) container;
-			Dimension old = container.getImageableArea().getSize();
-
-			double width[] = new double[table.columnWidth.length];
-			for (int i = 0; i < width.length; i++)
-				width[i] = Math.floor(old.getWidth() * table.getColumnWidth(i));
-
-			Point point = table.getImageableArea().getLocation();
-
+			int total = 0;
 			double maxRowHeight = 0;
 			for (int i = 0; i < table.cells.size(); i++) {
 				if (0 == i % table.columnWidth.length) {
-					point.x = table.getImageableArea().getLocation().x;
-					point.y += maxRowHeight;
+					total += maxRowHeight;
 					maxRowHeight = 0;
 				}
 				TableCell cell = table.cells.get(i);
-				cell.setPosition(new Rectangle(point.x + table.cellPadding,
-						point.y + table.cellPadding, ((int) width[i
-								% table.columnWidth.length])
-								- 2 * table.cellPadding, 0));
 				Dimension pref = cell.getPreferredSize(g2d);
-				point.x += width[i % table.columnWidth.length] + 2
-						* table.cellPadding;
 				maxRowHeight = Math.max(maxRowHeight, pref.getHeight() + 2
 						* table.cellPadding);
-				old.height = (int) Math.max(old.height, Math.ceil(point.y
-						+ pref.height + 2 * table.cellPadding));
 			}
-
-			return old;
+			if (0 != maxRowHeight)
+				total += maxRowHeight;
+			return new Dimension(container.getPosition().width, total);
 		}
 
 		@Override
 		public void layout(Container container, Graphics2D g2d) {
 			Table table = (Table) container;
-			table.getPreferredSize(g2d);
+			Dimension dim = table.getPreferredSize(g2d);
+
+			double[] width = new double[table.columnWidth.length];
+			for (int i = 0; i < table.columnWidth.length; i++)
+				width[i] = Math.floor(table.columnWidth[i]
+						* table.getPosition().width);
+			List<TableCell> cellInARow = new ArrayList<TableCell>();
+			int maxRowHeight = 0;
+			Point cursor = new Point(0, 0);
 			for (int i = 0; i < table.cells.size(); i++) {
+				int col = i % table.columnWidth.length;
+				if (0 == col) {
+					for (TableCell cc : cellInARow)
+						cc.getPosition().height = maxRowHeight;
+					if (0 != i)
+						cursor.y += maxRowHeight;
+					maxRowHeight = 0;
+					cursor.x = 0;
+					cellInARow.clear();
+				}
 				TableCell cell = table.cells.get(i);
+				cell.getPosition().x = cursor.x + table.cellPadding;
+				cell.getPosition().y = cursor.y + table.cellPadding;
+				cell.getPosition().width = (int) width[col];
+				cellInARow.add(cell);
+				cursor.x += (int) width[col];
 				Dimension pref = cell.getPreferredSize(g2d);
-				cell.setPosition(new Rectangle(
-						cell.getPosition().getLocation(), pref));
+				maxRowHeight = (int) Math.ceil(Math.max(maxRowHeight,
+						pref.getHeight() + 2 * table.cellPadding));
 			}
 			table.setPosition(new Rectangle(table.getPosition().getLocation(),
 					table.getPreferredSize(g2d)));

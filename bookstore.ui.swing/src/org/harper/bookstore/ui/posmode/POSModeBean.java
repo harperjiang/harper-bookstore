@@ -22,11 +22,11 @@ public class POSModeBean extends AbstractBean implements Serializable {
 
 	private List<POSBookItem> items;
 
-	private Map<Book, Integer> itemIndex;
+	private Map<Book, POSBookItem> itemIndex;
 
 	public POSModeBean() {
 		items = new ArrayList<POSBookItem>();
-		itemIndex = new HashMap<Book, Integer>();
+		itemIndex = new HashMap<Book, POSBookItem>();
 	}
 
 	public String getTradeId() {
@@ -54,16 +54,15 @@ public class POSModeBean extends AbstractBean implements Serializable {
 		ArrayList<POSBookItem> newItems = new ArrayList<POSBookItem>();
 		newItems.addAll(oldItems);
 		if (itemIndex.containsKey(newItem.getBook())) {
-			int listIndex = itemIndex.get(newItem.getBook());
-			POSBookItem currentItem = newItems.get(listIndex);
+			POSBookItem currentItem = itemIndex.get(newItem.getBook());
 			currentItem.setCount(currentItem.getCount() + 1);
 		} else {
 			new BinaryInserter().insert(newItem, newItems, true,
 					new MultiAttrComparator<POSBookItem>(
 							new String[] { "book" }, new boolean[] { true }));
-			itemIndex.put(newItem.getBook(), newItems.indexOf(newItem));
+			itemIndex.put(newItem.getBook(), newItem);
 		}
 		setItems(newItems);
-		return itemIndex.get(newItem.getBook());
+		return newItems.indexOf(newItem);
 	}
 }

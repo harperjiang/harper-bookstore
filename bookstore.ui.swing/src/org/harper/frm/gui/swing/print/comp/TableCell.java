@@ -1,6 +1,7 @@
 package org.harper.frm.gui.swing.print.comp;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
@@ -33,6 +34,12 @@ public class TableCell extends Component {
 		renderer.setTextWrap(true);
 	}
 
+	@Override
+	public void setFont(Font font) {
+		super.setFont(font);
+		getRenderer().setFont(font);
+	}
+	
 	@Override
 	public Dimension calcPreferredSize(Graphics2D g2d) {
 		Rectangle pos = getPosition();

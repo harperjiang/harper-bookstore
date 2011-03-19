@@ -3,27 +3,23 @@ package org.harper.bookstore.ui.posmode;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import org.harper.bookstore.domain.profile.Book;
-import org.harper.bookstore.service.ProfileService;
 import org.harper.bookstore.ui.common.CtrlKeyAdapter;
 import org.harper.bookstore.ui.common.ReturnKeyListener;
 import org.harper.bookstore.ui.common.ReturnKeyListener.Callback;
 import org.harper.bookstore.ui.common.UIStandard;
-import org.harper.frm.core.logging.LogManager;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 
 public class POSModeFrame extends JDialog {
@@ -68,6 +64,7 @@ public class POSModeFrame extends JDialog {
 		Font textFont = new Font("微软雅黑", Font.PLAIN, 30);
 
 		JPanel centerTopPanel = new JPanel();
+		centerTopPanel.setLayout(new GridLayout(1,2));
 		centerPanel.add(centerTopPanel, BorderLayout.NORTH);
 
 		inputField = new JTextField();
@@ -97,7 +94,7 @@ public class POSModeFrame extends JDialog {
 		inputField.addKeyListener(new CtrlKeyAdapter(KeyEvent.VK_P,
 				new Runnable() {
 					public void run() {
-						System.out.println("Get CTRL-P, WILL PRINT");
+						getController().print();
 					}
 				}));
 		inputField.addKeyListener(new CtrlKeyAdapter(KeyEvent.VK_S,
