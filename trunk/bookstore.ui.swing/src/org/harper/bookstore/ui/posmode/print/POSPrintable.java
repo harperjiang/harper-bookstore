@@ -27,12 +27,12 @@ public class POSPrintable extends Container {
 
 	public POSPrintable() {
 		setLayout(new RowLayout());
-		Font titleFont = new Font("微软雅黑", Font.BOLD, 24);
-		Font normalFont = new Font("微软雅黑", Font.PLAIN, 12);
+		Font titleFont = new Font("微软雅黑", Font.BOLD, 12);
+		Font normalFont = new Font("微软雅黑", Font.PLAIN, 8);
 
 		titleLabel = new TextLabel("发货扫描清单");
 		titleLabel.setAlign(Print.ALIGN_CENTER);
-		titleLabel.setBorder(new EmptyBorder(0, 0, 20, 0));
+		titleLabel.setBorder(new EmptyBorder(0, 0, 5, 0));
 		titleLabel.setFont(titleFont);
 		add(titleLabel);
 
@@ -42,19 +42,19 @@ public class POSPrintable extends Container {
 		add(numberLabel);
 
 		contentTable = new Table(3);
+		contentTable.setFont(normalFont);
 		contentTable.setColumnName(new String[] { "ISBN", "书名", "数量" });
 		contentTable.setColumnWidth(0, 0.3f);
 		contentTable.setColumnWidth(1, 0.5f);
 		contentTable.setColumnWidth(2, 0.2f);
-		contentTable.setFont(normalFont);
 		add(contentTable);
 
 		dateLabel = new TextLabel();
 		dateLabel.setFont(normalFont);
 		add(dateLabel);
 
-		setPosition(new Rectangle(0, 0, 450, 300));
-		setBorder(new EmptyBorder(10));
+		setPosition(new Rectangle(0, 0, 500, 310));
+//		setBorder(new EmptyBorder(10));
 	}
 
 	public TextLabel getTitleLabel() {
