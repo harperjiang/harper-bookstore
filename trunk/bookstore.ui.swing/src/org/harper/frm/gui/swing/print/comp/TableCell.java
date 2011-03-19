@@ -3,9 +3,15 @@ package org.harper.frm.gui.swing.print.comp;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
 
-public class TableCell extends TextLabel {
+import org.harper.frm.gui.swing.print.Component;
+
+public class TableCell extends Component {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5934975939734758632L;
 
 	private int posx;
 
@@ -15,38 +21,34 @@ public class TableCell extends TextLabel {
 
 	private int cellSpan;
 
+	private TextLabel renderer;
+
+	public TableCell(Object content) {
+		this(String.valueOf(content));
+	}
+
 	public TableCell(String content) {
-		super(content);
+		super();
+		renderer = new TextLabel(content);
+		renderer.setTextWrap(true);
 	}
 
 	@Override
 	public Dimension calcPreferredSize(Graphics2D g2d) {
-		setPreferredSize(getImageableArea().getSize());
-		extend(g2d, getImageableArea().y, getText());
-		return getPreferredSize(g2d);
+		Rectangle pos = getPosition();
+		renderer.setPosition(pos);
+		return renderer.calcPreferredSize(g2d);
 	}
 
-	protected void extend(Graphics2D graphic, int y, String now) {
-		Rectangle2D fontRect = graphic.getFont().getStringBounds(now,
-				graphic.getFontRenderContext());
+	@Override
+	public void draw(Graphics2D g2d) {
+		renderer.setPosition(new Rectangle(0, 0, getPosition().width,
+				getPosition().height));
+		renderer.paint(g2d);
+	}
 
-		fontRect = new Rectangle(getImageableArea().x, y, (int) Math
-				.ceil(fontRect.getWidth()), (int) Math.ceil(fontRect
-				.getHeight()));
-		Dimension pref = getPreferredSize(graphic);
-		// CRLF...
-		for (int i = now.length(); i > 0; i--) {
-			Rectangle2D subRect = graphic.getFont().getStringBounds(
-					now.substring(0, i), graphic.getFontRenderContext());
-			if (subRect.getWidth() < pref.width) {
-				setPreferredSize(new Dimension(pref.width, (int) Math.ceil(Math
-						.max(pref.height, y + fontRect.getHeight()))));
-				extend(graphic,
-						(int) (y + subRect.getHeight() + getRowPadding()), now
-								.substring(i));
-				break;
-			}
-		}
+	public TextLabel getRenderer() {
+		return renderer;
 	}
 
 	public int getPosx() {
@@ -81,4 +83,7 @@ public class TableCell extends TextLabel {
 		this.cellSpan = cellSpan;
 	}
 
+	public void setAlign(int alignCenter) {
+		getRenderer().setAlign(alignCenter);
+	}
 }

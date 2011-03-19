@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import org.apache.commons.lang.StringUtils;
 import org.harper.bookstore.domain.profile.Book;
@@ -45,38 +45,28 @@ public class ISBNTextField extends JTextField {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if ('\n' == e.getKeyChar()) {
-					if (null != callback)
-						try {
-							final String possibleISBN = null == getText() ? null
-									: getText().trim();
-							// Invoke Server Service
-							new Thread(new Runnable() {
-								public void run() {
-									try {
-										final List<Book> books = getProfileService()
-												.findBooks(possibleISBN);
-										SwingUtilities
-												.invokeLater(new Runnable() {
-													public void run() {
-														processBook(
-																possibleISBN,
-																books);
-													}
-												});
-									} catch (final Exception e) {
-										SwingUtilities
-												.invokeLater(new Runnable() {
-													public void run() {
-														callback.exception(e);
-													}
-												});
-									}
+					if (null != callback) {
+						final String possibleISBN = null == getText() ? null
+								: getText().trim();
+						// Invoke Server Service
+						new SwingWorker<List<Book>, Object>() {
+							@Override
+							protected List<Book> doInBackground()
+									throws Exception {
+								return getProfileService().findBooks(
+										possibleISBN);
+							}
 
+							protected void done() {
+								try {
+									List<Book> books = get();
+									processBook(possibleISBN, books);
+								} catch (final Exception e) {
+									callback.exception(e);
 								}
-							}).start();
-						} catch (Exception e1) {
-							callback.exception(e1);
-						}
+							};
+						}.execute();
+					}
 				}
 			}
 		});

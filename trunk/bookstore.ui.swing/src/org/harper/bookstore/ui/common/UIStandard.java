@@ -57,6 +57,12 @@ public class UIStandard {
 				(int) (screenSize.getHeight() - frame.getHeight()) / 2);
 	}
 
+	public static void maximizedDialog(JDialog dialog) {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		dialog.setLocation(0, 0);
+		dialog.setSize(screenSize);
+	}
+
 	public static void standardDialog(JDialog frame) {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

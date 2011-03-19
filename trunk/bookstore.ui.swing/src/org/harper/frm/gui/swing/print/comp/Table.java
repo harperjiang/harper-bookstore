@@ -11,7 +11,6 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 import org.harper.frm.gui.swing.print.Layout;
 import org.harper.frm.gui.swing.print.Print;
-import org.harper.frm.gui.swing.print.border.EmptyBorder;
 import org.harper.frm.gui.swing.print.border.LineBorder;
 
 public class Table extends Container {
@@ -23,6 +22,10 @@ public class Table extends Container {
 		columnWidth = new float[column];
 		columnName = new String[column];
 		cells = new ArrayList<TableCell>();
+		for (int i = 0; i < column; i++) {
+			// Reserved position for header cell
+			add((TableCell) null);
+		}
 	}
 
 	private int cellPadding = 3;
@@ -47,17 +50,36 @@ public class Table extends Container {
 
 	public void setColumnName(int index, String newName) {
 		this.columnName[index] = newName;
+		setHeaderCell(newName, index);
 	}
 
 	public void setColumnName(String[] name) {
 		Validate.isTrue(name.length == columnName.length);
 		this.columnName = name;
+		for (int i = 0; i < columnName.length; i++)
+			setHeaderCell(columnName[i], i);
+	}
+
+	protected void setHeaderCell(String text, int index) {
+		Font boldFont = new Font(getFont().getName(), Font.BOLD, getFont()
+				.getSize());
+
+		TableCell headerCell = new TableCell(text);
+		headerCell.setAlign(Print.ALIGN_CENTER);
+		headerCell.setFont(boldFont);
+		getChildren().set(index, headerCell);
+		cells.set(index, headerCell);
 	}
 
 	public void add(TableCell child) {
 		cells.add(child);
-		child.setBorder(new EmptyBorder(cellPadding));
 		super.add(child);
+	}
+
+	@Override
+	public void setPosition(Rectangle position) {
+		super.setPosition(position);
+		setPreferredSize(null);
 	}
 
 	@Override
@@ -70,7 +92,7 @@ public class Table extends Container {
 		for (int i = 0; i < columnWidth.length; i++) {
 			if (i > 0)
 				graphic.drawLine(xpos, 0, xpos, imagearea.height);
-			xpos += columnWidth[i] * imagearea.width;
+			xpos += columnWidth[i] * imagearea.width + 2 * cellPadding;
 		}
 		// Draw horizontal line
 		int ypos = 0;
@@ -80,14 +102,14 @@ public class Table extends Container {
 				ypos += height;
 				graphic.drawLine(0, ypos, imagearea.width, ypos);
 				height = 0;
-
 			}
-			height = (int) Math.max(height, cells.get(i).getPosition().height);
+			height = (int) Math.max(height, cells.get(i).getPosition().height
+					+ 2 * cellPadding);
 		}
-		if (0 != height) {
-			ypos += height;
-			graphic.drawLine(0, ypos, imagearea.width, ypos);
-		}
+//		if (0 != height) {
+//			ypos += height;
+//			graphic.drawLine(0, ypos, imagearea.width, ypos);
+//		}
 		graphic.translate(-imagearea.x, -imagearea.y);
 	}
 
@@ -95,21 +117,6 @@ public class Table extends Container {
 	public void setLayout(Layout layout) {
 		Validate.isTrue(layout instanceof TableLayout);
 		super.setLayout(layout);
-	}
-
-	@Override
-	public void prepare(Graphics2D g2d) {
-		// Insert table header cell
-		Font boldFont = new Font(getFont().getName(), Font.BOLD, getFont()
-				.getSize());
-		for (int i = 0; i < columnName.length; i++) {
-			TableCell headerCell = new TableCell(columnName[i]);
-			headerCell.setAlign(Print.ALIGN_CENTER);
-			headerCell.setFont(boldFont);
-			getChildren().add(i, headerCell);
-			cells.add(i, headerCell);
-		}
-		layout(g2d);
 	}
 
 	protected static class TableLayout implements Layout {
@@ -133,12 +140,17 @@ public class Table extends Container {
 					maxRowHeight = 0;
 				}
 				TableCell cell = table.cells.get(i);
-				cell.setPosition(new Rectangle(point.x, point.y, (int) width[i
-						% table.columnWidth.length], 0));
+				cell.setPosition(new Rectangle(point.x + table.cellPadding,
+						point.y + table.cellPadding, ((int) width[i
+								% table.columnWidth.length])
+								- 2 * table.cellPadding, 0));
 				Dimension pref = cell.getPreferredSize(g2d);
-				point.x += width[i % table.columnWidth.length];
-				maxRowHeight = Math.max(maxRowHeight, pref.getHeight());
-				old.height = (int) Math.ceil(point.y + pref.height);
+				point.x += width[i % table.columnWidth.length] + 2
+						* table.cellPadding;
+				maxRowHeight = Math.max(maxRowHeight, pref.getHeight() + 2
+						* table.cellPadding);
+				old.height = (int) Math.max(old.height, Math.ceil(point.y
+						+ pref.height + 2 * table.cellPadding));
 			}
 
 			return old;

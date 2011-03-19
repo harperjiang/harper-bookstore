@@ -11,7 +11,6 @@ import org.harper.frm.core.tools.bean.BeanAccess;
 import org.harper.frm.gui.swing.comp.table.data.TableData;
 import org.harper.frm.gui.swing.manager.ComponentBinding;
 
-
 public class TableBinding extends ComponentBinding {
 
 	public TableBinding(JTable table, String attribute) {
@@ -27,9 +26,9 @@ public class TableBinding extends ComponentBinding {
 			Object oldValue = value;
 			CommonTableModel model = (CommonTableModel) ((JTable) getComponent())
 					.getModel();
-			Object newValue = BeanAccess.getInstance().extract(model.getData(),
+			List newValue = BeanAccess.getInstance().extract(model.getData(),
 					"bean");
-			itemChangeCallback((List<Object>)newValue,e);
+			itemChangeCallback(newValue, e);
 			firePropertyChange(null, newValue);
 		}
 	};
@@ -54,8 +53,8 @@ public class TableBinding extends ComponentBinding {
 
 		model.addTableModelListener(listener);
 	}
-	
-	protected void itemChangeCallback(List<Object>vals,TableModelEvent e) {
-		
+
+	protected void itemChangeCallback(List<Object> vals, TableModelEvent e) {
+
 	}
 }

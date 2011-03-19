@@ -12,7 +12,7 @@ import org.harper.frm.gui.swing.print.comp.Container;
 public class RowLayout implements Layout {
 
 	private int span = 15;
-	
+
 	public int getSpan() {
 		return span;
 	}
@@ -36,11 +36,12 @@ public class RowLayout implements Layout {
 		Rectangle imagearea = container.getImageableArea();
 		Point loc = imagearea.getLocation();
 		for (Component child : container.getChildren()) {
+			child.getPosition().width = imagearea.width;
+			Dimension prefer = child.getPreferredSize(g2d);
 			child.setPosition(new Rectangle(loc, new Dimension(imagearea.width,
-					child.getPreferredSize(g2d).height)));
-			loc.y += child.getPreferredSize(g2d).height + span;
+					prefer.height)));
+			loc.y += prefer.height + span;
 		}
 
 	}
-
 }

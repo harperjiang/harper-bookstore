@@ -5,7 +5,10 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.harper.frm.gui.swing.print.Component;
 import org.harper.frm.gui.swing.print.Print;
 
@@ -15,8 +18,12 @@ public class TextLabel extends Component {
 
 	private int rowPadding = 5;
 
+	private boolean textWrap;
+
 	private int align = Print.ALIGN_LEFT | Print.ALIGN_TOP;
 
+	private List<String> wrapedText;
+	
 	public TextLabel() {
 		this("");
 	}
@@ -24,6 +31,7 @@ public class TextLabel extends Component {
 	public TextLabel(String content) {
 		super();
 		this.text = content;
+		wrapedText = new ArrayList<String>();
 	}
 
 	@Override
@@ -41,8 +49,8 @@ public class TextLabel extends Component {
 		if (getImageableArea().getHeight() < fontRect.getHeight())
 			return;
 
-		fontRect = new Rectangle(rect.x, rect.y, (int) fontRect.getWidth(),
-				(int) fontRect.getHeight());
+		fontRect = new Rectangle(rect.x, rect.y, (int) Math.ceil(fontRect
+				.getWidth()), (int) Math.ceil(fontRect.getHeight()));
 
 		if ((align & Print.ALIGN_LEFT) == 0 || (align & Print.ALIGN_TOP) == 0) {
 			// Not a left-top print, no CRLF
@@ -76,7 +84,8 @@ public class TextLabel extends Component {
 			if (rect.contains(subRect)) {
 				graphic.drawString(now.substring(0, i), rect.x,
 						(int) (rect.y + subRect.getHeight()));
-				drawString(graphic,
+				drawString(
+						graphic,
 						new Rectangle(rect.x, (int) (rect.y
 								+ subRect.getHeight() + rowPadding),
 								rect.width, (int) (rect.height
@@ -112,6 +121,14 @@ public class TextLabel extends Component {
 		this.align = align;
 	}
 
+	public boolean isTextWrap() {
+		return textWrap;
+	}
+
+	public void setTextWrap(boolean textWrap) {
+		this.textWrap = textWrap;
+	}
+
 	@Override
 	public Dimension calcPreferredSize(Graphics2D g2d) {
 		if (null == getText())
@@ -119,9 +136,43 @@ public class TextLabel extends Component {
 		Font font = getFont() == null ? g2d.getFont() : getFont();
 		if (null == font)
 			return null;
-		Rectangle2D rect = font.getStringBounds(text, g2d
-				.getFontRenderContext());
-		return new Dimension((int) Math.ceil(rect.getWidth()), (int) Math
-				.ceil(rect.getHeight()));
+		if (textWrap && getPosition().x > 0) {
+			setPreferredSize(getImageableArea().getSize());
+			wrapedText = new ArrayList<String>();
+			extend(g2d, getImageableArea().y, getText());
+			return getPreferredSize(g2d);
+		} else {
+			Rectangle2D rect = font.getStringBounds(text,
+					g2d.getFontRenderContext());
+			return new Dimension((int) Math.ceil(rect.getWidth()),
+					(int) Math.ceil(rect.getHeight()));
+		}
 	}
+
+	protected void extend(Graphics2D graphic, int y, String now) {
+		if (StringUtils.isEmpty(now))
+			return;
+		Rectangle2D fontRect = graphic.getFont().getStringBounds(now,
+				graphic.getFontRenderContext());
+
+		fontRect = new Rectangle(getImageableArea().x, y,
+				(int) Math.ceil(fontRect.getWidth()), (int) Math.ceil(fontRect
+						.getHeight()));
+		Dimension pref = getPreferredSize(graphic);
+		// CRLF...
+		for (int i = now.length(); i > 0; i--) {
+			Rectangle2D subRect = graphic.getFont().getStringBounds(
+					now.substring(0, i), graphic.getFontRenderContext());
+			if (subRect.getWidth() < pref.width) {
+				setPreferredSize(new Dimension(pref.width, (int) Math.ceil(Math
+						.max(pref.height, y + Math.ceil(fontRect.getHeight())))));
+				wrapedText.add(now.substring(0,i));
+				extend(graphic,
+						(int) (y + subRect.getHeight() + getRowPadding()),
+						now.substring(i));
+				break;
+			}
+		}
+	}
+
 }

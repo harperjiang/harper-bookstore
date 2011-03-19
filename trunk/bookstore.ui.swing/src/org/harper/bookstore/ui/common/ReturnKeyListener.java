@@ -7,25 +7,36 @@ import javax.swing.text.JTextComponent;
 
 public class ReturnKeyListener extends KeyAdapter {
 
-	private Runnable run;
+	public static interface Callback {
+		public void call(String text);
+	}
+
+	private Callback callback;
+
+	private StringBuilder buffer;
 
 	private boolean clear;
 
-	public ReturnKeyListener(Runnable run) {
-		this.run = run;
+	public ReturnKeyListener(Callback call) {
+		this(call, true);
 	}
 
-	public ReturnKeyListener(Runnable run, boolean clear) {
-		this.run = run;
+	public ReturnKeyListener(Callback call, boolean clear) {
+		this.callback = call;
 		this.clear = clear;
+		this.buffer = new StringBuilder();
 	}
 
 	public void keyTyped(KeyEvent e) {
 		if ('\n' == e.getKeyChar()) {
-			if (null != run)
-				run.run();
+			if (null != callback) {
+				callback.call(buffer.toString());
+				buffer = new StringBuilder();
+			}
 			if (clear && e.getComponent() instanceof JTextComponent)
 				((JTextComponent) e.getComponent()).setText(null);
+		} else {
+			buffer.append(e.getKeyChar());
 		}
 	}
 }

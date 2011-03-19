@@ -31,7 +31,11 @@ public abstract class Component {
 
 	public Dimension getPreferredSize(Graphics2D g2d) {
 		if (null == preferredSize) {
+			// Font Size Will affect calculation result
+			Font oldFont = getFont();
+			g2d.setFont(getFont());
 			preferredSize = calcPreferredSize(g2d);
+			g2d.setFont(oldFont);
 			if (null != getBorder()) {
 				Insets ins = getBorder().getBorderInsets(this);
 				preferredSize = new Dimension(preferredSize.width + ins.left
@@ -49,17 +53,15 @@ public abstract class Component {
 	public abstract Dimension calcPreferredSize(Graphics2D g2d);
 
 	public void prepare(Graphics2D g2d) {
-		Color oldColor = g2d.getColor();
-		Font oldFont = g2d.getFont();
-		Stroke oldStroke = g2d.getStroke();
-		if (null != getFont())
-			g2d.setFont(getFont());
-		if (null != getColor())
-			g2d.setColor(getColor());
-		getPreferredSize(g2d);
-		g2d.setFont(oldFont);
-		g2d.setColor(oldColor);
-		g2d.setStroke(oldStroke);
+		// Do nothing
+		/*
+		 * Color oldColor = g2d.getColor(); Font oldFont = g2d.getFont(); Stroke
+		 * oldStroke = g2d.getStroke(); if (null != getFont())
+		 * g2d.setFont(getFont()); if (null != getColor())
+		 * g2d.setColor(getColor()); getPreferredSize(g2d);
+		 * g2d.setFont(oldFont); g2d.setColor(oldColor);
+		 * g2d.setStroke(oldStroke);
+		 */
 	}
 
 	public void paint(Graphics2D g2d) {
@@ -70,8 +72,8 @@ public abstract class Component {
 			g2d.setFont(getFont());
 		if (null != getColor())
 			g2d.setColor(getColor());
-		Shape oldClip = g2d.getClip();
-		g2d.setClip(getPosition());
+//		Shape oldClip = g2d.getClip();
+//		g2d.setClip(getPosition());
 		// Point imagePoint = getImageableArea().getLocation();
 		g2d.translate(getPosition().x, getPosition().y);
 		draw(g2d);
@@ -79,8 +81,8 @@ public abstract class Component {
 			getBorder().paintBorder(this, g2d, 0, 0, getPosition().width,
 					getPosition().height);
 		g2d.translate(-getPosition().x, -getPosition().y);
-		
-		g2d.setClip(oldClip);
+
+//		g2d.setClip(oldClip);
 		g2d.setFont(oldFont);
 		g2d.setColor(oldColor);
 		g2d.setStroke(oldStroke);

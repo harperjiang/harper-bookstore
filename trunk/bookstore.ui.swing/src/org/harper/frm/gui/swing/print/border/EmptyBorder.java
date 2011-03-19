@@ -8,15 +8,19 @@ import org.harper.frm.gui.swing.print.Component;
 
 public class EmptyBorder implements Border {
 
-	private int width;
+	private Insets wide;
 
 	public EmptyBorder(int width) {
-		this.width = width;
+		this.wide = new Insets(width, width, width, width);
+	}
+
+	public EmptyBorder(int top, int left, int bottom, int right) {
+		this.wide = new Insets(top, left, bottom, right);
 	}
 
 	@Override
 	public Insets getBorderInsets(Component c) {
-		return new Insets(width, width, width, width);
+		return wide;
 	}
 
 	@Override
