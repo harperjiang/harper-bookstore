@@ -12,9 +12,12 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import org.apache.commons.lang.StringUtils;
+import org.harper.bookstore.cache.FileBookCache;
+import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.ui.Controller;
 import org.harper.bookstore.ui.posmode.print.POSPrintable;
 import org.harper.frm.core.logging.LogManager;
+import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
 import org.harper.frm.gui.swing.manager.BindingManager;
 import org.harper.frm.gui.swing.manager.JTextBinding;
@@ -129,5 +132,35 @@ public class POSModeController extends Controller {
 
 	public static void main(String[] args) {
 		new POSModeController().getFrame().setVisible(true);
+	}
+
+	public void loadBook(final String word) {
+		// ISBN
+		new SwingWorker<Book, Object>() {
+			@Override
+			protected Book doInBackground() throws Exception {
+				return FileBookCache.getInstance().getBook(word);
+			}
+
+			protected void done() {
+				try {
+					Book book = get();
+					if (null != book) {
+						POSBookItem item = new POSBookItem();
+						item.setBook(book);
+						item.setCount(1);
+						int row = getBean().addItem(item);
+						((CommonTableModel) frame.getBookTable().getModel())
+								.updateRow(row, null);
+					}
+				} catch (Exception e) {
+					LogManager.getInstance().getLogger(getClass())
+							.error("Error", e);
+					JOptionPane.showMessageDialog(frame, e.getMessage(),
+							"Error", JOptionPane.ERROR_MESSAGE);
+				}
+
+			};
+		}.execute();
 	}
 }
