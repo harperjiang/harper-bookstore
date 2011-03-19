@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.harper.bookstore.domain.Entity;
 
-public class Book extends Entity {
+public class Book extends Entity implements Comparable<Book> {
 
 	private String isbn;
 
@@ -79,5 +79,12 @@ public class Book extends Entity {
 		BookUnit unit = new BookUnit(this, 1, BigDecimal.ONE);
 		content.add(unit);
 		return content;
+	}
+
+	@Override
+	public int compareTo(Book o) {
+		if (null == o)
+			return 1;
+		return compare(getName(), o.getName());
 	}
 }

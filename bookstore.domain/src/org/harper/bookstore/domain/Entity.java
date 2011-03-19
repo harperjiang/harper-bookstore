@@ -81,6 +81,16 @@ public abstract class Entity implements IAdaptor {
 		return a.equals(b);
 	}
 
+	public static <T extends Comparable<T>> int compare(T a, T b) {
+		if (a == b && a == null)
+			return 0;
+		if (a != null && b == null)
+			return 1;
+		if (a == null && b != null)
+			return -1;
+		return a.compareTo(b);
+	}
+
 	public String getCreator() {
 		return creator;
 	}
@@ -92,14 +102,16 @@ public abstract class Entity implements IAdaptor {
 	protected PropertyChangeSupport getSupport() {
 		return support;
 	}
-	
+
 	protected void fireNewItem(Object item) {
-		PropertyChangeEvent event = new PropertyChangeEvent(item,MediatorManager.PROPERTY_NEW,null,item);
+		PropertyChangeEvent event = new PropertyChangeEvent(item,
+				MediatorManager.PROPERTY_NEW, null, item);
 		getSupport().firePropertyChange(event);
 	}
-	
+
 	protected void fireDeleteItem(Object item) {
-		PropertyChangeEvent event = new PropertyChangeEvent(item,MediatorManager.PROPERTY_DELETE,null,item);
+		PropertyChangeEvent event = new PropertyChangeEvent(item,
+				MediatorManager.PROPERTY_DELETE, null, item);
 		getSupport().firePropertyChange(event);
 	}
 
