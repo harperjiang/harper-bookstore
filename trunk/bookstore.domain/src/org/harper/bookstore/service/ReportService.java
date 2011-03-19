@@ -57,11 +57,19 @@ public class ReportService extends Service {
 						po.getTotalAmt().subtract(po.getFeeAmount())));
 				for (OrderItem item : po.getItems()) {
 					StoreEntry entry = po.getSite().getEntry(item.getBook());
+					BigDecimal profit = null;
 					if (null != entry) {
-						BigDecimal profit = item.getUnitPrice().subtract(
-								entry.getUnitPrice());
-						data.setProfit(data.getProfit().add(profit));
+						profit = item.getUnitPrice()
+								.subtract(entry.getUnitPrice())
+								.multiply(new BigDecimal(item.getCount()));
+					} else {
+						// Use Default Profit Rate 10%
+						profit = item.getUnitPrice()
+								.multiply(new BigDecimal(item.getCount()))
+								.multiply(new BigDecimal("0.1"));
 					}
+
+					data.setProfit(data.getProfit().add(profit));
 				}
 			}
 			List<SAPData> dataList = new ArrayList<SAPData>();
