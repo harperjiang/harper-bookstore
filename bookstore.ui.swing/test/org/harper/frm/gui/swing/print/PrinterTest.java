@@ -25,6 +25,7 @@ public class PrinterTest {
 				if(pageIndex>0)
 					return NO_SUCH_PAGE;
 				Graphics2D g2d = (Graphics2D)graphics;
+			
 				
 //				g2d.setClip(100,100,100,100);
 				

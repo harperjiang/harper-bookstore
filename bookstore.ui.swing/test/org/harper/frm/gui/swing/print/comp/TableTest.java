@@ -50,7 +50,37 @@ public class TableTest {
 
 		Container container = new Container();
 		container.setBorder(new EmptyBorder(50));
-		container.setPosition(new Rectangle(0, 0, 700, 800));
+		container.setPosition(new Rectangle(0, 0, 700, 900));
+		container.setLayout(new FillLayout());
+		container.add(table);
+
+		PrinterJob job = PrinterJob.getPrinterJob();
+		job.setPrintable(new ComponentPrintable(container));
+		if (job.printDialog())
+			job.print();
+	}
+	
+	@Test
+	public void testCellWrap() throws Exception {
+
+		Table table = new Table(2);
+		table.setPosition(new Rectangle(0, 0, 600, 0));
+
+		table.setColumnName(new String[] { "Col 1","Col 2"});
+
+		table.setColumnWidth(0, 0.2f);
+		table.setColumnWidth(1, 0.8f);
+
+		table
+				.add(new TableCell(
+						"Cell 32 has a lot of to say. But it doesn't know whether there's enough space. If you can read this, it means it succeed"));
+		table.add(new TableCell("Cell 33"));
+
+		table.setBorder(new LineBorder(1));
+
+		Container container = new Container();
+		container.setBorder(new EmptyBorder(50));
+		container.setPosition(new Rectangle(0, 0, 700, 900));
 		container.setLayout(new FillLayout());
 		container.add(table);
 

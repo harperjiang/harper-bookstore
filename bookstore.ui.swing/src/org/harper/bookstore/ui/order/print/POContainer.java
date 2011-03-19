@@ -9,11 +9,6 @@ import java.awt.print.PrinterException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 
-import net.sourceforge.barbecue.Barcode;
-import net.sourceforge.barbecue.BarcodeException;
-import net.sourceforge.barbecue.BarcodeFactory;
-import net.sourceforge.barbecue.output.OutputException;
-
 import org.apache.commons.lang.StringUtils;
 import org.harper.bookstore.domain.order.OrderItem;
 import org.harper.bookstore.domain.order.PurchaseOrder;

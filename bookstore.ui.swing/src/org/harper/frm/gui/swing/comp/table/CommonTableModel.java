@@ -250,10 +250,10 @@ public class CommonTableModel extends AbstractTableModel {
 			if (data != null && refClass.isInstance(data)
 					&& index < getRowCount()) {
 				tableData.set(index, data);
-				fireTableRowsUpdated(index, index);
 			}
+			fireTableRowsUpdated(index, index);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-}
+	}

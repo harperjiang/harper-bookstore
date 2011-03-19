@@ -33,9 +33,8 @@ public class Container extends Component {
 
 	@Override
 	public void draw(Graphics2D graphic) {
-		for (Component child : children) 
+		for (Component child : children)
 			child.paint(graphic);
-			
 	}
 
 	/**
@@ -43,9 +42,9 @@ public class Container extends Component {
 	 */
 	@Override
 	public void prepare(Graphics2D g2d) {
+		layout(g2d);
 		for (Component child : children)
 			child.prepare(g2d);
-		layout(g2d);
 	}
 
 	@Override
@@ -54,10 +53,12 @@ public class Container extends Component {
 			return getLayout().getPreferredSize(this, g2d);
 		Dimension dim = getPosition().getSize();
 		for (Component child : getChildren()) {
-			dim.width = (int) Math.max(child.getPosition().x
-					+ child.getPosition().width, dim.width);
-			dim.height = (int) Math.max(child.getPosition().y
-					+ child.getPosition().height, dim.height);
+			dim.width = (int) Math.max(
+					child.getPosition().x + child.getPosition().width,
+					dim.width);
+			dim.height = (int) Math.max(
+					child.getPosition().y + child.getPosition().height,
+					dim.height);
 		}
 		return dim;
 	}

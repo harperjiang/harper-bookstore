@@ -18,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.lang.StringUtils;
 import org.harper.bookstore.ui.common.ReturnKeyListener;
+import org.harper.bookstore.ui.common.ReturnKeyListener.Callback;
 import org.harper.bookstore.ui.common.UIStandard;
 
 public class LoginDialog extends JDialog {
@@ -95,9 +96,9 @@ public class LoginDialog extends JDialog {
 
 		controller = new LoginController(this);
 
-		passwordField.addKeyListener(new ReturnKeyListener(new Runnable() {
+		passwordField.addKeyListener(new ReturnKeyListener(new Callback() {
 			@Override
-			public void run() {
+			public void call(String text) {
 				loginStart();
 			}
 		}));
