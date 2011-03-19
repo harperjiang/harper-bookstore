@@ -43,7 +43,7 @@ public class POSModeFrame extends JDialog {
 	public POSModeFrame() {
 		super();
 		setTitle("POS Mode");
-		setUndecorated(true);
+//		setUndecorated(true);
 		setModal(true);
 		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -126,35 +126,7 @@ public class POSModeFrame extends JDialog {
 
 					}
 				} else {
-					// ISBN
-					new SwingWorker<Book, Object>() {
-						@Override
-						protected Book doInBackground() throws Exception {
-							return new ProfileService().getBook(word);
-						}
-
-						protected void done() {
-							try {
-								Book book = get();
-								if (null != book) {
-									POSBookItem item = new POSBookItem();
-									item.setBook(book);
-									item.setCount(1);
-									int row = getController().getBean()
-											.addItem(item);
-									((CommonTableModel) getBookTable()
-											.getModel()).updateRow(row, null);
-								}
-							} catch (Exception e) {
-								LogManager.getInstance().getLogger(getClass())
-										.error("Error", e);
-								JOptionPane.showMessageDialog(
-										POSModeFrame.this, e.getMessage(),
-										"Error", JOptionPane.ERROR_MESSAGE);
-							}
-
-						};
-					}.execute();
+					getController().loadBook(word);
 				}
 			}
 		}, true));
