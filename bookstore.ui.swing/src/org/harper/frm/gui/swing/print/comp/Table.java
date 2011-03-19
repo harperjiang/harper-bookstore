@@ -175,8 +175,10 @@ public class Table extends Container {
 				maxRowHeight = (int) Math.ceil(Math.max(maxRowHeight,
 						pref.getHeight() + 2 * table.cellPadding));
 			}
+			for (TableCell cc : cellInARow)
+				cc.getPosition().height = maxRowHeight;
 			table.setPosition(new Rectangle(table.getPosition().getLocation(),
-					table.getPreferredSize(g2d)));
+					dim));
 		}
 	}
 }
