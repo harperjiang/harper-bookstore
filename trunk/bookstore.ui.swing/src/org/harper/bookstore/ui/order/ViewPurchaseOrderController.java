@@ -91,6 +91,7 @@ public class ViewPurchaseOrderController extends Controller {
 			orders.add(po);
 		}
 		DOController doc = new DOController();
+		frame.getManagerWindow().addEditor(doc.getComponent());
 		for (PurchaseOrder po : orders) {
 			try {
 				doc.getBean().setPoNumber(po.getNumber());

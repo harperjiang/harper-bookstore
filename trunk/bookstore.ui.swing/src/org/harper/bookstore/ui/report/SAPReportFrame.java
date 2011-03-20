@@ -8,7 +8,6 @@ import java.awt.GradientPaint;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
@@ -23,7 +22,7 @@ import javax.swing.border.EmptyBorder;
 import org.harper.bookstore.service.bean.report.SAPReportResultBean;
 import org.harper.bookstore.ui.common.PercentageTableCellRenderer;
 import org.harper.bookstore.ui.common.UIStandard;
-import org.harper.bookstore.util.Utilities;
+import org.harper.frm.core.logging.LogManager;
 import org.harper.frm.gui.swing.comp.table.CommonTableModel;
 import org.harper.frm.gui.swing.comp.textfield.DateTextField;
 import org.harper.frm.gui.swing.comp.window.JPowerWindowEditor;
@@ -95,7 +94,11 @@ public class SAPReportFrame extends JPowerWindowEditor {
 							getController().getBean().setResult(bean);
 						} catch (Exception e) {
 							// TODO Log
-							e.printStackTrace();
+							LogManager
+									.getInstance()
+									.getLogger(getClass())
+									.error("Exception while generating report",
+											e);
 							JOptionPane.showMessageDialog(
 									SAPReportFrame.this.getManagerWindow(),
 									e.getMessage(),

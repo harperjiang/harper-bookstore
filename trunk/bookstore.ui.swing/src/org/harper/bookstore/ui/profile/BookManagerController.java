@@ -1,15 +1,16 @@
 package org.harper.bookstore.ui.profile;
 
-import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JComponent;
+import javax.swing.SwingWorker;
 
 import org.harper.bookstore.domain.profile.Book;
 import org.harper.bookstore.service.OrderService;
 import org.harper.bookstore.service.ProfileService;
 import org.harper.bookstore.ui.Controller;
+import org.harper.frm.core.logging.LogManager;
 import org.harper.frm.core.tools.insert.BinaryInserter;
 import org.harper.frm.gui.swing.comp.table.TableBinding;
 import org.harper.frm.gui.swing.manager.BindingManager;
@@ -54,17 +55,32 @@ public class BookManagerController extends Controller {
 	}
 
 	public void load() {
+		new SwingWorker<List<Book>, Object>() {
+			@Override
+			protected List<Book> doInBackground() throws Exception {
+				List<Book> books = new ProfileService().getBooks();
+				return books;
+			}
 
-		List<Book> books = new ProfileService().getBooks();
-		List<BookBean> beans = new ArrayList<BookBean>();
-		OrderService orderServ = new OrderService();
-		for (Book book : books) {
-			BookBean bean = new BookBean();
-			bean.setBook(book);
-			bean.setPrice(orderServ.getListPrice(book));
-			beans.add(bean);
-		}
-		model.setBooks(beans);
+			@Override
+			protected void done() {
+				try {
+					List<Book> books = get();
+					List<BookBean> beans = new ArrayList<BookBean>();
+					OrderService orderServ = new OrderService();
+					for (Book book : books) {
+						BookBean bean = new BookBean();
+						bean.setBook(book);
+						bean.setPrice(orderServ.getListPrice(book));
+						beans.add(bean);
+					}
+					model.setBooks(beans);
+				} catch (Exception e) {
+					LogManager.getInstance().getLogger(getClass())
+							.error("Error when loading books", e);
+				}
+			}
+		}.execute();
 	}
 
 	public void select(Book book) {
@@ -84,10 +100,12 @@ public class BookManagerController extends Controller {
 		new BinaryInserter().insert(bean, newBooks);
 		model.setBooks(newBooks);
 	}
-@Override
-public JComponent getComponent() {
-return frame;
-}
+
+	@Override
+	public JComponent getComponent() {
+		return frame;
+	}
+
 	public static void main(String[] args) {
 		new BookManagerController();
 	}
