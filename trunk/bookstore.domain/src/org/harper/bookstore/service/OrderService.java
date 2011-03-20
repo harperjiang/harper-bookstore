@@ -38,13 +38,13 @@ public class OrderService extends Service {
 						order.getCustomer());
 			}
 
-			// Check the existence of items;
-			for (OrderItem item : order.getItems())
-				if (null == order.getSite().getEntry(item.getBook())
-						&& !item.isAgent())
-					throw new IllegalArgumentException(
-							"Cannot sell book with no history:"
-									+ item.getBook().getName());
+			// Check the existence of books;
+//			for (OrderItem item : order.getItems())
+//				if (null == order.getSite().getEntry(item.getBook())
+//						&& !item.isAgent())
+//					throw new IllegalArgumentException(
+//							"Cannot sell book with no history:"
+//									+ item.getBook().getName());
 
 			PurchaseOrder orderToEdit = null;
 
