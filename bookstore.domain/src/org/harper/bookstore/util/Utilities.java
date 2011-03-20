@@ -19,10 +19,16 @@ public class Utilities {
 	}
 
 	public static Date getEndOfDate() {
-		Date stopDate = new Date();
-		stopDate = DateUtils.addSeconds(DateUtils.addDays(
-				DateUtils.truncate(stopDate, Calendar.DATE), 1), -1);
-		return stopDate;
+		return getEndOfDate(new Date());
+	}
+
+	public static Date getEndOfDate(Date date) {
+		if (null == date)
+			return null;
+		date = DateUtils.addSeconds(
+				DateUtils.addDays(DateUtils.truncate(date, Calendar.DATE), 1),
+				-1);
+		return date;
 	}
 
 	public static String digest(String input) {

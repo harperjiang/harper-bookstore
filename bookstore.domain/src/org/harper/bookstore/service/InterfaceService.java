@@ -196,7 +196,10 @@ public class InterfaceService extends Service {
 		job.setStatus(TradeQueryStatus.WAIT_SELLER_SEND_GOODS);
 		int wait = (Integer) job.call();
 
-		return sent + wait;
+		job.setStatus(TradeQueryStatus.TRADE_FINISHED);
+		int finish = (Integer)job.call();
+		
+		return sent + wait + finish;
 	}
 
 	public int increImportTOPOrder() {

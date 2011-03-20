@@ -53,8 +53,10 @@ public class ReportService extends Service {
 							BigDecimal.ZERO, BigDecimal.ZERO));
 				}
 				SAPData data = dataMap.get(dateStr);
-				data.setSelling(data.getSelling().add(
-						po.getTotalAmt().subtract(po.getFeeAmount())));
+				data.setSelling(data.getSelling().add(po.getTotalAmt()));
+				if (null != po.getFeeAmount())
+					data.setSelling(data.getSelling().subtract(
+							po.getFeeAmount()));
 				for (OrderItem item : po.getItems()) {
 					StoreEntry entry = po.getSite().getEntry(item.getBook());
 					BigDecimal profit = null;
