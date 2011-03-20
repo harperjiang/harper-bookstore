@@ -2,6 +2,7 @@ package org.harper.frm.gui.swing.print;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -22,12 +23,14 @@ public class ComponentPrintable implements Printable {
 
 	private double pageWidth, pageHeight, compWidth, compHeight, emplifyFactor;
 
+	private static Insets BORDER = new Insets(30, 30, 30, 30);
+
 	protected void init(PageFormat pageFormat) {
 		if (!inited) {
 			// pageWidth = pageFormat.getImageableWidth();
 			// pageHeight = pageFormat.getImageableHeight();
-			pageWidth = pageFormat.getWidth() - 30;
-			pageHeight = pageFormat.getHeight() - 30;
+			pageWidth = pageFormat.getWidth() - BORDER.left - BORDER.right;
+			pageHeight = pageFormat.getHeight() - BORDER.top - BORDER.bottom;
 			compWidth = component.getPosition().getWidth();
 			compHeight = component.getPosition().getHeight();
 			emplifyFactor = pageWidth / compWidth;
@@ -53,18 +56,14 @@ public class ComponentPrintable implements Printable {
 		// Determine which part of the image should be drawn
 
 		Graphics2D g2d = (Graphics2D) graphics;
-		g2d.setClip(0, 0, (int) pageWidth, (int) pageHeight);
-		// Rectangle rect = g2d.getClipBounds();
-		// g2d.drawRect(rect.x+1,rect.y+1,rect.width-2,rect.height-2);
-		// g2d.translate(pageFormat.getImageableX(),
-		// pageFormat.getImageableY());
+		g2d.setClip(BORDER.left, BORDER.top, (int) pageWidth, (int) pageHeight);
 
 		if (0 == counter % 2 && !prepared) {
 			component.prepare(g2d);
 			prepared = true;
 			component.getPosition().height = component.getPreferredSize(g2d).height;
 		} else {
-			g2d.translate(15, 15);
+			g2d.translate(BORDER.left, BORDER.top);
 			g2d.translate(0, -pageHeight * pageIndex);
 			g2d.scale(emplifyFactor, emplifyFactor);
 			component.paint(g2d);
