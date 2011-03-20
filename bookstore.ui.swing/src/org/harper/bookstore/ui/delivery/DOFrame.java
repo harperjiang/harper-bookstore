@@ -181,7 +181,7 @@ public class DOFrame extends JPowerWindowEditor {
 								public void run() {
 									JOptionPane
 											.showMessageDialog(
-													DOFrame.this,
+													DOFrame.this.getManagerWindow(),
 													Messages.getString("DOFrame.msg_save_success")); //$NON-NLS-1$
 								}
 							});
@@ -192,7 +192,7 @@ public class DOFrame extends JPowerWindowEditor {
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									JOptionPane.showMessageDialog(
-											DOFrame.this,
+											DOFrame.this.getManagerWindow(),
 											ex.getMessage(),
 											Messages.getString("DOFrame.msg_save_error"), //$NON-NLS-1$
 											JOptionPane.ERROR_MESSAGE);

@@ -43,7 +43,10 @@ public class TOPImportController extends Controller {
 		job.setStatus(TradeQueryStatus.WAIT_SELLER_SEND_GOODS);
 		int wait = (Integer) job.call(monitor);
 
-		return sent + wait;
+		job.setStatus(TradeQueryStatus.TRADE_FINISHED);
+		int finished = (Integer) job.call(monitor);
+		
+		return sent + wait + finished;
 	}
 
 	@Override

@@ -55,6 +55,7 @@ public class ChooseDateDialog extends JDialog {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setResizable(false);
+		UIStandard.standardDialog(this);
 
 		setLayout(new GridLayout(3, 1));
 

@@ -8,6 +8,7 @@ import org.harper.bookstore.domain.order.Order;
 import org.harper.bookstore.domain.order.Order.Status;
 import org.harper.bookstore.domain.order.PurchaseOrder;
 import org.harper.bookstore.domain.order.PurchaseOrder.DeliveryStatus;
+import org.harper.bookstore.util.Utilities;
 import org.harper.frm.gui.swing.manager.AbstractBean;
 
 public class ViewPurchaseOrderBean extends AbstractBean {
@@ -23,7 +24,7 @@ public class ViewPurchaseOrderBean extends AbstractBean {
 	private String partyId;
 
 	private String orderNum;
-	
+
 	private String powersearch;
 
 	private PurchaseOrder.DeliveryStatus deliveryStatus = null;
@@ -55,7 +56,7 @@ public class ViewPurchaseOrderBean extends AbstractBean {
 	}
 
 	public void setStopDate(Date stopDate) {
-		this.stopDate = stopDate;
+		this.stopDate = Utilities.getEndOfDate(stopDate);
 	}
 
 	public String getPartyId() {
@@ -87,7 +88,7 @@ public class ViewPurchaseOrderBean extends AbstractBean {
 	}
 
 	public void setSearchResults(List<PurchaseOrder> searchResults) {
-		List<PurchaseOrder> oldResult = getSearchResults();
+//		List<PurchaseOrder> oldResult = getSearchResults();
 		this.searchResults = searchResults;
 		firePropertyChange("searchResults", null, searchResults);
 	}
