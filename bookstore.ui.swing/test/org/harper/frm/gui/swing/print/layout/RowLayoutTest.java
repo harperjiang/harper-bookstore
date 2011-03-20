@@ -50,6 +50,7 @@ public class RowLayoutTest {
 		TextLabel text = new TextLabel("This is a Text Label");
 		cntr.add(longTable);
 		cntr.add(text);
+//		cntr.setBorder(new EmptyBorder(20));
 
 		PrinterJob job = PrinterJob.getPrinterJob();
 		job.setPrintable(new ComponentPrintable(cntr));
