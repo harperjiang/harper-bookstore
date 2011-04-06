@@ -15,13 +15,13 @@ import org.harper.frm.job.JobMonitor;
 import org.harper.frm.top.session.TOPSession;
 import org.harper.frm.top.session.TOPSessionManager;
 
-import com.taobao.api.TaobaoApiException;
-import com.taobao.api.TaobaoRestClient;
-import com.taobao.api.model.Trade;
-import com.taobao.api.model.TradeGetRequest;
-import com.taobao.api.model.TradeGetResponse;
-import com.taobao.api.model.TradesGetResponse;
-import com.taobao.api.model.TradesSoldIncrementGetRequest;
+import com.taobao.api.ApiException;
+import com.taobao.api.TaobaoClient;
+import com.taobao.api.domain.Trade;
+import com.taobao.api.request.TradeGetRequest;
+import com.taobao.api.request.TradesSoldIncrementGetRequest;
+import com.taobao.api.response.TradeGetResponse;
+import com.taobao.api.response.TradesSoldIncrementGetResponse;
 
 public class IncreImportTaobaoOrderJob extends AbstractJob {
 
@@ -39,7 +39,7 @@ public class IncreImportTaobaoOrderJob extends AbstractJob {
 	public Object execute(JobMonitor monitor) {
 		TOPSession ssn = TOPSessionManager.getInstance().getSession();
 
-		TaobaoRestClient client = ssn.getClient();
+		TaobaoClient client = ssn.getClient();
 
 		TradesSoldIncrementGetRequest req = new TradesSoldIncrementGetRequest();
 
@@ -51,9 +51,9 @@ public class IncreImportTaobaoOrderJob extends AbstractJob {
 
 		req.setStatus(TradeQueryStatus.WAIT_SELLER_SEND_GOODS.name());
 
-		Map<String, Trade> result = new HashMap<String, Trade>();
+		Map<Long, Trade> result = new HashMap<Long, Trade>();
 		try {
-			TradesGetResponse resp = client.tradesSoldIncrementGet(req,
+			TradesSoldIncrementGetResponse resp = client.execute(req,
 					ssn.getSessionId());
 			List<Trade> trads = resp.getTrades();
 			// 详细信息无法直接获取，再次调用trade.get获取详细信息
@@ -61,23 +61,23 @@ public class IncreImportTaobaoOrderJob extends AbstractJob {
 				result.put(td.getTid(), getTradeFullInfo(td));
 			}
 
-			int total = resp.getTotalResults();
+			long total = resp.getTotalResults();
 			int maxPage = (int) Math.ceil((float) total
 					/ (float) req.getPageSize());
 			for (int i = 1; i < maxPage; i++) {
-				req.setPageNo(i + 1);
+				req.setPageNo((long) (i + 1));
 				try {
-					List<Trade> nextPage = client.tradesSoldIncrementGet(req,
+					List<Trade> nextPage = client.execute(req,
 							ssn.getSessionId()).getTrades();
 
 					for (Trade td : nextPage)
 						result.put(td.getTid(), getTradeFullInfo(td));
-				} catch (TaobaoApiException e) {
+				} catch (ApiException e) {
 					LogManager.getInstance().getLogger(getClass())
 							.error("Cannot Fetch Order", e);
 				}
 			}
-		} catch (TaobaoApiException e) {
+		} catch (ApiException e) {
 			LogManager.getInstance().getLogger(getClass())
 					.error("Cannot Fetch Order", e);
 		}
@@ -87,17 +87,17 @@ public class IncreImportTaobaoOrderJob extends AbstractJob {
 		return new InterfaceService().importTaobaoOrder(orders);
 	}
 
-	protected Trade getTradeFullInfo(Trade trade) throws TaobaoApiException {
+	protected Trade getTradeFullInfo(Trade trade) throws ApiException {
 		TOPSession ssn = TOPSessionManager.getInstance().getSession();
 
-		TaobaoRestClient client = ssn.getClient();
+		TaobaoClient client = ssn.getClient();
 
 		TradeGetRequest req = new TradeGetRequest();
 
 		req.setFields(TaobaoJobConstants.TRADE_ADDI_FIELDS);
 		req.setTid(trade.getTid());
 
-		TradeGetResponse resp = client.tradeGet(req);
+		TradeGetResponse resp = client.execute(req);
 
 		Trade addiInfo = resp.getTrade();
 		trade.setBuyerNick(addiInfo.getBuyerNick());

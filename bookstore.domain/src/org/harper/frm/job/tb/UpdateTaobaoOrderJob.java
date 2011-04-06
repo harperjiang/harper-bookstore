@@ -13,10 +13,10 @@ import org.harper.frm.job.JobMonitor;
 import org.harper.frm.top.session.TOPSession;
 import org.harper.frm.top.session.TOPSessionManager;
 
-import com.taobao.api.TaobaoApiException;
-import com.taobao.api.TaobaoRestClient;
-import com.taobao.api.model.Trade;
-import com.taobao.api.model.TradeGetRequest;
+import com.taobao.api.ApiException;
+import com.taobao.api.TaobaoClient;
+import com.taobao.api.domain.Trade;
+import com.taobao.api.request.TradeGetRequest;
 
 public class UpdateTaobaoOrderJob extends AbstractJob {
 
@@ -24,7 +24,7 @@ public class UpdateTaobaoOrderJob extends AbstractJob {
 	protected Object execute(JobMonitor monitor) {
 		TOPSession ssn = TOPSessionManager.getInstance().getSession();
 
-		TaobaoRestClient client = ssn.getClient();
+		TaobaoClient client = ssn.getClient();
 
 		List<PurchaseOrder> ostOrders = RepoFactory.INSTANCE.getOrderRepo()
 				.getExternalOutstandingOrder();
@@ -36,12 +36,12 @@ public class UpdateTaobaoOrderJob extends AbstractJob {
 		ConvertTaobaoOrderTask task = new ConvertTaobaoOrderTask();
 		for (PurchaseOrder po : ostOrders) {
 			TradeGetRequest req = new TradeGetRequest();
-			req.setTid(po.getRefno());
+			req.setTid(Long.valueOf(po.getRefno()));
 			req.setFields(TaobaoJobConstants.TRADE_INCREGET_FIELDS);
 			try {
-				Trade trade = client.tradeGet(req).getTrade();
+				Trade trade = client.execute(req).getTrade();
 				orders.add(task.convert(trade));
-			} catch (TaobaoApiException e) {
+			} catch (ApiException e) {
 				// TODO
 			}
 		}

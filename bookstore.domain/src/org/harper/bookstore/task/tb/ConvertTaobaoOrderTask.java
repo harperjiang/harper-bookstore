@@ -10,8 +10,8 @@ import org.harper.bookstore.service.TaobaoOrderStatus;
 import org.harper.bookstore.service.bean.TaobaoItemBean;
 import org.harper.bookstore.service.bean.TaobaoOrderBean;
 
-import com.taobao.api.model.Order;
-import com.taobao.api.model.Trade;
+import com.taobao.api.domain.Order;
+import com.taobao.api.domain.Trade;
 
 public class ConvertTaobaoOrderTask {
 
@@ -26,7 +26,7 @@ public class ConvertTaobaoOrderTask {
 
 		TaobaoOrderBean order = new TaobaoOrderBean();
 
-		order.setUid(input.getTid());
+		order.setUid(String.valueOf(input.getTid()));
 		order.setCreateTime(input.getCreated());
 		order.setCustomerId(input.getBuyerNick());
 		order.setMobile(input.getReceiverMobile());
@@ -47,9 +47,10 @@ public class ConvertTaobaoOrderTask {
 		for (int i = 0; i < order.getItems().length; i++) {
 			Order tbo = input.getOrders().get(i);
 			order.getItems()[i] = new TaobaoItemBean();
-			order.getItems()[i].setCount(tbo.getNum());
+			order.getItems()[i].setCount(Integer.parseInt(String.valueOf(tbo
+					.getNum())));
 			order.getItems()[i].setName(tbo.getTitle());
-			order.getItems()[i].setOrderUid(input.getTid());
+			order.getItems()[i].setOrderUid(String.valueOf(input.getTid()));
 			order.getItems()[i].setItemId(tbo.getOuterIid());
 			order.getItems()[i].setUnitPrice(new BigDecimal(tbo.getPrice()));
 			order.getItems()[i]
