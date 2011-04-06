@@ -2,9 +2,9 @@ package org.harper.frm.top.session;
 
 import org.harper.frm.core.config.ConfigManager;
 
-import com.taobao.api.TaobaoApiException;
-import com.taobao.api.TaobaoJsonRestClient;
-import com.taobao.api.TaobaoRestClient;
+import com.taobao.api.Constants;
+import com.taobao.api.DefaultTaobaoClient;
+import com.taobao.api.TaobaoClient;
 
 public class TOPSession {
 
@@ -16,9 +16,10 @@ public class TOPSession {
 
 	public TOPSession() {
 		super();
-		setSessionId(ConfigManager.getInstance().getConfigValue("TOP_SESSIONKEY"));
+		setSessionId(ConfigManager.getInstance().getConfigValue(
+				"TOP_SESSIONKEY"));
 	}
-	
+
 	public TOPLogin getLogin() {
 		return login;
 	}
@@ -43,9 +44,9 @@ public class TOPSession {
 		return loggedIn;
 	}
 
-	private TaobaoRestClient client;
+	private TaobaoClient client;
 
-	public TaobaoRestClient getClient() {
+	public TaobaoClient getClient() {
 		if (null == client) {
 			String url = ConfigManager.getInstance().getConfigValue(
 					"TOP_REQ_URL");
@@ -53,11 +54,9 @@ public class TOPSession {
 					"TOP_APPKEY");
 			String secret = ConfigManager.getInstance().getConfigValue(
 					"TOP_APPSECRET");
-			try {
-				client = new TaobaoJsonRestClient(url, appkey, secret);
-			} catch (TaobaoApiException e) {
-				throw new RuntimeException("Failed to create Client", e);
-			}
+
+			client = new DefaultTaobaoClient(url, appkey, secret,
+					Constants.FORMAT_XML);
 		}
 		return client;
 	}

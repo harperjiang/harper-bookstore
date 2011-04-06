@@ -2,7 +2,7 @@ package org.harper.frm.job.tb;
 
 public interface TaobaoJobConstants {
 
-	int PAGE_SIZE = 50;
+	long PAGE_SIZE = 50L;
 
 	String TRADE_INCREGET_FIELDS = "tid," + "buyer_nick," + "type,"
 			+ "created," + "price," + "payment," + "status," + "total_fee,"
