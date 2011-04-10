@@ -1,8 +1,9 @@
 package org.harper.bookstore.job;
 
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import org.harper.bookstore.util.Utilities;
 import org.harper.frm.job.AbstractJob;
 import org.harper.frm.job.JobMonitor;
 import org.harper.frm.top.session.TOPSession;
@@ -24,10 +25,10 @@ public class LoadBuyerRecordJob extends AbstractJob {
 		
 		TradesBoughtGetRequest req = new TradesBoughtGetRequest();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
-		req.setStartCreated(sdf.parse("2011-03-01",new ParsePosition(0)));
-		req.setEndCreated(sdf.parse("2011-04-11", new ParsePosition(0)));
+		req.setStartCreated(Utilities.getBeginOfDate(7));
+		req.setEndCreated(new Date());
 		req.setFields(" seller_nick, buyer_nick, title, type," +
 				" created, sid, tid, seller_rate, buyer_rate, " +
 				"status, payment, discount_fee, adjust_fee, " +
@@ -37,7 +38,7 @@ public class LoadBuyerRecordJob extends AbstractJob {
 				"pic_path, num_iid, num, price, cod_fee, cod_status, " +
 				"shipping_type, receiver_name, receiver_state, " +
 				"receiver_city, receiver_district, receiver_address, " +
-				"receiver_zip, receiver_mobile, receiver_phone");
+				"receiver_zip, receiver_mobile, receiver_phone,orders");
 		
 		try {
 			TradesBoughtGetResponse resp = client.execute(req);

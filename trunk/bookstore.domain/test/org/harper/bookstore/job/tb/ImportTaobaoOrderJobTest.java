@@ -1,7 +1,7 @@
 package org.harper.bookstore.job.tb;
 
+import org.harper.bookstore.job.ImportTaobaoOrderJob;
 import org.harper.bookstore.util.Utilities;
-import org.harper.frm.job.tb.ImportTaobaoOrderJob;
 import org.junit.Test;
 
 public class ImportTaobaoOrderJobTest {

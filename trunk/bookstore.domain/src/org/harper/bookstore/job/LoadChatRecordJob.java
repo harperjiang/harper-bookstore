@@ -1,6 +1,5 @@
 package org.harper.bookstore.job;
 
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 
 import org.harper.frm.job.Job;
@@ -8,9 +7,14 @@ import org.harper.frm.job.JobMonitor;
 import org.harper.frm.top.session.TOPSession;
 import org.harper.frm.top.session.TOPSessionManager;
 
+import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
-import com.taobao.api.request.WangwangEserviceChatrecordGetRequest;
-import com.taobao.api.response.WangwangEserviceChatrecordGetResponse;
+import com.taobao.api.domain.Chatpeer;
+import com.taobao.api.domain.Msg;
+import com.taobao.api.request.WangwangEserviceChatlogGetRequest;
+import com.taobao.api.request.WangwangEserviceChatpeersGetRequest;
+import com.taobao.api.response.WangwangEserviceChatlogGetResponse;
+import com.taobao.api.response.WangwangEserviceChatpeersGetResponse;
 
 public class LoadChatRecordJob implements Job {
 
@@ -24,17 +28,35 @@ public class LoadChatRecordJob implements Job {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-		WangwangEserviceChatrecordGetRequest req = new WangwangEserviceChatrecordGetRequest();
-		req.setServiceStaffId("cntaobaocndebbie");
-		req.setStartDate(sdf.parse("2011-04-01", new ParsePosition(0)));
-		req.setEndDate(sdf.parse("2011-04-04", new ParsePosition(0)));
-
+		WangwangEserviceChatpeersGetRequest cpreq = new WangwangEserviceChatpeersGetRequest();
+		cpreq.setChatId("cntaobaocndebbie");
+		cpreq.setStartDate("2011-04-10");
+		cpreq.setEndDate("2011-04-10");
+		WangwangEserviceChatpeersGetResponse cpresp = null;
 		try {
-			WangwangEserviceChatrecordGetResponse response = client.execute(
-					req, null);
-			System.out.println(response.getLogFileUrl());
-		} catch (Exception e) {
-			e.printStackTrace();
+			cpresp = client.execute(cpreq);
+		} catch (ApiException e1) {
+			e1.printStackTrace();
+		}
+		for (Chatpeer cp : cpresp.getChatpeers()) {
+
+			WangwangEserviceChatlogGetRequest req = new WangwangEserviceChatlogGetRequest();
+			req.setFromId("cntaobaocndebbie");
+			req.setToId(cp.getUid());
+			req.setStartDate("2011-04-10");
+			req.setEndDate("2011-04-10");
+
+			try {
+				WangwangEserviceChatlogGetResponse response = client.execute(
+						req, null);
+				for (Msg msg : response.getMsgs()) {
+					System.out.println(cp.getUid().substring(8) + ":"
+							+ msg.getDirection() + ":" + msg.getTime() + ":"
+							+ msg.getContent());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		return null;
