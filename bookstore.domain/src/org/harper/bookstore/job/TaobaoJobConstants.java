@@ -15,7 +15,8 @@ public interface TaobaoJobConstants {
 			+ "orders.num," + "orders.total_fee," + "orders.discount_fee";
 
 	String TRADE_ADDI_FIELDS = "tid," + "buyer_nick," + "buyer_message,"
-			+ "buyer_memo," + "seller_memo," + "seller_flag," + "buyer_email,";
+			+ "seller_alipay_no," + "buyer_memo," + "seller_memo,"
+			+ "seller_flag," + "buyer_email,";
 
 	String TRADE_FIELDS = "tid," + "buyer_nick," + "type," + "buyer_message,"
 			+ "buyer_memo," + "seller_memo," + "seller_flag," + "buyer_email,"

@@ -18,9 +18,9 @@ import org.harper.frm.top.session.TOPSessionManager;
 import com.taobao.api.ApiException;
 import com.taobao.api.TaobaoClient;
 import com.taobao.api.domain.Trade;
-import com.taobao.api.request.TradeGetRequest;
+import com.taobao.api.request.TradeFullinfoGetRequest;
 import com.taobao.api.request.TradesSoldGetRequest;
-import com.taobao.api.response.TradeGetResponse;
+import com.taobao.api.response.TradeFullinfoGetResponse;
 import com.taobao.api.response.TradesSoldGetResponse;
 
 public class ImportTaobaoOrderJob extends AbstractJob {
@@ -121,12 +121,12 @@ public class ImportTaobaoOrderJob extends AbstractJob {
 
 		TaobaoClient client = ssn.getClient();
 
-		TradeGetRequest req = new TradeGetRequest();
+		TradeFullinfoGetRequest req = new TradeFullinfoGetRequest();
 
 		req.setFields(TaobaoJobConstants.TRADE_ADDI_FIELDS);
 		req.setTid(trade.getTid());
 
-		TradeGetResponse resp = client.execute(req);
+		TradeFullinfoGetResponse resp = client.execute(req);
 
 		Trade addiInfo = resp.getTrade();
 		trade.setBuyerNick(addiInfo.getBuyerNick());

@@ -30,8 +30,11 @@ public class LoadChatRecordJob implements Job {
 
 		WangwangEserviceChatpeersGetRequest cpreq = new WangwangEserviceChatpeersGetRequest();
 		cpreq.setChatId("cntaobaocndebbie");
-		cpreq.setStartDate("2011-04-10");
-		cpreq.setEndDate("2011-04-10");
+		
+		String date = "2011-05-23";
+		
+		cpreq.setStartDate(date);
+		cpreq.setEndDate(date);
 		WangwangEserviceChatpeersGetResponse cpresp = null;
 		try {
 			cpresp = client.execute(cpreq);
@@ -43,8 +46,8 @@ public class LoadChatRecordJob implements Job {
 			WangwangEserviceChatlogGetRequest req = new WangwangEserviceChatlogGetRequest();
 			req.setFromId("cntaobaocndebbie");
 			req.setToId(cp.getUid());
-			req.setStartDate("2011-04-10");
-			req.setEndDate("2011-04-10");
+			req.setStartDate(date);
+			req.setEndDate(date);
 
 			try {
 				WangwangEserviceChatlogGetResponse response = client.execute(
