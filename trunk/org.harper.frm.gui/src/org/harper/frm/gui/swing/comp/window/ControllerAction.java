@@ -1,0 +1,33 @@
+package org.harper.frm.gui.swing.comp.window;
+
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+
+import org.harper.frm.gui.swing.mvc.Controller;
+
+
+public class ControllerAction extends AbstractAction {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5825018566654434068L;
+	private Class<? extends Controller> controller;
+
+	public ControllerAction(String name, Class<? extends Controller> ctrl) {
+		super(name);
+		this.controller = ctrl;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		try {
+			this.controller.newInstance();
+		} catch (Exception e1) {
+			throw new RuntimeException(e1);
+		} finally {
+
+		}
+	}
+
+}
