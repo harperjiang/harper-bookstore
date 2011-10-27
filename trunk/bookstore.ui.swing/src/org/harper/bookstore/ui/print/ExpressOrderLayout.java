@@ -1,5 +1,6 @@
 package org.harper.bookstore.ui.print;
 
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.text.SimpleDateFormat;
@@ -24,6 +25,8 @@ public class ExpressOrderLayout extends Container {
 
 	private TextLabel date;
 
+	private TextLabel remark;
+
 	private TextLabel toName;
 
 	private TextLabel toAddress;
@@ -34,6 +37,8 @@ public class ExpressOrderLayout extends Container {
 
 	public ExpressOrderLayout(ExpressOrderSettingBean bean) {
 		super();
+
+		setFont(new Font("宋体", Font.BOLD, 14));
 
 		setPosition(new Rectangle(new Point(0, 0), bean.getSize()));
 
@@ -52,6 +57,10 @@ public class ExpressOrderLayout extends Container {
 		fromMobile = new TextLabel();
 		fromMobile.setPosition(bean.getFromMobileLoc());
 		add(fromMobile);
+
+		remark = new TextLabel();
+		remark.setPosition(bean.getRemarkLoc());
+		add(remark);
 
 		fromSign = new TextLabel();
 		fromSign.setPosition(bean.getFromSignLoc());
@@ -93,5 +102,9 @@ public class ExpressOrderLayout extends Container {
 		toAddress.setText(to.getAddress());
 		toPhone.setText(to.getPhone());
 		toMobile.setText(to.getMobile());
+	}
+
+	public void setRemark(String remarkText) {
+		remark.setText(remarkText);
 	}
 }
