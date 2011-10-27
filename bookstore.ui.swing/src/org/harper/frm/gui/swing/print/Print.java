@@ -18,5 +18,5 @@ public interface Print {
 
 	int VERTICAL = 1;
 
-	Font DEFAULT_FONT = new Font("宋体", Font.PLAIN, 12);
+	Font DEFAULT_FONT = new Font("宋体", Font.BOLD, 14);
 }

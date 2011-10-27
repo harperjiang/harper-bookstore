@@ -17,6 +17,8 @@ public class ExpressOrderSettingBean {
 
 	private Rectangle fromMobileLoc;
 
+	private Rectangle remarkLoc;
+	
 	private Rectangle fromSignLoc;
 
 	private Rectangle dateLoc;
@@ -123,6 +125,14 @@ public class ExpressOrderSettingBean {
 
 	public void setToPhoneLoc(Rectangle toPhoneLoc) {
 		this.toPhoneLoc = toPhoneLoc;
+	}
+
+	public Rectangle getRemarkLoc() {
+		return remarkLoc;
+	}
+
+	public void setRemarkLoc(Rectangle remarkLoc) {
+		this.remarkLoc = remarkLoc;
 	}
 
 }

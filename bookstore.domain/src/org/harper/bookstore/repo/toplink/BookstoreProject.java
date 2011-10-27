@@ -73,7 +73,7 @@ public void applyLogin() {
 	DatabaseLogin login = new DatabaseLogin();
 	login.usePlatform(new oracle.toplink.platform.database.MySQL4Platform());
 	login.setDriverClassName("com.mysql.jdbc.Driver");
-	login.setConnectionString("jdbc:mysql://localhost:3306/bookstore_test");
+	login.setConnectionString("jdbc:mysql://localhost:3306/bookstore");
 	login.setUserName("root");
 	login.setEncryptedPassword("BF06934E3F151B148BEEB6319A4856D6");
 	
