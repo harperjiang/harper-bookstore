@@ -93,7 +93,7 @@ public class JPowerWindow extends JFrame {
 			}
 		}
 		viewPane.add(newView.getName(), newView);
-		viewPane.setTabComponentAt(viewPane.getTabCount() - 1, new TabHeader(
+		viewPane.setComponentAt(viewPane.getTabCount() - 1, new TabHeader(
 				newView));
 	}
 
