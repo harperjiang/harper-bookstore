@@ -125,7 +125,7 @@ public class JPowerWindow extends JFrame {
 
 		public NewEditorButton(String tooltip, Icon icon, Class<?> clazz) {
 			super();
-			setHideActionText(true);
+//			setHideActionText(true);
 			setAction(new NewEditorAction(tooltip, clazz));
 			setToolTipText(tooltip);
 			setIcon(icon);
