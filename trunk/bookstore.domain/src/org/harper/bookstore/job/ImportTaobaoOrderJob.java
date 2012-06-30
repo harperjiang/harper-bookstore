@@ -73,8 +73,8 @@ public class ImportTaobaoOrderJob extends AbstractJob {
 
 		Map<Long, Trade> result = new HashMap<Long, Trade>();
 		try {
-			TradesSoldGetResponse resp = client.execute(req,
-					ssn.getSessionId());
+			TradesSoldGetResponse resp = client
+					.execute(req, ssn.getSessionId());
 			List<Trade> trads = resp.getTrades();
 
 			for (Trade td : trads) {
@@ -85,7 +85,7 @@ public class ImportTaobaoOrderJob extends AbstractJob {
 			int maxPage = (int) Math.ceil((float) total
 					/ (float) req.getPageSize());
 			for (int i = 1; i < maxPage; i++) {
-				req.setPageNo((long)i + 1);
+				req.setPageNo((long) i + 1);
 				try {
 					List<Trade> nextPage = client.execute(req,
 							ssn.getSessionId()).getTrades();
@@ -126,7 +126,7 @@ public class ImportTaobaoOrderJob extends AbstractJob {
 		req.setFields(TaobaoJobConstants.TRADE_ADDI_FIELDS);
 		req.setTid(trade.getTid());
 
-		TradeFullinfoGetResponse resp = client.execute(req);
+		TradeFullinfoGetResponse resp = client.execute(req, ssn.getSessionId());
 
 		Trade addiInfo = resp.getTrade();
 		trade.setBuyerNick(addiInfo.getBuyerNick());
